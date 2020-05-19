@@ -1,17 +1,25 @@
+#############################
+# EC2 Configuration
+#############################
+
 # launch config for all terraform built servers
 
 resource "aws_launch_configuration" "terraform-example" {
-  image_id = data.aws_ami.amazon_linux_2.image_id
+  image_id = data.aws_ami.linux-2.image_id
   instance_type = "t2.micro"
+  key_name = "Terraform-test"
 
   security_groups = [
     aws_security_group.terraform.id]
 
   user_data = <<-EOF
                 #!/bin/bash
-                cd /var/www
-                echo "Hello, World!" > index.html
-                nohup busybox httpd -f -p ${var.server_port} &
+                yum update -y
+                yum install -y httpd
+                systemctl start httpd
+                systemctl enable httpd
+                mkdir -p /var/www/html/
+                echo "Hello, World!" > /var/www/html/index.html
               EOF
 
   lifecycle {
@@ -45,7 +53,7 @@ resource "aws_autoscaling_group" "asg" {
   metrics_granularity = "1Minute"
 
   tag {
-    key = "NAME"
+    key = "Name"
     value = "terraform-asg-example"
     propagate_at_launch = true
   }
@@ -58,7 +66,7 @@ resource "aws_autoscaling_policy" "autopolicy" {
   name = "terraform-autopolicy"
   scaling_adjustment = 1
   adjustment_type = "ChangeInCapacity"
-  cooldown = 300
+  cooldown = 30
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
@@ -84,16 +92,37 @@ resource "aws_cloudwatch_metric_alarm" "cpualarm" {
     aws_autoscaling_policy.autopolicy.arn]
 }
 
+#################################
 # Define security group rules
+#################################
 
 resource "aws_security_group" "terraform" {
   name = "terraform_sg"
   vpc_id = aws_vpc.terraform-vpc.id
 
   ingress {
-    from_port = 8080
-    to_port = var.server_port
+    description = "allow HTTP port 80"
+    from_port = var.http_port
     protocol = "tcp"
+    to_port = var.http_port
+    cidr_blocks = [
+      var.open_cider]
+  }
+
+  ingress {
+    description = "allow TLS port 443 "
+    from_port = 443
+    protocol = "tcp"
+    to_port = 443
+    cidr_blocks = [
+      aws_vpc.terraform-vpc.cidr_block]
+  }
+
+  ingress {
+    description = "SSH port"
+    from_port = 22
+    protocol = "tcp"
+    to_port = 22
     cidr_blocks = [
       var.open_cider]
   }
@@ -123,6 +152,26 @@ resource "aws_internet_gateway" "gw" {
   tags = {
     Name = "terraform-gateway"
   }
+}
+
+# Route Table
+
+resource "aws_route_table" "terraform-route" {
+  vpc_id = aws_vpc.terraform-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+
+  tags = {
+    Name = "terraform-route-table"
+  }
+}
+
+resource "aws_main_route_table_association" "main" {
+  route_table_id = aws_route_table.terraform-route.id
+  vpc_id = aws_vpc.terraform-vpc.id
 }
 
 # Create VPC
@@ -155,6 +204,7 @@ resource "aws_subnet" "public2" {
   cidr_block = "172.2.8.0/24"
   vpc_id = aws_vpc.terraform-vpc.id
   availability_zone = data.aws_availability_zones.all.names[1]
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "public2"
@@ -165,17 +215,17 @@ resource "aws_subnet" "public2" {
 
 resource "aws_lb_target_group" "target" {
   name = "target"
-  port = var.server_port
+  port = var.http_port
   protocol = "HTTP"
   target_type = "instance"
   vpc_id = aws_vpc.terraform-vpc.id
 
   # Note that for NLB `healthy_threshold` and `unhealthy_threshold` must be the same value
   health_check {
-    healthy_threshold = "3"
+    healthy_threshold = "2"
     unhealthy_threshold = "2"
     interval = "10"
-    port = var.server_port
+    port = var.http_port
     protocol = "HTTP"
   }
 
@@ -212,7 +262,7 @@ resource "aws_lb" "nlb" {
 
 resource "aws_lb_listener" "nlb-listener" {
   load_balancer_arn = aws_lb.nlb.arn
-  port = var.server_port
+  port = var.http_port
   protocol = "TCP"
 
   default_action {
@@ -248,7 +298,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_lb_listener" "alb-listener" {
   load_balancer_arn = aws_lb.alb.arn
-  port = var.server_port
+  port = var.http_port
   protocol = "HTTP"
 
   default_action {

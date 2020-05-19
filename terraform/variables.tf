@@ -1,9 +1,9 @@
 # Variable to describe default ports
 
-variable "server_port" {
+variable "http_port" {
   description = "The port the server will use for HTTP/TCP requests"
   type = number
-  default = 8080
+  default = 80
 }
 
 # Path to credentials file
@@ -16,3 +16,4 @@ variable "open_cider" {
   description = "All traffic allowed cidr block"
   default = "0.0.0.0/0"
 }
+

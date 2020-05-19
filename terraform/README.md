@@ -17,7 +17,7 @@ aws_secret_access_key=<>
 3. Run `terraform apply` and type `yes` when prompted
 
 ```
-Plan: 13 to add, 0 to change, 0 to destroy.
+Plan: 14 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
   Terraform will perform the actions described above.
@@ -28,7 +28,7 @@ Do you want to perform these actions?
 
 4. Run `terraform output` to get the dns_name of the load-balancer
 
-5. Go to your browser and search for `<dns-name>:8080` and confirm `Hello, World!` is the output
+5. Go to your browser and search for `<dns-name>:8080` and confirm `Hello, World!` appears in the corner
 
 6. Run `terraform destroy` to prevent unexpected charges on your AWS account.
 
@@ -55,7 +55,7 @@ For this AWS-based example this includes launch configurations, ELB configuratio
 # launch config for all terraform built servers
 
 resource "aws_launch_configuration" "terraform-example" {
-  image_id = "ami-0c55b159cbfafe1f0"
+  image_id = data.aws_ami.linux-2.image_id
   instance_type = "t2.micro"
   security_groups = [
     aws_security_group.terraform.id]
@@ -94,7 +94,7 @@ Variables indirectly represent a value in an expression.
 variable "example" {}
 ```
 
-and referenced in other modules with syntax: 
+and referenced in other modules with the syntax: 
 
 ```hcl-terraform
 var.example
@@ -114,3 +114,35 @@ variable "creds" {
 }
 ```
 
+## Some Notes
+**I want to set up a few load balanced instances. <br> What do I need?**
+
+At a minimum you would set up the following:
+1. VPC - (default is an option)
+    - The private cloud where all your subsequent infrastructure sits and communicates in
+    
+2. Internet Gateway
+    - The Internet Gateway allows the vpc to communicate with networks outside of itself(e.g: The internet)<br>
+    
+3. Route Table
+    - The list of cidr addresses that allow ingress/egress within the network
+    - For open access to the internet your VPC should specify the cider address `0.0.0.0/0`
+    - If in a private network or carrying confidential data your cider block 
+    should only include IP addresses from within your VPC. 
+    
+4. A load balancer (DUH!)
+    - Specify a listener for the port(s) that should be monitored for traffic
+    - Also include a proper target group (The servers that web traffic should be balanced against)
+     
+
+**When running terraform apply/destroy not everything is updated properly. What gives?**
+  
+There are several reasons this could happen:
+1. You made changes/created default/main network options
+    - By default in aws you can not delete these; This is usually not something to worry about, 
+    but can be avoided by creating and associating resources that are not attached as the default.
+    
+2. Terraform did not properly provision a resource properly:
+    - In this case terraform improperly provisioning an item can leave it 
+    "stuck" such that a manual override is necessary. 
+    In this case manually deleting the item in AWS should return the state to normal. 

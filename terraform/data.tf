@@ -2,8 +2,7 @@
 
 data "aws_availability_zones" "all" {}
 
-data "aws_ami" "amazon_linux_2" {
-  most_recent = true
+data "aws_ami" "linux-2" {
   owners = ["amazon"]
 
   filter {
