@@ -1,0 +1,6 @@
+.terraform
+.idea
+terraform/terraform.tfstate*
+packer/*
+docker/*
+~             
