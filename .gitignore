@@ -2,5 +2,5 @@
 .idea
 terraform/terraform.tfstate*
 packer/*
-docker/*
-~             
+docker/*/node_modules*
+*~
