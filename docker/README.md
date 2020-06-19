@@ -1,60 +1,56 @@
 
 This folder represents a few different ways to use docker including:
-- [Dockerfile](#Dockerfile)
+- [docker-compose](#docker-compose)
 - [docker swarm](#Swarm)
 - [docker-machine](#Machine)
 
 
-# Dockerfile
+# docker-compose
 
-### **Install a service with Dockerfile**
-cd to the `/php` folder
+### **Install a service with docker-compose**
+cd to the `/php-apache-sql` folder and run
 
-Start with
 ```shell script
-docker build -t php:myapp .
+docker-compose up
 ```
-Which will build an image to the specifications in the Dockerfile
+
+Which will build 3 images to the specifications in the 
+`/apache` and `/php` Dockerfiles and the docker-compose.yml file
+
 ```shell script
-FROM php:7.4-cli
-COPY . /usr/src/myapp
-WORKDIR /usr/src/myapp
-CMD [ "php", "./hello-world.php" ]
+--- Some output ommitted ---
+php       | [07-Jul-2020 18:06:30] NOTICE: fpm is running, pid 1
+php       | [07-Jul-2020 18:06:30] NOTICE: ready to handle connections
+mysql     | 2020-07-07T18:06:32.127135Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: '/var/run/mysqld/mysqlx.sock' bind-address: '::' port: 33060
+apache    | [Tue Jul 07 18:06:32.134571 2020] [mpm_event:notice] [pid 1:tid 140302753025352] AH00489: Apache/2.4.43 (Unix) configured -- resuming normal operations
+apache    | [Tue Jul 07 18:06:32.134631 2020] [core:notice] [pid 1:tid 140302753025352] AH00094: Command line: 'httpd -D FOREGROUND'
+mysql     | 2020-07-07T18:06:32.168533Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+mysql     | 2020-07-07T18:06:32.171182Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+mysql     | 2020-07-07T18:06:32.197188Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.20'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
 ```
-To ensure the image was properly created run
- 
+
+now try to curl localhost
+```shell script
+$ curl localhost
+<h1>Hello World!</h1>
+<h3>Attempting MySQL connection from php...</h3>
+Connected to MySQL successfully!
+```
+
+If you run into issues check and ensure the images were properly created:
 ```
 docker image ls
 ```
 which should return something like
 
 ```shell script
-REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
-php                        7.4-cli             f6c37cd548d0        6 days ago          405MB
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+php-apache-sql_apache   latest              72123c019cbe        About an hour ago   59.2MB
+php-apache-sql_php      latest              316c531e75bf        About an hour ago   85.6MB
+httpd                   alpine              e7e8868c7697        22 hours ago        56.1MB
+php                     fpm-alpine          78e945602ecc        3 weeks ago         81.4MB
+mysql                   latest              be0dbf01a0f3        4 weeks ago         541MB
 ```
-After which running
-
-```shell script
-docker run -it --rm <IMAGE-ID>
-```
-
-should show you the php code in hello-world.php
-```shell script
-<html>
- <head>
-  <title>PHP Test</title>
- </head>
- <body>
- <p>Hello World</p> 
- </body>
-</html>
-```
-
-The container should exit on its own, but running
-```shell script
-docker container kill <CONTAINER-ID> 
-```
-can remove stale running containers as well.
 
 # Swarm
 ### **Creating a web cluster using docker swarm**  
@@ -212,7 +208,7 @@ vm2    -        virtualbox   Running   tcp://192.168.99.101:2376           v19.0
 
 # References
 
-Examples were referenced from:  
+Examples and images were referenced from:  
 https://docs.docker.com/engine/reference/builder/   
 https://hub.docker.com/_/php  
 https://takacsmark.com/docker-swarm-tutorial-for-beginners/#your-first-swarm-cluster

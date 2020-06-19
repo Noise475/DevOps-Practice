@@ -1,3 +1,4 @@
+.git*
 .terraform
 .idea
 terraform/terraform.tfstate*
