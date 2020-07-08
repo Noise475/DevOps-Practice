@@ -132,7 +132,7 @@ At a minimum you would set up the following:
 3. Route Table
     - The list of cidr addresses that allow ingress/egress within the network
     - For open access to the internet your VPC should specify the cider address `0.0.0.0/0`
-    - If in a private network or carrying confidential data your cider block 
+    - If in a private network your cider block 
     should only include IP addresses from within your VPC. 
     
 4. A load balancer 
@@ -142,7 +142,7 @@ At a minimum you would set up the following:
 
 **When running terraform apply/destroy not everything is updated properly. What gives?**
   
-Check if you made changes/created default/main network options:  
+Check if you made changes to or created default/main network options:  
 
 By default in aws you can not delete these; This is usually not something to worry about, 
 but can be avoided by creating and associating resources that are not attached as the default.

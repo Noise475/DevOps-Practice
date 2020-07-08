@@ -12,6 +12,9 @@ resource "aws_launch_configuration" "terraform-example" {
   security_groups = [
     aws_security_group.terraform.id]
 
+  # The user_data section starts an httpd process and creates an
+  # index.html to serve on requests to the server
+
   user_data = <<-EOF
                 #!/bin/bash
                 yum update -y
