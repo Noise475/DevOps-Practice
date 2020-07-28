@@ -1,0 +1,103 @@
+---
+- hosts: all
+  become: True
+  tasks:
+    - include: tasks/deps.yml
+
+    # runit
+    - name: create runit group
+      group:
+        name: runit
+        system: yes
+        state: present
+
+    - name: create runit user
+      user:
+        name: runit
+        group: runit
+
+    - name: create runit directory /packages
+      file:
+        path: /packages
+        state: directory
+        mode: 0755
+        owner: runit
+        group: runit
+
+    - name: download runit using get_url
+      get_url:
+        url: "https://packagecloud.io/imeyer/runit/packages/el/6/runit-2.1.2-1.el6.x86_64.rpm/download.rpm"
+        dest: /packages
+        mode: 0755
+        checksum: sha512:62c5de5f32da634f2c2d37b5258397c59dd3dbc0aa01e94cdbc6f7b5b6f28d0e83d5d1a776e1f3ef30e73388cdea7a645f88593cc5a6087fe620eb25afa4bd26
+        group: runit
+        owner: runit
+
+
+    - name: install runit
+      yum:
+        name: /packages/runit-2.1.2-1.el6.x86_64.rpm
+        state: present
+        update_cache: yes
+
+    # certificates
+    - name: copy certificate files
+      copy:
+        src: ./files
+        dest: /etc/ssl/
+
+    - name: set ssl certificate permissions
+      file:
+        path: /etc/ssl/files
+        mode: 0600
+        owner: root
+        group: root
+
+    # extract & run application.zip
+    - name: unzip application.zip
+      unarchive:
+        src: ./application.zip
+        mode: 0755
+        dest: /opt
+
+    - name: symlink application to sv service
+      command: "ln -s /opt/application /etc/service"
+
+
+    # install nginx
+    - name: create nginx group
+      group:
+        name: nginx
+        system: yes
+        state: present
+
+    - name: create nginx user
+      user:
+        name: nginx
+        group: nginx
+
+    - name: install nginx
+      yum:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+
+    # nginx config
+    - name: copy nginx config file
+      copy:
+        src: ./config/nginx.conf
+        dest: /etc/nginx
+
+    - name: set nginx.conf file permissions
+      file:
+        path: /etc/nginx/nginx.conf
+        mode: 0755
+        owner: nginx
+        group: nginx
+
+    # start nginx
+    - name: start nginx
+      service:
+        name: nginx
+        state: started
