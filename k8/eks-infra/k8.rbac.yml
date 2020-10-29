@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: k8-test
+---
+# admin-user ClusterRoleBinding
+apiVersion: v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+# type of role to apply to account
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRoleBinding
+  name: cluster-admin
+# subjects: what accounts roleRef applies to  
+subjects:
+  - kind: ServiceAccount
+    name: admin-user
