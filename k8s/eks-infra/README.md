@@ -1,6 +1,6 @@
 # Setup EKS using Terraform
 
-This example assumes you have [credentials](https://github.com/Noise475/DevOps-Practice/blob/master/terraform/README.md#terraform) for aws setup.
+This example assumes you have [credentials](<https://github.com/Noise475/DevOps-Practice/blob/master/terraform/README.md#terraform>) for aws setup and [Terraform](<https://www.terraform.io/downloads.html>) installed.
 
 To run this example do the following:
 
