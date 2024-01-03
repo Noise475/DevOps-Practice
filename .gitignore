@@ -1,7 +1,6 @@
 .idea*
 *node_modules*/
 **/.terraform*/
-**/terraform*
 packer/
 **/aws-env
 **/.aws-sam
