@@ -34,7 +34,7 @@ include {
   path = "../../modules/dynamodb"
 }
 
-#Include S3 module
+# Include S3 module
 include {
   path = "../../modules/s3"
 }

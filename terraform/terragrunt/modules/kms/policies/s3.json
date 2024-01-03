@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Id": "TerraformStatePolicy",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ],
+        "Resource": [
+          "arn:aws:s3:::${var.environment}-terraform-state-bucket",
+          "arn:aws:s3:::${var.environment}-terraform-state-bucket/*"
+        ]
+      },
+      {
+        "Effect": "Deny",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Action": [
+          "s3:PutObject"
+        ],
+        "Resource": "arn:aws:s3:::${var.environment}-terraform-state-bucket/*",
+        "Condition": {
+          "StringNotEqualsIfExists": {
+            "s3:x-amz-server-side-encryption": "aws:kms",
+            "aws:PrincipalArn": "arn:aws:iam::123456789012:role/your-terraform-role"
+          }
+        }
+      }
+    ]
+  }
+  

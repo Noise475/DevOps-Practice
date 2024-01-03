@@ -1,10 +1,10 @@
 # module/s3/s3.tf
 
 resource "aws_s3_bucket" "example" {
-  bucket = "my-tf-test-bucket"
+  bucket = "${var.environment}-terraform-state-bucket"
 
   tags = {
-    Name        = "terraform-state-bucket"
-    Environment = "Dev"
+    Name        = "terraform-remote-state-bucket"
+    Environment = var.environment
   }
 }
