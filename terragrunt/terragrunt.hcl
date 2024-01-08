@@ -1,47 +1,30 @@
 # environments/dev/terragrunt.hcl
 
-remote_state {
-  backend = "s3"
-  config = {
-    bucket         = "terraform-state-bucket"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = "us-east-2"
-    encrypt        = true
-    dynamodb_table = "dynamodb-lock-table"
-  }
-}
-
 # Indicate what region to deploy the resources into
+generate "provider" {
+  path = "provider.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
 provider "aws" {
   region = "us-east-2"
 }
-
-# The URL used here is a shorthand for
-# "tfr://registry.terraform.io/terraform-aws-modules/vpc/aws?version=3.5.0".
-# Note the extra `/` after the protocol is required for the shorthand
-# notation.
-terraform {
-  source = "." #"git::git@github.com:Noise475/DevOps-Practice.git?ref=0.0.1"
+EOF
 }
 
-# Include VPC module
-include "vpc" {
-  path = "./modules/vpc"
-}
+remote_state {
+  backend = "s3"
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
+  config = {
+    bucket = "my-terraform-state"
 
-# Include EKS module
-include "eks" {
-  path = "./modules/eks"
-}
-
-# Include DynamoDB module
-include "dynamodb" {
-  path = "./modules/dynamodb"
-}
-
-# Include S3 module
-include "s3" {
-  path = "./modules/s3"
+    key = "${path_relative_to_include()}/terraform.tfstate"
+    region         = "us-east-2"
+    encrypt        = true
+    dynamodb_table = "my-lock-table"
+  }
 }
 
 # Indicate the input values to use for the variables of the module.
@@ -50,4 +33,12 @@ inputs = {
   tags = {
     Terraform = "true"
   }
+}
+
+# The URL used here is a shorthand for
+# "tfr://registry.terraform.io/terraform-aws-modules/vpc/aws?version=3.5.0".
+# Note the extra `/` after the protocol is required for the shorthand
+# notation.
+terraform {
+  source = "./modules" #"git::git@github.com:Noise475/DevOps-Practice.git?ref=0.0.1"
 }
