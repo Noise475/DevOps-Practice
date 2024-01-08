@@ -2,7 +2,7 @@
 
 # IAM Role for EKS Cluster
 resource "aws_iam_role" "eks_cluster" {
-  name               = "terragrunt-cluster-role"
+  name               = "eks-cluster-role"
   assume_role_policy = file("./policies/iam.json")
 }
 

@@ -1,6 +1,6 @@
 {
     "Version": "2012-10-17",
-    "Id": "key-default-1",
+    "Id": "PrivateSubnetKey",
     "Statement": [
         {
             "Effect": "Allow",

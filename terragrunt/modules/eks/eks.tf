@@ -1,4 +1,4 @@
-# modules/eks/eks.tf
+# modules/eks/main.tf
 
 # EKS Cluster
 resource "aws_eks_cluster" "terragrunt_cluster" {

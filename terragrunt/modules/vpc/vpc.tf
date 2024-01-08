@@ -1,4 +1,4 @@
-# modules/vpc/vpc.terraform
+# modules/vpc/main.tt
 
 # VPC
 resource "aws_vpc" "eks_vpc" {

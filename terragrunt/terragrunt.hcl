@@ -11,44 +11,37 @@ remote_state {
   }
 }
 
+# Indicate what region to deploy the resources into
+provider "aws" {
+  region = "us-east-2"
+}
+
 # The URL used here is a shorthand for
 # "tfr://registry.terraform.io/terraform-aws-modules/vpc/aws?version=3.5.0".
 # Note the extra `/` after the protocol is required for the shorthand
 # notation.
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git?ref=0.0.1"
+  source = "." #"git::git@github.com:Noise475/DevOps-Practice.git?ref=0.0.1"
 }
 
 # Include VPC module
-include {
-  path = "../../modules/vpc"
+include "vpc" {
+  path = "./modules/vpc"
 }
 
 # Include EKS module
-include {
-  path = "../../modules/eks"
+include "eks" {
+  path = "./modules/eks"
 }
 
 # Include DynamoDB module
-include {
-  path = "../../modules/dynamodb"
+include "dynamodb" {
+  path = "./modules/dynamodb"
 }
 
 # Include S3 module
-include {
-  path = "../../modules/s3"
-}
-
-
-# Indicate what region to deploy the resources into
-generate "provider" {
-  path = "provider.tf"
-  if_exists = "overwrite_terragrunt"
-  contents = <<EOF
-provider "aws" {
-  region = "us-east-2"
-}
-EOF
+include "s3" {
+  path = "./modules/s3"
 }
 
 # Indicate the input values to use for the variables of the module.
