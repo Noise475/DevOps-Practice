@@ -1,8 +1,15 @@
+repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.4.0
-  hooks:
-    - id: terraform-validate
-      args: ["--tflint-ignore", "TFLINT_IGNORE"]
-    - id: terraform-fmt
-    - id: check-merge-conflict
-    - id: end-of-file-fixer
+    rev: v3.4.0
+    hooks:
+      - id: terraform-validate
+        args: ["--tflint-ignore", "TFLINT_IGNORE"]
+      - id: terraform-fmt
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+  
+- repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.17.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--output-file", "README.md", "./modules/*"]

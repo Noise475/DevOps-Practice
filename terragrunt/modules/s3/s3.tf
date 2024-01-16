@@ -1,6 +1,6 @@
 # module/s3/main.tf
 
-resource "aws_s3_bucket" "example" {
+resource "aws_s3_bucket" "dev-state-example" {
   bucket = "${var.environment}-terraform-state-bucket"
 
   tags = {
