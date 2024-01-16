@@ -1,4 +1,6 @@
 # terragrunt.hcl
+iam_role = "arn:aws:iam::503489311732:role/terragrunt"
+
 remote_state {
   backend = "s3"
   generate = {
