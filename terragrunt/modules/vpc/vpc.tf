@@ -1,4 +1,4 @@
-# modules/vpc/main.tt
+# modules/vpc/main.tf
 
 # VPC
 resource "aws_vpc" "eks_vpc" {
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "eks_igw" {
   vpc_id = aws_vpc.eks_vpc.id
 }
 
-# Route Tables for Public Subnets
+# Route Table for Public Subnets
 resource "aws_route_table" "eks_public_rt" {
   vpc_id = aws_vpc.eks_vpc.id
 }
@@ -102,6 +102,7 @@ resource "aws_route_table" "eks_private_rt_c" {
   vpc_id = aws_vpc.eks_vpc.id
 }
 
+# Routes For Private Subnets
 resource "aws_route" "eks_private_rt_a" {
   route_table_id         = aws_route_table.eks_private_rt_a.id
   destination_cidr_block = "0.0.0.0/0"
@@ -127,3 +128,16 @@ resource "aws_security_group" "eks_cluster_sg" {
 
   vpc_id = aws_vpc.eks_vpc.id
 }
+
+output "vpc_id" {
+  value = aws_vpc.eks_vpc.id
+}
+
+output "public_subnets" {
+  value = concat(aws_subnet.eks_subnet_a[*].id, aws_subnet.eks_subnet_b[*].id, aws_subnet.eks_subnet_c[*].id)
+}
+
+output "private_subnets" {
+  value = concat(aws_subnet.eks_private_subnet_a[*].id, aws_subnet.eks_private_subnet_b[*].id, aws_subnet.eks_private_subnet_c[*].id)
+}
+

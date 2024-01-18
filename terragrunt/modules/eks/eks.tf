@@ -5,7 +5,7 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster.arn
   vpc_config {
-    subnet_ids = var.subnets
+    subnet_ids = concat(module.vpc.public_subnets, module.vpc.private_subnets)
   }
 
   depends_on = [
