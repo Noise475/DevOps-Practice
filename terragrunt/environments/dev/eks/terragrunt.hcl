@@ -1,7 +1,11 @@
-# environments/dev/vpc/terragrunt.hcl
+# environments/dev/eks/terragrunt.hcl
 
 terraform {
   source = "../../../modules/eks" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.0"
+}
+
+dependencies {
+  paths = ["../../../modules/vpc"]
 }
 
 include "vpc" {
