@@ -5,7 +5,7 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster.arn
   vpc_config {
-    subnet_ids = concat(module.vpc.public_subnets, module.vpc.private_subnets)
+    subnet_ids = [var.subnets]
   }
 
   depends_on = [
@@ -13,12 +13,17 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   ]
 }
 
+# EKS Cluster Auth (as data source)
+data "aws_eks_cluster_auth" "terragrunt_cluster_auth" {
+  name = aws_eks_cluster.terragrunt_cluster.name
+}
+
 # EKS Node Group
 resource "aws_eks_node_group" "terragrunt_group" {
-  cluster_name    = aws_eks_cluster.terragrunt_group.name
+  cluster_name    = aws_eks_cluster.terragrunt_cluster.name
   node_group_name = "terragrunt_group_example"
-  node_role_arn   = aws_iam_role.terragrunt_group.arn
-  subnet_ids      = aws_subnet.terragrunt_group[*].id
+  node_role_arn   = aws_iam_role.eks_cluster.arn
+  subnet_ids      = [var.subnets]
 
   scaling_config {
     desired_size = 1
@@ -29,16 +34,8 @@ resource "aws_eks_node_group" "terragrunt_group" {
   update_config {
     max_unavailable = 1
   }
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
-  depends_on = [
-    aws_iam_role_policy_attachment.example-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
-  ]
 }
 
 output "kubeconfig" {
-  value = aws_eks_cluster.terragrunt_cluster.kubeconfig[*].kubeconfig[*].raw_config
+  value = data.aws_eks_cluster_auth.terragrunt_cluster_auth[*].kubeconfig[*].raw_config
 }

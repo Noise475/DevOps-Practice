@@ -16,9 +16,8 @@ remote_state {
   }
 }
 
-# Indicate what region to deploy the resources into
 generate "provider" {
-  path      = "provider.tf"
+  path      = "provider_override.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
@@ -30,9 +29,8 @@ provider "aws" {
 EOF
 }
 
-# Indicate the input values to use for the variables of the module.
+# Include the input values to use for the variables of the module.
 inputs = {
-
   tags = {
     Terraform = "true"
   }

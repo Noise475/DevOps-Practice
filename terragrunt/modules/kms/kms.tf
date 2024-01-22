@@ -1,4 +1,4 @@
-# kms/main.tf
+# modules/kms/main.tf
 
 # VPC Keys
 resource "aws_kms_key" "private_subnet_key" {
@@ -16,8 +16,4 @@ resource "aws_kms_key" "s3_key" {
   enable_key_rotation     = true
 
   policy = file("./policies/s3.json")
-}
-
-output "s3_key_id" {
-  value = aws_kms_key.s3_key.id
 }
