@@ -12,6 +12,7 @@ dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
     vpc_id = "fake-vpc-id"
+    subnets = []
   }
 }
 
@@ -20,4 +21,5 @@ inputs = {
   cluster_name    = "dev-eks-cluster"
   cluster_version = "1.28"
   vpc_id          = dependency.vpc.outputs.vpc_id
+  subnets         = dependency.vpc.outputs.subnets
 }

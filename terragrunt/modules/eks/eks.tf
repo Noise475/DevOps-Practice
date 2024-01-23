@@ -18,6 +18,10 @@ data "aws_eks_cluster_auth" "terragrunt_cluster_auth" {
   name = aws_eks_cluster.terragrunt_cluster.name
 }
 
+data "aws_eks_cluster" "terragrunt_cluster" {
+  name = aws_eks_cluster.terragrunt_cluster.name
+}
+
 # EKS Node Group
 resource "aws_eks_node_group" "terragrunt_group" {
   cluster_name    = aws_eks_cluster.terragrunt_cluster.name
@@ -34,8 +38,4 @@ resource "aws_eks_node_group" "terragrunt_group" {
   update_config {
     max_unavailable = 1
   }
-}
-
-output "kubeconfig" {
-  value = data.aws_eks_cluster_auth.terragrunt_cluster_auth[*].kubeconfig[*].raw_config
 }
