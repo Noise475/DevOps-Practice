@@ -6,7 +6,9 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terragrunt"
+    role_arn = "arn:aws:organizations::503489311732:ou/o-gjpa8mdexj/ou-6580-th0y6j7x
+
+"
   }
 }
 EOF

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-for dir in $(find . -maxdepth 3 -type d); do
-    if [ -f "${dir}/*.tf" ]; then
-        echo "Generating documentation for module in ${dir}"
-        terraform-docs markdown table "${dir}"
-    fi
+# Find all directories containing at least one Terraform file
+find . -type f -name '*.tf' -exec dirname {} \; | sort -u | while read -r dir; do
+    echo "Generating documentation for module in ${dir}"
+    terraform-docs markdown table "${dir}" --output-file README.md
 done
