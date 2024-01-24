@@ -6,3 +6,4 @@ packer/
 **/.aws-sam
 **/samconfig.toml
 **/.terragrunt*
+**/.terraform.lock*
