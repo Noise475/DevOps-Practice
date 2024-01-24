@@ -17,7 +17,7 @@ remote_state {
 }
 
 generate "provider" {
-  path      = "provider_override.tf"
+  path      = "provider.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
