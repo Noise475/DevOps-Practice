@@ -3,13 +3,6 @@
     "Statement": [
         {
             "Effect": "Allow",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-        },
-        {
-            "Effect": "Allow",
             "Action": [
                 "s3:*"
             ],

@@ -129,7 +129,5 @@ will output the results of `terraform plan` for the following modules:
 - s3
 - vpc
 
-
-
 ## Terraform-docs
 Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed

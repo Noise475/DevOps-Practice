@@ -11,7 +11,7 @@ resource "aws_organizations_organizational_unit" "ou" {
 resource "aws_iam_role" "ou_roles" {
   for_each = { for ou in var.ou : ou.name => ou }
   name = "OU-${each.value.name}-Role"
-  assume_role_policy = file("./policies/ou_role.json")
+  assume_role_policy = file("../iam/roles/ou_role.json")
 }
 
 # Define policies for each OU
@@ -22,20 +22,7 @@ resource "aws_iam_policy" "ou_policies" {
   description = "Policy for ${each.key}"
 
   # Define policy document here
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:*"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  policy = file("../iam/policies/s3.json")
 }
 
 # Attach policies to roles
