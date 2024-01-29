@@ -87,7 +87,7 @@ an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
      - `terragrunt/environments/dev`
      - `terragrunt/environments/staging`  
      - `terragrunt/environments/prod`
-  3. Under **each** module being loading in the environment
+  3. Under **EACH** module being loading in the environment
      * `terragrunt/environments/<env_name>/<module_name>` 
 
 ## How to run commands
@@ -96,7 +96,6 @@ Terragrunt as a terraform wrapper is usually running terraform commands as a gro
 `terragrunt plan` can be ran in each module folder which will deliver the same output as `terraform plan`, but can take into account your settings in your terragrunt.hcl (like provider/backend file configs).
 
 ```
-DevOps-Practice/terragrunt/environments/dev/vpc
 INFO[0000] Downloading Terraform configurations from file:///Users/guestadmin/git/DevOps-Practice/terragrunt/modules into /Users/guestadmin/git/DevOps-Practice/terragrunt/environments/dev/vpc/.terragrunt-cache/Sc8-jha5f51vUf2NSfZAz4EYlHE/xyQE6GfL4jWSqLyKZKDrYOybgfE 
 
 Initializing the backend...
@@ -122,16 +121,15 @@ Terraform will perform the following actions:
 ...
 ```
 
-`terragrunt run-all plan` can be ran in the directory containing your root terragrunt.hcl
+`terragrunt run-all <command>` can be ran in the directory containing your root terragrunt.hcl. This will run the targeted command `terraform <command>` against all submodules from the root; for example, running `terragrunt run-all plan` in `environments/dev`
+will output the results of `terraform plan` for the following modules:
+- dynamodb
+- eks
+- kms
+- s3
+- vpc
 
-```
-dis
-```
+
 
 ## Terraform-docs
 Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed
-
-```shell
-homebrew install terraform-docs
-```
-

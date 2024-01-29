@@ -1,4 +1,15 @@
 # environments/staging/terragrunt.hcl
+
+# Loop over the list of OUs and create IAM roles and policies dynamically
+foreach = {
+  ou in var.ou
+}
+
+include "iam_roles" {
+  path = "${ou}/iam_roles.hcl"
+}
+
+# Generate provider configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
   if_exists = "overwrite_terragrunt"
@@ -6,14 +17,12 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "arn:aws:organizations::503489311732:ou/o-gjpa8mdexj/ou-6580-th0y6j7x
-
-"
+    role_arn = var.provider_role_arn
   }
 }
 EOF
-}
 
+}
 remote_state {
   backend = "s3"
   generate = {

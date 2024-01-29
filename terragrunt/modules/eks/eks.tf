@@ -13,15 +13,6 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   ]
 }
 
-# EKS Cluster Auth (as data source)
-data "aws_eks_cluster_auth" "terragrunt_cluster_auth" {
-  name = aws_eks_cluster.terragrunt_cluster.name
-}
-
-data "aws_eks_cluster" "terragrunt_cluster" {
-  name = aws_eks_cluster.terragrunt_cluster.name
-}
-
 # EKS Node Group
 resource "aws_eks_node_group" "terragrunt_group" {
   cluster_name    = aws_eks_cluster.terragrunt_cluster.name
