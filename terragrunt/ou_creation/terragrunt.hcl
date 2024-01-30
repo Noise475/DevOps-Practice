@@ -9,5 +9,15 @@ include "root" {
 }
 
 inputs = {
-  ou_names = [sdlc, prod]
+  ou_names = (
+    if get_terragrunt_dir() == "environments/dev" {
+      ["dev"]
+    } else if get_terragrunt_dir() == "environments/staging" {
+      ["staging"]
+    } else if get_terragrunt_dir() == "environments/prod" {
+      ["prod"]
+    } else {
+      [""]  # Default value if environment is unknown or not specified
+    }
+  )
 }

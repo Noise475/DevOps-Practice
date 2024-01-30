@@ -7,7 +7,7 @@
         "Service": "dynamodb.amazonaws.com"
       },
       "Action": "dynamodb:GetItem",
-      "Resource": "arn:aws:dynamodb:your-region:your-account-id:table/your-lock-table-name"
+      "Resource": "arn:aws:dynamodb:${var.region}:${module.ou_creation.outputs.ou_id}:table/${module.dynamodb.outputs.table_name}"
     },
     {
       "Effect": "Allow",
@@ -15,7 +15,7 @@
         "Service": "dynamodb.amazonaws.com"
       },
       "Action": "dynamodb:PutItem",
-      "Resource": "arn:aws:dynamodb:your-region:your-account-id:table/your-lock-table-name"
+      "Resource": "arn:aws:dynamodb:${var.region}:${module.ou_creation.outputs.ou_id}:table/${module.dynamodb.outputs.table_name}"
     }
   ]
 }

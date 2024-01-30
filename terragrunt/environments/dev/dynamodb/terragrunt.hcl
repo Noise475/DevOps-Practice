@@ -1,11 +1,7 @@
 # environments/dev/dynamodb/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/dynamodb" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/dynamodb?ref=0.0.0"
-}
-
-dependency "ou_creation" {
-  config_path = "../../../ou_creation"
+  source = "../../../modules//dynamodb" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/dynamodb?ref=0.0.0"
 }
 
 include "root" {

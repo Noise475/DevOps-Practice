@@ -8,12 +8,8 @@ include "root" {
   path = find_in_parent_folders()
 }
 
-dependency "kms" {
-  config_path = "../kms"
-
-  mock_outputs = {
-    kms_master_key_id = "fake-kms-master-key-id"
-  }
+dependency "wrapper" {
+  config_path = "../wrapper"
 }
 
 inputs = {

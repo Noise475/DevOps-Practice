@@ -8,12 +8,8 @@ include "root" {
   path = find_in_parent_folders()
 }
 
-dependency "vpc" {
-  config_path = "../vpc"
-  mock_outputs = {
-    vpc_id = "fake-vpc-id"
-    subnets = []
-  }
+dependency "wrapper" {
+  config_path = "../wrapper"
 }
 
 # dev-specific variables
