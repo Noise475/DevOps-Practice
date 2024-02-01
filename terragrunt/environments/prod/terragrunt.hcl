@@ -8,7 +8,7 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "${inputs.ou_role_arn}"
+    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
   }
 }
 EOF
@@ -37,5 +37,7 @@ terraform {
 inputs = {
   environment = "prod"
   region      = "us-east-2"
-  ou_role_arn = dependency.ou_creation.outputs.ou_role_arn
+  tags = {
+    Terraform = "true"
+  }
 }

@@ -9,8 +9,8 @@ resource "aws_organizations_organizational_unit" "ou" {
 
 # Iterate over the list of OUs and create IAM roles
 resource "aws_iam_role" "ou_roles" {
-  for_each = { for ou in var.ou : ou.name => ou }
-  name = "OU-${each.value.name}-Role"
+  for_each           = { for ou in var.ou : ou.name => ou }
+  name               = "OU-${each.value.name}-Role"
   assume_role_policy = file("../iam/roles/ou_role.json")
 }
 

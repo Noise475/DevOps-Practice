@@ -1,6 +1,10 @@
 # terragrunt.hcl
 iam_role = "arn:aws:iam::503489311732:role/terragrunt"
 
+terraform {
+  source =  "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+}
+
 remote_state {
   backend = "s3"
   generate = {

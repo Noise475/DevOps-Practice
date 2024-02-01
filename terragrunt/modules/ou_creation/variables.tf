@@ -14,5 +14,4 @@ variable "parent_ou_id" {
 variable "ou" {
   description = "variable holding current orginazation"
   type = string
-  default = data.aws_organizations_organization.current.organizational_units
 }

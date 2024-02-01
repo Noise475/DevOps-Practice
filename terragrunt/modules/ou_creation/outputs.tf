@@ -2,7 +2,7 @@
 
 # List of ids for organizational units
 output "ou_ids" {
-  value       = aws_organizations_organizational_unit.ou[*].id
+  value = aws_organizations_organizational_unit.ou[*].id
 }
 
 # role arn for organzational unit role

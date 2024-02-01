@@ -29,7 +29,7 @@
         "Condition": {
           "StringNotEqualsIfExists": {
             "s3:x-amz-server-side-encryption": "aws:kms",
-            "aws:PrincipalArn": "arn:aws:iam::503489311732:role/terragrunt"
+            "aws:PrincipalArn": "${var.role_arn}"//"arn:aws:iam::503489311732:role/terragrunt"
           }
         }
       }

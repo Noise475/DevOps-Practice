@@ -4,12 +4,12 @@ terraform {
   source = "../../../modules//eks" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.0"
 }
 
-include "root" {
-  path = find_in_parent_folders()
-}
-
-dependency "wrapper" {
-  config_path = "../wrapper"
+dependency "vpc" {
+  config_path = "../vpc"
+  mock_outputs = {
+    vpc_id = "fake-vpc-id"
+    subnets = []
+  }
 }
 
 # dev-specific variables

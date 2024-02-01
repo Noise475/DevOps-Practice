@@ -4,6 +4,13 @@ terraform {
   source = "../../../modules//kms" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.0"
 }
 
-include "root" {
-  path = find_in_parent_folders()
+dependency "ou_creation" {
+  config_path = "../../../ou_creation"
+  mock_outputs = {
+    role_arn = ""
+  }
+}
+
+inputs = {
+  role_arn = dependency.ou_creation.outputs.ou_role_arn
 }

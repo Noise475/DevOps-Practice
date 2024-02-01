@@ -1,4 +1,14 @@
 # environments/staging/terragrunt.hcl
+dependency "ou_creation" {
+  config_path = "../../ou_creation"
+  mock_outputs = {
+    ou_role_arn = ""
+  }
+}
+
+terraform {
+  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+}
 
 # Generate provider configuration dynamically
 generate "provider" {
@@ -8,7 +18,7 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "${inputs.ou_role_arn}"
+    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
   }
 }
 EOF
@@ -29,13 +39,11 @@ remote_state {
   }
 }
 
-terraform {
-  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
-}
-
 # Vars to be replaced
 inputs = {
   environment = "staging"
   region      = "us-east-2"
-  ou_role_arn = dependency.ou_creation.outputs.ou_role_arn
+  tags = {
+    Terraform = "true"
+  }
 }

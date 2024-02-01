@@ -1,6 +1,17 @@
 # environments/dev/terragrunt.hcl
 
-# Generate provider configuration dynamically
+terraform {
+  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+}
+
+dependency "ou_creation" {
+  config_path = "../../ou_creation/"
+  mock_outputs = {
+    ou_role_arn = "placeholder"
+  }
+}
+
+# Generate provider.tf configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
   if_exists = "overwrite_terragrunt"
@@ -8,12 +19,13 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "${inputs.ou_role_arn}"
+    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
   }
 }
 EOF
 }
 
+# Generate backend.tf
 remote_state {
   backend = "s3"
   generate = {
@@ -29,13 +41,11 @@ remote_state {
   }
 }
 
-terraform {
-  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
-}
-
 # Vars to be replaced
 inputs = {
   environment = "dev"
   region      = "us-east-2"
-  role_arn    = dependency.ou_creation.outputs.ou_role_arn
+  tags = {
+    Terraform = "true"
+  }
 }
