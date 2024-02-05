@@ -7,5 +7,5 @@ output "ou_ids" {
 
 # role arn for organzational unit role
 output "ou_role_arn" {
-  value = aws_iam_role.ou_roles.arn
+  value = aws_iam_role.ou_roles[*].arn
 }

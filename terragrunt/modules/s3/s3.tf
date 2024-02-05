@@ -14,7 +14,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" 
 
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = module.kms.aws_kms_key.s3_key.arn
+      kms_master_key_id = var.s3_key_id
       sse_algorithm     = "aws:kms"
     }
   }

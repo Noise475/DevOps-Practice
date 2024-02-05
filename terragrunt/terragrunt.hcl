@@ -2,8 +2,15 @@
 iam_role = "arn:aws:iam::503489311732:role/terragrunt"
 
 terraform {
-  source =  "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+  source =  "./modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
+
+locals {
+  region = env("AWS_REGION", "us-east-2")
+  environment = env("ENVIRONMENT", "dev")
+  role_arn = env("ROLE_ARN", iam_role)
+}
+
 
 remote_state {
   backend = "s3"
@@ -12,11 +19,11 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    bucket         = "global-remote-state-terraform-bucket"
-    region         = "us-east-2"
+    bucket         = "${local.environment}-remote-state-terraform-bucket"
+    region         = "${local.region}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
-    dynamodb_table = "terraform-state-lock-table"
+    dynamodb_table = "${local.environment}-terraform-lock-table"
   }
 }
 
@@ -25,9 +32,9 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${local.region}"
   assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terragrunt"
+    role_arn = "${local.role_arn}"
   }
 }
 EOF
