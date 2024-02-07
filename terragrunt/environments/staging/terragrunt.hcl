@@ -1,11 +1,11 @@
 # environments/staging/terragrunt.hcl
+
 dependency "ou_creation" {
-  config_path = "../../ou_creation"
+  config_path = "../../ou_creation/"
   mock_outputs = {
-    ou_role_arn = ""
+    ou_role_arn = "placeholder"
   }
 }
-
 terraform {
   source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
@@ -36,14 +36,5 @@ remote_state {
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "staging-terraform-lock-table"
-  }
-}
-
-# Vars to be replaced
-inputs = {
-  environment = "staging"
-  region      = "us-east-2"
-  tags = {
-    Terraform = "true"
   }
 }

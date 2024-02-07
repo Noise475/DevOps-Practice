@@ -7,7 +7,7 @@ terraform {
 dependency "ou_creation" {
   config_path = "../../../ou_creation"
   mock_outputs = {
-    role_arn = ""
+    ou_role_arn = "fake-role-arn"
   }
 }
 

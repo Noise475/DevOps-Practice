@@ -8,7 +8,7 @@ dependency "kms" {
   config_path = "../kms"
 
   mock_outputs = {
-    kms_master_key_id = "fake-kms-master-key-id"
+    s3_key_id = "fake-kms-master-key-id"
   }
 }
 

@@ -1,9 +1,5 @@
 # environments/dev/terragrunt.hcl
 
-terraform {
-  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
-}
-
 dependency "ou_creation" {
   config_path = "../../ou_creation/"
   mock_outputs = {
@@ -41,11 +37,10 @@ remote_state {
   }
 }
 
-# Vars to be replaced
-inputs = {
-  environment = "dev"
-  region      = "us-east-2"
-  tags = {
-    Terraform = "true"
-  }
+include "root" {
+  path = find_in_parent_folders()
+}
+
+terraform {
+  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }

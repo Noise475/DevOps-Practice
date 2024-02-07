@@ -1,5 +1,12 @@
 # environments/prod/terragrunt.hcl
 
+dependency "ou_creation" {
+  config_path = "../../ou_creation/"
+  mock_outputs = {
+    ou_role_arn = "placeholder"
+  }
+}
+
 # Generate provider configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
@@ -29,15 +36,10 @@ remote_state {
   }
 }
 
-terraform {
-  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+include "root" {
+  path = find_in_parent_folders()
 }
 
-# Vars to be replaced
-inputs = {
-  environment = "prod"
-  region      = "us-east-2"
-  tags = {
-    Terraform = "true"
-  }
+terraform {
+  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
