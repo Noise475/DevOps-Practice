@@ -1,7 +1,7 @@
 # environments/prod/terragrunt.hcl
 
 dependency "ou_creation" {
-  config_path = "../../ou_creation/"
+  config_path = "../../ou_creation"
   mock_outputs = {
     ou_role_arn = "placeholder"
   }
@@ -43,3 +43,9 @@ include "root" {
 terraform {
   source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
+
+inputs = {
+  environment = "prod"
+  region = "us-east-2"
+}
+

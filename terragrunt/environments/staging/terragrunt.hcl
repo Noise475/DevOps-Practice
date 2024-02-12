@@ -1,11 +1,12 @@
 # environments/staging/terragrunt.hcl
 
 dependency "ou_creation" {
-  config_path = "../../ou_creation/"
+  config_path = "../../ou_creation"
   mock_outputs = {
     ou_role_arn = "placeholder"
   }
 }
+
 terraform {
   source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
@@ -38,3 +39,9 @@ remote_state {
     dynamodb_table = "staging-terraform-lock-table"
   }
 }
+
+inputs = {
+  environment = "staging"
+  region = "us-east-2"
+}
+

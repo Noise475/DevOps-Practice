@@ -3,15 +3,16 @@
 # Create Organizational Units
 resource "aws_organizations_organizational_unit" "ou" {
   count     = length(var.ou_names)
-  name      = var.ou_names[count.index]
-  parent_id = var.parent_ou_id
+  name      = var.ou_names[count.index].name
+  parent_id = length(data.aws_organizations_organization.current.roots) > 0 ? data.aws_organizations_organization.current.roots[0].id : null
+
 }
 
 # Iterate over the list of OUs and create IAM roles
 resource "aws_iam_role" "ou_roles" {
-  for_each           = { for ou in var.ou : ou.name => ou }
+  for_each           = { for ou in var.ou_names : ou.name => ou }
   name               = "OU-${each.value.name}-Role"
-  assume_role_policy = file("../iam/roles/ou_role.json")
+  assume_role_policy = file("./policies/ou-role.json")
 }
 
 # Define policies for each OU
@@ -22,7 +23,7 @@ resource "aws_iam_policy" "ou_policies" {
   description = "Policy for ${each.key}"
 
   # Define policy document here
-  policy = file("../iam/policies/s3.json")
+  policy = file("./policies/env-perms.json")
 }
 
 # Attach policies to roles

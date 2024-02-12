@@ -2,16 +2,17 @@
 
 variable "ou_names" {
   description = "List of OU names to create"
-  type        = list(string)
+  type        = list(object({ name = string }))
+  default     = [{ name = "dev" }, { name = "staging" }, { name = "prod" }]
 }
 
 variable "parent_ou_id" {
   description = "ID of the parent OU (optional)"
   type        = string
-  default     = null
+  default     = "null"
 }
 
 variable "ou" {
   description = "variable holding current orginazation"
-  type = string
+  type        = string
 }
