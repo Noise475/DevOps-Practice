@@ -7,6 +7,10 @@ dependency "ou_creation" {
   }
 }
 
+dependency "iam" {
+  config_path = "../../modules/iam"
+}
+
 # Generate provider configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"

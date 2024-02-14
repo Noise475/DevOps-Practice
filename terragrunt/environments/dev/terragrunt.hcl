@@ -7,6 +7,10 @@ dependency "ou_creation" {
   }
 }
 
+dependency "iam" {
+  config_path = "../../modules/iam"
+}
+
 # Generate provider.tf configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
@@ -47,5 +51,5 @@ terraform {
 
 inputs = {
   environment = "dev"
-  region = "us-east-2"
+  region      = "us-east-2"
 }

@@ -1,7 +1,7 @@
 # terragrunt/ou_creation/terragrunt.hcl
 
 terraform {
-  source = "../modules/ou_creation" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/ou_creation?ref=0.0.0"
+  source = "../modules/iam" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.0"
 }
 
 include "root" {
@@ -23,11 +23,6 @@ EOF
 }
 
 inputs = {
-  ou_names = [
-    for name in ["dev", "staging", "prod"] : {
-      name = name
-    }
-  ]
   environment = basename(find_in_parent_folders())
   region = "us-east-2"
 }
