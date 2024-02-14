@@ -1,14 +1,9 @@
 # environments/staging/terragrunt.hcl
-
-dependency "ou_creation" {
-  config_path = "../../ou_creation"
+dependency "iam" {
+  config_path = "../../iam"
   mock_outputs = {
     ou_role_arn = "placeholder"
-  }
-}
-
-dependency "iam" {
-  config_path = "../../modules/iam"
+  }  
 }
 
 terraform {

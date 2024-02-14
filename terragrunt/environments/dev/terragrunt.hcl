@@ -1,14 +1,9 @@
 # environments/dev/terragrunt.hcl
-
-dependency "ou_creation" {
-  config_path = "../../ou_creation"
+dependency "iam" {
+  config_path = "../../iam"
   mock_outputs = {
     ou_role_arn = "placeholder"
   }
-}
-
-dependency "iam" {
-  config_path = "../../modules/iam"
 }
 
 # Generate provider.tf configuration dynamically
@@ -19,7 +14,7 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
+    role_arn = "${dependency.iam.outputs.ou_role_arn}"
   }
 }
 EOF
