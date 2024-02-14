@@ -14,7 +14,7 @@ generate "provider" {
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
+    role_arn = "${dependency.iam.outputs.ou_role_arn}"
   }
 }
 EOF

@@ -16,9 +16,9 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${input.region}"
   assume_role {
-    role_arn = "${dependency.ou_creation.outputs.ou_role_arn}"
+    role_arn = "${dependency.iam.outputs.ou_role_arn}"
   }
 }
 EOF

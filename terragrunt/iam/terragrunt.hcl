@@ -25,4 +25,5 @@ EOF
 inputs = {
   environment = basename(find_in_parent_folders())
   region = "us-east-2"
+  ou_role = basename(find_in_parent_folders())
 }
