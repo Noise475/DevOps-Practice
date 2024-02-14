@@ -11,8 +11,3 @@ variable "parent_ou_id" {
   type        = string
   default     = "null"
 }
-
-variable "ou" {
-  description = "variable holding current orginazation"
-  type        = string
-}

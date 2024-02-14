@@ -10,7 +10,7 @@
                 "dynamodb:GetItem",
                 "dynamodb:PutItem"
             ],
-            "Resource": "arn:aws:dynamodb:${var.region}:${module.ou_creation.outputs.ou_id}:table/${module.dynamodb.outputs.table_name}"
+            "Resource": "arn:aws:dynamodb:${var.region}:${module.ou_creation.ou_role_arn}:table/${module.dynamodb.table_name}"
         },
         {
             "Effect": "Allow",

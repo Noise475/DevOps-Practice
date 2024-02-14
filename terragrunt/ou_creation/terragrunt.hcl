@@ -28,5 +28,6 @@ inputs = {
       name = name
     }
   ]
-  ou = basename(find_in_parent_folders())
+  env = basename(find_in_parent_folders())
+  region = "us-east-2"
 }
