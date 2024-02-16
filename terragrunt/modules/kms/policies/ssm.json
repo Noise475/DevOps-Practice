@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Id": "ParameterStore",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "kms:ListKeys",
+                "kms:ListAliases",
+                "kms:Describe*",
+                "kms:Decrypt"
+            ],
+            "Resource": "ssm_key"
+        }
+    ]
+}

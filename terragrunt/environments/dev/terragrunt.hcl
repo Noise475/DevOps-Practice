@@ -12,7 +12,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${get_env("REGION")}"
   assume_role {
     role_arn = "${dependency.iam.outputs.ou_role_arn}"
   }
@@ -29,7 +29,7 @@ remote_state {
   }
   config = {
     bucket         = "dev-remote-state-terraform-bucket"
-    region         = "us-east-2"
+    region         = "${get_env("REGION")}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
@@ -46,5 +46,5 @@ terraform {
 
 inputs = {
   environment = "dev"
-  region      = "us-east-2"
+  region      = "${get_env("REGION")}"
 }

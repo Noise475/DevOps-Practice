@@ -17,3 +17,12 @@ resource "aws_kms_key" "s3_key" {
 
   policy = file("./policies/s3.json")
 }
+
+# SSM keys
+resource "aws_kms_key" "ssm_key" {
+  description             = "KMS key for parameter store"
+  deletion_window_in_days = 30
+  enable_key_rotation     = true
+
+  policy = file("./policies/ssm.json")
+}

@@ -5,7 +5,14 @@ terraform {
 }
 
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
+  expose = true
+}
+
+inputs = {
+  environment = get_env("ENVIRONMENT")
+  region      = get_env("REGION")
+  ou_role     = get_env("ENVIRONMENT")
 }
 
 # Generate provider configuration dynamically
@@ -14,16 +21,10 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${get_env("REGION")}"
   assume_role {
     role_arn = "arn:aws:iam::503489311732:role/terragrunt"
   }
 }
 EOF
-}
-
-inputs = {
-  environment = basename(find_in_parent_folders())
-  region = "us-east-2"
-  ou_role = basename(find_in_parent_folders())
 }

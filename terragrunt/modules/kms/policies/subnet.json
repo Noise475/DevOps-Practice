@@ -8,7 +8,7 @@
                 "Service": "ec2.amazonaws.com"
             },
             "Action": "kms:Encrypt",
-            "Resource": "*"
+            "Resource": "private_subnet_key"
         },
         {
             "Effect": "Allow",
@@ -16,7 +16,7 @@
                 "Service": "ec2.amazonaws.com"
             },
             "Action": "kms:Decrypt",
-            "Resource": "*"
+            "Resource": "private_subnet_key"
         },
         {
             "Effect": "Allow",
@@ -24,7 +24,7 @@
                 "Service": "ec2.amazonaws.com"
             },
             "Action": "kms:ReEncrypt*",
-            "Resource": "*"
+            "Resource": "private_subnet_key"
         },
         {
             "Effect": "Allow",
@@ -32,7 +32,7 @@
                 "Service": "ec2.amazonaws.com"
             },
             "Action": "kms:GenerateDataKey*",
-            "Resource": "*"
+            "Resource": "private_subnet_key"
         }
     ]
 }

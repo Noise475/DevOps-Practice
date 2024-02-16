@@ -14,7 +14,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${get_env("REGION")}"
   assume_role {
     role_arn = "arn:aws:iam::503489311732:role/terragrunt"
   }
@@ -28,6 +28,6 @@ inputs = {
       name = name
     }
   ]
-  environment = basename(find_in_parent_folders())
-  region = "us-east-2"
+  environment = "${get_env("ENVIRONMENT")}"
+  region      = "${get_env("REGION")}"
 }
