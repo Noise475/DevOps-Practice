@@ -1,10 +1,4 @@
 # environments/dev/terragrunt.hcl
-dependency "iam" {
-  config_path = "../../iam"
-  mock_outputs = {
-    ou_role_arn = "placeholder"
-  }
-}
 
 # Generate provider.tf configuration dynamically
 generate "provider" {
@@ -14,7 +8,7 @@ generate "provider" {
 provider "aws" {
   region = "${get_env("REGION")}"
   assume_role {
-    role_arn = "${dependency.iam.outputs.ou_role_arn}"
+    role_arn = "${get_env("DEV_ROLE_ARN")}"
   }
 }
 EOF
@@ -36,9 +30,6 @@ remote_state {
   }
 }
 
-include "root" {
-  path = find_in_parent_folders()
-}
 
 terraform {
   source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
@@ -47,4 +38,7 @@ terraform {
 inputs = {
   environment = "dev"
   region      = "${get_env("REGION")}"
+  tags = {
+    Terraform = "true"
+  }
 }
