@@ -19,7 +19,7 @@ include "root" {
 inputs = {
   environment = get_env("ENVIRONMENT")
   region      = get_env("REGION")
-  account_id  = current_ou_id
+  account_id  = dependency.ou_creation.outputs.current_ou_id
 }
 
 # Generate provider configuration dynamically
