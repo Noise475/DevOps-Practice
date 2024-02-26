@@ -4,11 +4,14 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": [
-                    "arn:aws:iam::${account_id}:role/${environment}"
-                ]
+                "AWS": "arn:aws:iam::${account_id}:root"
             },
-            "Action": "sts:AssumeRole"
+            "Action": "sts:AssumeRole",
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalOrgID": "${org_id}"
+                }
+            }
         }
     ]
 }

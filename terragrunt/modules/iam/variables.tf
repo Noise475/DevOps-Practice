@@ -9,6 +9,11 @@ variable "environment" {
 }
 
 variable "account_id" {
-  description = "AWS Account/Organizational Unit ID"
+  description = "AWS Account ID"
   type        = string
+}
+
+variable "org_id" {
+  description = "AWS Organization ID"
+  type = string
 }

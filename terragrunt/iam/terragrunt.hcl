@@ -1,4 +1,4 @@
-# terragrunt/ou_creation/terragrunt.hcl
+# terragrunt/iam/terragrunt.hcl
 
 terraform {
   source = "../modules/iam" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.0"
@@ -19,7 +19,8 @@ include "root" {
 inputs = {
   environment = get_env("ENVIRONMENT")
   region      = get_env("REGION")
-  account_id  = dependency.ou_creation.outputs.current_ou_id
+  account_id  = get_env("ACCOUNT_ID")
+  org_id      = dependency.ou_creation.outputs.current_ou_id
 }
 
 # Generate provider configuration dynamically
