@@ -12,14 +12,14 @@ resource "aws_iam_role" "ou_role" {
 
 # Attach policies to the IAM role
 resource "aws_iam_policy_attachment" "env_policy_attachment" {
-  name       = "${var.environment}-policy-attachment"
+  name       = "${var.environment}-terragrunt-policy-attachment"
   roles      = [aws_iam_role.ou_role.name]
   policy_arn = aws_iam_policy.ou_policy.arn
 }
 
 # Define policies for each OU
 resource "aws_iam_policy" "ou_policy" {
-  name        = "ou-${var.environment}-policy"
+  name        = "${var.environment}-terragrunt-policy"
   description = "Policy for ${var.environment}"
 
   # Define policy document here
@@ -33,7 +33,14 @@ resource "aws_iam_policy" "ou_policy" {
 
 # Attach policies to roles
 resource "aws_iam_policy_attachment" "ou_policy_attachments" {
-  name       = "ou-${var.environment}-policy-attachment"
+  name       = "${var.environment}-terragrunt-policy-attachment"
   roles      = [aws_iam_role.ou_role.name]
   policy_arn = aws_iam_policy.ou_policy.arn
+}
+
+resource "aws_iam_policy" "eks_policy" {
+  name        = "eks_policy"
+  description = "IAM policy for Amazon EKS"
+
+  policy = file("./policies/eks_policy.json")
 }

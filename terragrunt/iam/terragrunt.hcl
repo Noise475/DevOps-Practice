@@ -22,17 +22,3 @@ inputs = {
   account_id  = get_env("ACCOUNT_ID")
   org_id      = dependency.ou_creation.outputs.current_ou_id
 }
-
-# Generate provider configuration dynamically
-generate "provider" {
-  path      = "provider_override.tf"
-  if_exists = "overwrite_terragrunt"
-  contents  = <<EOF
-provider "aws" {
-  region = "${get_env("REGION")}"
-  assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terragrunt"
-  }
-}
-EOF
-}
