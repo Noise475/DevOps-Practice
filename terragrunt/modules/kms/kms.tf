@@ -15,7 +15,10 @@ resource "aws_kms_key" "s3_key" {
   deletion_window_in_days = 30
   enable_key_rotation     = true
 
-  policy = file("./policies/s3.json")
+  policy = templatefile("./policies/s3.json", {
+    environment = var.environment
+    role_arn    = var.role_arn
+  })
 }
 
 # SSM keys
