@@ -12,7 +12,7 @@ generate "provider" {
 provider "aws" {
   region = "${get_env("REGION")}"
   assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terragrunt"
+    role_arn = "arn:aws:iam::503489311732:role/terraform_role"
   }
 }
 EOF

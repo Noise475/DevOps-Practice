@@ -1,0 +1,44 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Create*",
+                "ec2:Describe*",
+                "ec2:Modify*",
+                "iam:AttachRolePolicy",
+                "iam:AttachUserPolicy",
+                "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
+                "iam:CreateRole",
+                "iam:DeletePolicyVersion",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListEntitiesForPolicy",
+                "iam:ListPolicyVersions",
+                "iam:ListRolePolicies",
+                "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:PutUserPolicy",
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:GetKeyPolicy",
+                "kms:GetKeyRotationStatus",
+                "kms:ListResourceTags",
+                "kms:PutKeyPolicy",
+                "s3:CreateBucket",
+                "s3:GetBucketLocation",
+                "s3:GetBucketPolicy",
+                "s3:GetObject",
+                "s3:ListAllMyBuckets",
+                "s3:PutBucketPolicy",
+                "s3:PutObject"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
