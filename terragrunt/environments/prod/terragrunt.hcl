@@ -14,7 +14,7 @@ generate "provider" {
 provider "aws" {
   region = "${get_env("REGION")}"
   assume_role {
-    role_arn = "${dependency.iam.outputs.ou_role_arn}"
+    role_arn = "${get_env("PROD_ROLE_ARN")}"
   }
 }
 EOF

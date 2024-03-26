@@ -76,6 +76,12 @@ resource "aws_kms_key" "ssm_key" {
   enable_key_rotation     = true
 }
 
+# Key alias
+resource "aws_kms_alias" "ssm_key" {
+  name = "alias/${var.environment}-parameter-store-key"
+  target_key_id = aws_kms_key.ssm_key.key_id
+}
+
 # SSM key policy
 resource "aws_kms_key_policy" "kms_policy" {
   key_id = aws_kms_key.ssm_key.id
