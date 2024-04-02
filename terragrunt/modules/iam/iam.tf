@@ -69,6 +69,12 @@ resource "aws_iam_policy_attachment" "env_policy_attachment" {
   policy_arn = aws_iam_policy.ou_tf_state_policy.arn
 }
 
+
+#######################################################
+# SSM keys here are placed for loading in the same 
+# order as iam module for kms access for service roles
+#######################################################
+
 # SSM keys
 resource "aws_kms_key" "ssm_key" {
   description             = "KMS key for parameter store"

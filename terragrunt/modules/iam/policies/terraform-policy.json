@@ -23,6 +23,7 @@
                 "iam:PassRole",
                 "iam:PutRolePolicy",
                 "iam:PutUserPolicy",
+                "iam:UpdateAssumeRolePolicy",
                 "kms:CreateAlias",
                 "kms:Decrypt",
                 "kms:DeleteAlias",
