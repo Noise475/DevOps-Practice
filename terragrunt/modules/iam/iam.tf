@@ -3,7 +3,7 @@
 # Define terraform_role for infrastructure administration
 resource "aws_iam_role" "terraform_role" {
   name = "terraform_role"
-  assume_role_policy = templatefile("./policies/terraform-role.json", {
+  assume_role_policy = templatefile("./policies/assume-root-policy.json", {
     account_id = var.account_id
   })
   tags = {
@@ -29,7 +29,7 @@ resource "aws_iam_policy_attachment" "tf_policy_attachment" {
 # Define IAM role for the OU
 resource "aws_iam_role" "ou_role" {
   name = var.environment
-  assume_role_policy = templatefile("./policies/ou-role.json", {
+  assume_role_policy = templatefile("./policies/assume-tf-policy.json", {
     account_id  = var.account_id
     org_id      = var.org_id
     environment = var.environment
@@ -65,10 +65,9 @@ resource "aws_iam_policy" "eks_policy" {
 # Attach policies to the IAM role
 resource "aws_iam_policy_attachment" "env_policy_attachment" {
   name       = "${var.environment}-terraform-state-policy-attachment"
-  roles      = [aws_iam_role.ou_role.name]
+  roles      = [aws_iam_role.ou_role.name, aws_iam_role.terraform_role.name]
   policy_arn = aws_iam_policy.ou_tf_state_policy.arn
 }
-
 
 #######################################################
 # SSM keys here are placed for loading in the same 

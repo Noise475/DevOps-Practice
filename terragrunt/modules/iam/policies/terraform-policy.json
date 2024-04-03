@@ -9,6 +9,7 @@
                 "ec2:Modify*",
                 "iam:AttachRolePolicy",
                 "iam:AttachUserPolicy",
+                "iam:CreateGroup",
                 "iam:CreatePolicy",
                 "iam:CreatePolicyVersion",
                 "iam:CreateRole",
@@ -40,7 +41,7 @@
                 "s3:GetBucketLocation",
                 "s3:GetBucketPolicy",
                 "s3:GetObject",
-                "s3:ListAllMyBuckets",
+                "s3:ListBuckets",
                 "s3:PutBucketPolicy",
                 "s3:PutObject"
             ],

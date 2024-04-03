@@ -6,12 +6,7 @@
             "Principal": {
                 "AWS": "arn:aws:iam::${account_id}:role/terraform_role"
             },
-            "Action": "sts:AssumeRole",
-            "Condition": {
-                "StringEquals": {
-                    "aws:PrincipalOrgID": "${org_id}"
-                }
-            }
+            "Action": "sts:AssumeRole"
         }
     ]
 }
