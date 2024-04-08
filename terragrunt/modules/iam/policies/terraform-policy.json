@@ -14,6 +14,7 @@
                 "iam:CreatePolicyVersion",
                 "iam:CreateRole",
                 "iam:DeletePolicyVersion",
+                "iam:DetachRolePolicy",
                 "iam:GetPolicy",
                 "iam:GetPolicyVersion",
                 "iam:GetRole",
@@ -26,15 +27,19 @@
                 "iam:PutUserPolicy",
                 "iam:UpdateAssumeRolePolicy",
                 "kms:CreateAlias",
+                "kms:CreateKey",
                 "kms:Decrypt",
                 "kms:DeleteAlias",
                 "kms:DescribeKey",
                 "kms:Encrypt",
+                "kms:EnableKeyRotation",
                 "kms:GetKeyPolicy",
                 "kms:GetKeyRotationStatus",
                 "kms:ListResourceTags",
                 "kms:ListAliases",
                 "kms:PutKeyPolicy",
+                "kms:ScheduleKeyDeletion",
+                "kms:UpdateAlias",
                 "organizations:Describe*",
                 "organizations:List*",
                 "s3:CreateBucket",
@@ -43,7 +48,9 @@
                 "s3:GetObject",
                 "s3:ListBuckets",
                 "s3:PutBucketPolicy",
-                "s3:PutObject"
+                "s3:PutObject",
+                "sso:ListInstances",
+                "sso:ListAccountAssignments"
             ],
             "Resource": "*"
         }

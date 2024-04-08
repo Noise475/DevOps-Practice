@@ -42,4 +42,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_ou_role_arn"></a> [ou\_role\_arn](#output\_ou\_role\_arn) | n/a |
+| <a name="output_tf_role_arn"></a> [tf\_role\_arn](#output\_tf\_role\_arn) | n/a |
 <!-- END_TF_DOCS -->

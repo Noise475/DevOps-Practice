@@ -6,7 +6,11 @@ resource "aws_kms_key" "private_subnet_key" {
   deletion_window_in_days = 30
   enable_key_rotation     = true
 
-  policy = file("./policies/subnet.json")
+  policy = templatefile("./policies/subnet.json", {
+    environment = "${var.environment}"
+    role_arn    = "${var.role_arn}"
+    account_id  = "${var.account_id}"
+  })
 }
 
 # S3 Keys
@@ -16,8 +20,9 @@ resource "aws_kms_key" "s3_key" {
   enable_key_rotation     = true
 
   policy = templatefile("./policies/s3.json", {
-    environment = var.environment
-    role_arn    = var.role_arn
+    environment = "${var.environment}"
+    role_arn    = "${var.role_arn}"
+    account_id  = "${var.account_id}"
   })
 }
 
@@ -27,5 +32,9 @@ resource "aws_kms_key" "ssm_key" {
   deletion_window_in_days = 30
   enable_key_rotation     = true
 
-  policy = file("./policies/ssm.json")
+  policy = templatefile("./policies/ssm.json", {
+    environment = "${var.environment}"
+    role_arn    = "${var.role_arn}"
+    account_id  = "${var.account_id}"
+  })
 }

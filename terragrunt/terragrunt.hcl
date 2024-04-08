@@ -11,10 +11,7 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${get_env("REGION")}"
-  assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terraform_role"
   }
-}
 EOF
 }
 

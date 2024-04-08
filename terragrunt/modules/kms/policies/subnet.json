@@ -5,34 +5,15 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "Service": "ec2.amazonaws.com"
+                "Service": "arn:aws:iam::${account_id}:role/${environment}"
             },
-            "Action": "kms:Encrypt",
-            "Resource": "private_subnet_key"
-        },
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Action": "kms:Decrypt",
-            "Resource": "private_subnet_key"
-        },
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Action": "kms:ReEncrypt*",
-            "Resource": "private_subnet_key"
-        },
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Action": "kms:GenerateDataKey*",
-            "Resource": "private_subnet_key"
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+            ],
+            "Resource": "*"
         }
     ]
 }

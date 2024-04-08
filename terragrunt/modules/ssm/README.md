@@ -24,7 +24,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | current environment | `string` | n/a | yes |
-| <a name="input_ou_role_arn"></a> [ou\_role\_arn](#input\_ou\_role\_arn) | current organization role ARN | `string` | n/a | yes |
+| <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | current organization/environment role ARN | `string` | n/a | yes |
 
 ## Outputs
 

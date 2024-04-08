@@ -11,7 +11,10 @@
                 "kms:Describe*",
                 "kms:Decrypt"
             ],
-            "Resource": "ssm_key"
+            "Principal": {
+                "Service": "arn:aws:iam::${account_id}:role/${environment}"
+            },
+            "Resource": "*"
         }
     ]
 }

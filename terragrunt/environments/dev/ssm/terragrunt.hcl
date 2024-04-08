@@ -17,6 +17,11 @@ dependency "iam" {
   }
 }
 
+dependency "kms" {
+  config_path  = "../kms"
+  skip_outputs = true
+}
+
 inputs = {
   dev_role_arn = dependency.iam.outputs.ou_role_arn
 }

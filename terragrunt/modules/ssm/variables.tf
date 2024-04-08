@@ -3,7 +3,7 @@ variable "environment" {
   type = string
 }
 
-variable "ou_role_arn" {
-  description = "current organization role ARN"
+variable "role_arn" {
+  description = "current organization/environment role ARN"
   type = string
 }
