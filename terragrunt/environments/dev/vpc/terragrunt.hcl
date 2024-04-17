@@ -18,7 +18,8 @@ dependency "iam" {
 }
 
 dependency "kms" {
-  config_path = "../kms"
+  config_path  = "../kms"
+  skip_outputs = true
 }
 
 locals {
