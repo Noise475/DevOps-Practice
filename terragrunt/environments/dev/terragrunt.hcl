@@ -39,7 +39,7 @@ inputs = {
   environment = "dev"
   region      = "${get_env("REGION")}"
   role_arn    = "${get_env("DEV_ROLE_ARN")}"
-  account_id = "${get_env("ACCOUNT_ID")}"
+  account_id  = "${get_env("ACCOUNT_ID")}"
   tags = {
     Terraform = "true"
   }
