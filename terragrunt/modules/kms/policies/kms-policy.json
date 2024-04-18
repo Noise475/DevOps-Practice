@@ -5,7 +5,11 @@
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${account_id}:role/terraform_role"
+        "AWS": [
+          "arn:aws:iam::${account_id}:role/terraform_role",
+          "arn:aws:iam::${account_id}:role/${environment}",
+          "arn:aws:iam::${account_id}:root"
+        ]
       },
       "Action": [
         "kms:Create*",
@@ -21,10 +25,7 @@
         "kms:ScheduleKeyDeletion",
         "kms:CancelKeyDeletion"
       ],
-      "Resource": [
-        "${s3_key_arn}",
-        "${ssm_key_arn}"
-      ]
+      "Resource": "*"
     }
   ]
 }

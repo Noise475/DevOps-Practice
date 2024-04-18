@@ -11,9 +11,16 @@ fi
 role_arn="$1"
 session_name="$2"
 
+# Check if AWS environment variables are set
+if [ -n "$AWS_ACCESS_KEY_ID" ]; then
+    echo "Exiting current assumed role..."
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_SECRET_ACCESS_KEY
+    unset AWS_SESSION_TOKEN
+fi
+
 # Assume the IAM role and retrieve temporary credentials
 credentials=$(aws sts assume-role --role-arn "$role_arn" --role-session-name "$session_name")
-
 
 # Extract the temporary credentials from the JSON response
 aws_access_key_id=$(echo "$credentials" | jq -r .Credentials.AccessKeyId)
