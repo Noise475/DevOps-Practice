@@ -52,7 +52,12 @@
                 "sso:ListInstances",
                 "sso:ListAccountAssignments"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/OrgUnit": "${environment}"
+                }
+            }
         }
     ]
 }

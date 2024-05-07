@@ -18,8 +18,10 @@ dependency "iam" {
 }
 
 dependency "kms" {
-  config_path  = "../kms"
-  skip_outputs = true
+  config_path = "../../../kms"
+  mock_outputs = {
+    private_subnet_key_id = "placeholder"
+  }
 }
 
 locals {

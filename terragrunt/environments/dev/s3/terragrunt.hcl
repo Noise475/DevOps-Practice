@@ -10,13 +10,13 @@ include "root" {
 }
 
 dependency "kms" {
-  config_path = "../kms"
+  config_path = "../../../kms"
 
   mock_outputs = {
-    s3_key_id = "fake-kms-master-key-id"
+    s3_key_id = "placeholder"
   }
 }
 
 inputs = {
-  kms_master_key_id = dependency.kms.outputs.s3_key_id
+  s3_key_id = dependency.kms.outputs.s3_key_id
 }

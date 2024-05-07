@@ -41,14 +41,16 @@ resource "aws_iam_policy" "tf_policy" {
   policy = file("./policies/root-terraform-policy.json")
 }
 
+# Define policies for OUs
 resource "aws_iam_policy" "ou_tf_policy" {
   name        = "${var.environment}-terraform-policy"
   description = "administrative terraform policy for ${var.environment}"
 
-  policy = file("./policies/ou-terraform-policy.json")
+  policy = templatefile("./policies/ou-terraform-policy.json", {
+    environment = var.environment
+  })
 }
 
-# Define policies for OUs
 resource "aws_iam_policy" "ou_tf_state_policy" {
   name        = "${var.environment}-terraform-state-policy"
   description = "Terraform state policy for ${var.environment}"
@@ -66,17 +68,27 @@ resource "aws_iam_policy" "eks_policy" {
   name        = "eks-policy"
   description = "IAM policy for Amazon EKS"
 
-  policy = file("./policies/eks-policy.json")
+  policy = templatefile("./policies/eks-policy.json", {
+    environment = var.environment
+  })
 }
 
 #######################################################
 # IAM Policy Attachments
 #######################################################
+
 # Attach policies to terraform_role
 resource "aws_iam_policy_attachment" "tf_policy_attachment" {
   name       = "${var.environment}-terraform-policy-attachment"
   roles      = [aws_iam_role.terraform_role.name]
   policy_arn = aws_iam_policy.tf_policy.arn
+}
+
+# Attach policies to ou_role
+resource "aws_iam_policy_attachment" "ou_tf_policy_attachment" {
+  name       = "${var.environment}-terraform-policy-attachment"
+  roles      = [aws_iam_role.ou_role.name]
+  policy_arn = aws_iam_policy.ou_tf_policy.arn
 }
 
 resource "aws_iam_policy_attachment" "ou_state_policy_attachment" {

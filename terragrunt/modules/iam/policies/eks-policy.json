@@ -55,7 +55,12 @@
                 "ssm:UpdateInstanceAssociationStatus",
                 "ssm:UpdateInstanceInformation"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/OrgUnit": "${environment}"
+                }
+            }
         }
     ]
 }

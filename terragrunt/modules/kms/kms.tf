@@ -11,6 +11,10 @@ resource "aws_kms_key" "private_subnet_key" {
     role_arn    = "${var.role_arn}"
     account_id  = "${var.account_id}"
   })
+
+  tags = {
+    environment = var.environment
+  }
 }
 
 # S3 Keys
@@ -24,6 +28,10 @@ resource "aws_kms_key" "s3_key" {
     role_arn    = "${var.role_arn}"
     account_id  = "${var.account_id}"
   })
+
+  tags = {
+    environment = var.environment
+  }
 }
 
 # SSM keys
@@ -37,6 +45,10 @@ resource "aws_kms_key" "ssm_key" {
     role_arn    = "${var.role_arn}"
     account_id  = "${var.account_id}"
   })
+
+  tags = {
+    environment = var.environment
+  }
 }
 
 resource "aws_kms_alias" "s3_key" {
