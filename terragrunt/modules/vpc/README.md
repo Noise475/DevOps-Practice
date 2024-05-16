@@ -47,6 +47,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_environment"></a> [environment](#input\_environment) | Current OU | `string` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | EC2 Instance key-value pair | `string` | n/a | yes |
 
 ## Outputs
