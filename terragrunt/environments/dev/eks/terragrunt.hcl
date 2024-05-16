@@ -5,14 +5,14 @@ terraform {
 }
 
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
-    vpc_id = "fake-vpc-id"
+    vpc_id  = "fake-vpc-id"
     subnets = []
   }
 }
@@ -23,4 +23,8 @@ inputs = {
   cluster_version = "1.28"
   vpc_id          = dependency.vpc.outputs.vpc_id
   subnets         = dependency.vpc.outputs.subnets
+
+  tags = {
+    environments = "dev"
+  }
 }

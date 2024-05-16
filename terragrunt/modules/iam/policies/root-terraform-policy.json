@@ -42,14 +42,7 @@
                 "kms:CancelKeyDeletion",
                 "organizations:Describe*",
                 "organizations:List*",
-                "s3:CreateBucket",
-                "s3:GetBucketLocation",
-                "s3:GetBucketPolicy",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "s3:PutBucketPolicy",
-                "s3:PutObject",
-                "sso:ListInstances",
+                "s3:*",
                 "sso:ListAccountAssignments"
             ],
             "Resource": "*"

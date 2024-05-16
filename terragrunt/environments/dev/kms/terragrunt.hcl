@@ -5,7 +5,7 @@ terraform {
 }
 
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -18,4 +18,8 @@ dependency "iam" {
 
 inputs = {
   role_arn = dependency.iam.outputs.ou_role_arn
+  
+  tags = {
+    environments = "dev"
+  }
 }

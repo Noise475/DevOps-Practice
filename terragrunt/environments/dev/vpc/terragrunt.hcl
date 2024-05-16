@@ -30,4 +30,8 @@ locals {
 
 inputs = {
   key_name = local.key_name
+
+  tags = {
+    environments = "dev"
+  }
 }

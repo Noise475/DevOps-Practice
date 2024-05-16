@@ -5,7 +5,7 @@ terraform {
 }
 
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -19,4 +19,8 @@ dependency "kms" {
 
 inputs = {
   s3_key_id = dependency.kms.outputs.s3_key_id
+  
+  tags = {
+    environments = "dev"
+  }
 }

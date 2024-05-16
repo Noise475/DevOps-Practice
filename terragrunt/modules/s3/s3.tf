@@ -25,5 +25,5 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" 
 # Create S3 terrafrom access policy
 resource "aws_s3_bucket_policy" "tf_policy" {
   bucket = aws_s3_bucket.bucket-env-example.id
-  policy = templatefile("./policies/s3.json")
+  policy = templatefile("./policies/s3-policy.json", { environment = var.environment })
 }
