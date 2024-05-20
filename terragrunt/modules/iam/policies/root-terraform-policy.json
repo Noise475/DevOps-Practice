@@ -40,6 +40,7 @@
                 "kms:Delete*",
                 "kms:ScheduleKeyDeletion",
                 "kms:CancelKeyDeletion",
+                "kms:TagResource",
                 "organizations:Describe*",
                 "organizations:List*",
                 "s3:*",

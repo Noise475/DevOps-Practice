@@ -4,9 +4,7 @@
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:Create*",
-                "ec2:Describe*",
-                "ec2:Modify*",
+                "ec2:*",
                 "iam:AttachRolePolicy",
                 "iam:AttachUserPolicy",
                 "iam:CreateGroup",
@@ -43,15 +41,13 @@
                 "organizations:Describe*",
                 "organizations:List*",
                 "s3:*",
+                "ssm:*",
                 "sso:ListInstances",
-                "sso:ListAccountAssignments"
+                "sso:ListAccountAssignments",
+                "dynamodb:*",
+                "vpc:*"
             ],
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:ResourceTag/OrgUnit": "${environment}"
-                }
-            }
+            "Resource": "*"
         }
     ]
 }

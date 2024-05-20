@@ -2,7 +2,7 @@
 
 # SSO configuration for AWS access
 
-data "aws_ssoadmin_instances" "example" {}
+# data "aws_ssoadmin_instances" "example" {}
 
 # resource "aws_ssoadmin_account_assignment" "example" {
 #   instance_arn       = var.sso_instance_arn
