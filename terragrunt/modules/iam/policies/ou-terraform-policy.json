@@ -47,7 +47,12 @@
                 "dynamodb:*",
                 "vpc:*"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestTag/OrgID": "${environment}"
+                }
+            }
         }
     ]
 }

@@ -16,6 +16,6 @@ include "root" {
 
 inputs = {
   tags = {
-    environments = get_env("ENVIRONMENT")
+
   }
 }

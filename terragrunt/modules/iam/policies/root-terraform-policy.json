@@ -44,7 +44,11 @@
                 "organizations:Describe*",
                 "organizations:List*",
                 "s3:*",
-                "sso:ListAccountAssignments"
+                "ssm:*",
+                "sso:ListInstances",
+                "sso:ListAccountAssignments",
+                "dynamodb:*",
+                "vpc:*"
             ],
             "Resource": "*"
         }

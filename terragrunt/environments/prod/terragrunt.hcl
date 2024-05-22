@@ -3,7 +3,7 @@ dependency "iam" {
   config_path = "../../iam"
   mock_outputs = {
     ou_role_arn = "placeholder"
-  }  
+  }
 }
 
 # Generate provider configuration dynamically
@@ -14,7 +14,7 @@ generate "provider" {
 provider "aws" {
   region = "${get_env("REGION")}"
   assume_role {
-    role_arn = "${get_env("PROD_ROLE_ARN")}"
+    role_arn = "${get_env("ROLE_ARN")}"
   }
 }
 EOF
@@ -45,6 +45,12 @@ terraform {
 
 inputs = {
   environment = "prod"
-  region = "${get_env("REGION")}"
+  region      = "${get_env("REGION")}"
+  role_arn    = "${get_env("ROLE_ARN")}"
+  account_id  = "${get_env("ACCOUNT_ID")}"
+  tags = {
+    OrgID     = "prod"
+    Terraform = "true"
+  }
 }
 

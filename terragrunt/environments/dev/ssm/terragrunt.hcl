@@ -32,6 +32,6 @@ inputs = {
   ssm_key_id    = dependency.kms.outputs.ssm_key_id
 
   tags = {
-    environments = "dev"
+
   }
 }

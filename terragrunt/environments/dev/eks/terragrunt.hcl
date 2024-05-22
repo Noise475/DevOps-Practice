@@ -25,6 +25,6 @@ inputs = {
   subnets         = dependency.vpc.outputs.subnets
 
   tags = {
-    environments = "dev"
+
   }
 }

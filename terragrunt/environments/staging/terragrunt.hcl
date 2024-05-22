@@ -3,7 +3,7 @@ dependency "iam" {
   config_path = "../../iam"
   mock_outputs = {
     ou_role_arn = "placeholder"
-  }  
+  }
 }
 
 terraform {
@@ -18,7 +18,7 @@ generate "provider" {
 provider "aws" {
   region = "${get_env("REGION")}"
   assume_role {
-    role_arn = "${get_env("STAGING_ROLE_ARN")}"
+    role_arn = "${get_env("ROLE_ARN")}"
   }
 }
 EOF
@@ -42,5 +42,11 @@ remote_state {
 inputs = {
   environment = "staging"
   region      = "${get_env("REGION")}"
+  role_arn    = "${get_env("ROLE_ARN")}"
+  account_id  = "${get_env("ACCOUNT_ID")}"
+  tags = {
+    OrgID     = "staging"
+    Terraform = "true"
+  }
 }
 
