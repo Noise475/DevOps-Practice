@@ -4,30 +4,26 @@ set -e # Exit immediately if a command exits with a non-zero status
 set -u # Treat unset variables as an error
 
 # Setup Env
-export ACCOUNT_ID=503489311732 \
-    TF_ROLE_ARN=arn:aws:iam::503489311732:role/terraform_role \
-    REGION=us-east-2 \
-    AWS_PROFILE=noise
+export ACCOUNT_ID=503489311732 TF_ROLE_ARN=arn:aws:iam::503489311732:role/terraform_role REGION=us-east-2 AWS_PROFILE=noise
 
 # Define environments
-environments=("dev" "staging" "prod")
+environments=("dev") # "stage" "prod")
+role_arn=$TF_ROLE_ARN
 
-# Function to run terragrunt with the terraform_role
+# Initial setup function using terraform_role
 run_initial_setup() {
     local env=$1
     echo "Running initial setup for environment: ${env}"
 
-    export AWS_ACCESS_KEY_ID="your-access-key"
-    export AWS_SECRET_ACCESS_KEY="your-secret-key"
-    export AWS_DEFAULT_REGION="your-region"
+    source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
 
     # Change to the environment directory
     cd environments/${env}
 
     # Run Terragrunt to provision resources
     terragrunt init
-    terragrunt plan -out=tfplan
-    terragrunt apply -auto-approve tfplan
+    terragrunt run-all plan -out=tfplan
+    terragrunt run-all apply -auto-approve tfplan
 
     cd - # Go back to the previous directory
 }
@@ -38,14 +34,17 @@ run_with_env_role() {
     echo "Running Terragrunt with environment-specific role for: ${env}"
 
     # Assume the environment-specific role (replace with actual role ARN)
-    eval $(aws sts assume-role --role-arn arn:aws:iam::$ACCOUNT_ID:role/${env}_role --role-session-name terragrunt_session --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text | awk '{ print "export AWS_ACCESS_KEY_ID="$1" AWS_SECRET_ACCESS_KEY="$2" AWS_SESSION_TOKEN="$3 }')
+    role_arn_var="${env^^}_ROLE_ARN" # Converts env to uppercase to match the variable names
+    eval role_arn=\$$role_arn_var
+
+    source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
 
     # Change to the environment directory
     cd environments/${env}
 
     # Run Terragrunt to enforce tagging
-    terragrunt plan -out=tfplan
-    terragrunt apply -auto-approve tfplan
+    terragrunt run-all plan -out=tfplan
+    terragrunt run-all apply -auto-approve tfplan
 
     cd - # Go back to the previous directory
 }
