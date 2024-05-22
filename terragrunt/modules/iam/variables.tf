@@ -8,6 +8,12 @@ variable "environment" {
   type        = string
 }
 
+variable "environments" {
+  description = "List of AWS environments"
+  type        = list(string)
+}
+
+
 variable "account_id" {
   description = "AWS Account ID"
   type        = string
@@ -15,7 +21,7 @@ variable "account_id" {
 
 variable "org_id" {
   description = "AWS Organization ID"
-  type = string
+  type        = string
 }
 
 # variable "sso_instance_arn" {

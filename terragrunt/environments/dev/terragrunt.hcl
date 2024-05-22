@@ -27,9 +27,9 @@ remote_state {
   }
 }
 
-# Generate IAM Policy
+# Generate Dev IAM Policy
 generate "iam_policy" {
-  path      = "./iam/ou_terraform_policy.json"
+  path = "${get_parent_terragrunt_dir()}/../../modules/iam/ou-terraform-policy.json"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 {
@@ -104,7 +104,7 @@ inputs = {
   role_arn    = "${get_env("ROLE_ARN")}"
   account_id  = "${get_env("ACCOUNT_ID")}"
   tags = {
-    OrgID = "dev"
+    OrgID     = "dev"
     Terraform = "true"
   }
 }

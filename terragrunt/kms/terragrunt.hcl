@@ -22,8 +22,9 @@ include "root" {
 }
 
 inputs = {
-  environment = get_env("ENVIRONMENT")
-  region      = get_env("REGION")
-  account_id  = get_env("ACCOUNT_ID")
-  role_arn    = dependency.iam.outputs.ou_role_arn
+  environment  = get_env("ENVIRONMENT")
+  environments = ["dev", "staging"]
+  region       = get_env("REGION")
+  account_id   = get_env("ACCOUNT_ID")
+  role_arn     = dependency.iam.outputs.ou_role_arn
 }

@@ -1,11 +1,4 @@
 # environments/staging/terragrunt.hcl
-dependency "iam" {
-  config_path = "../../iam"
-  mock_outputs = {
-    ou_role_arn = "placeholder"
-  }
-}
-
 terraform {
   source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
@@ -17,9 +10,6 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${get_env("REGION")}"
-  assume_role {
-    role_arn = "${get_env("ROLE_ARN")}"
-  }
 }
 EOF
 }
@@ -39,6 +29,72 @@ remote_state {
   }
 }
 
+# Generate Staging IAM Policy
+generate "iam_policy" {
+  path = "${get_parent_terragrunt_dir()}/../../modules/iam/ou-terraform-policy.json"
+  if_exists = "overwrite_terragrunt"
+  contents  = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:*",
+                "iam:AttachRolePolicy",
+                "iam:AttachUserPolicy",
+                "iam:CreateGroup",
+                "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
+                "iam:CreateRole",
+                "iam:DeletePolicy",
+                "iam:DeletePolicyVersion",
+                "iam:DetachRolePolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListEntitiesForPolicy",
+                "iam:ListPolicyVersions",
+                "iam:ListRolePolicies",
+                "iam:PassRole",
+                "iam:PutRolePolicy",
+                "iam:PutUserPolicy",
+                "iam:UpdateAssumeRolePolicy",
+                "iam:TagRole",
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "organizations:Describe*",
+                "organizations:List*",
+                "s3:*",
+                "ssm:*",
+                "sso:ListInstances",
+                "sso:ListAccountAssignments",
+                "dynamodb:*",
+                "vpc:*"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestTag/OrgID": "staging"
+                }
+            }
+        }
+    ]
+}
+EOF
+}
+
 inputs = {
   environment = "staging"
   region      = "${get_env("REGION")}"
@@ -49,4 +105,3 @@ inputs = {
     Terraform = "true"
   }
 }
-

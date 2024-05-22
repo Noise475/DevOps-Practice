@@ -19,7 +19,7 @@ dependency "iam" {
 }
 
 dependency "kms" {
-  config_path = "../../../kms"
+  config_path = "../kms"
 
   mock_outputs = {
     ssm_key_id = "placeholder"

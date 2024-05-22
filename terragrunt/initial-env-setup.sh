@@ -1,31 +1,39 @@
 #!/bin/bash
 
-set -e # Exit immediately if a command exits with a non-zero status
+#set -e # Exit immediately if a command exits with a non-zero status
 set -u # Treat unset variables as an error
 
-# Setup Env
-export ACCOUNT_ID=503489311732 TF_ROLE_ARN=arn:aws:iam::503489311732:role/terraform_role REGION=us-east-2 AWS_PROFILE=noise
-
 # Define environments
-environments=("dev") # "stage" "prod")
-role_arn=$TF_ROLE_ARN
+environments=("dev" "staging") # "prod")
+role_arn=($TF_ROLE_ARN)
 
 # Initial setup function using terraform_role
 run_initial_setup() {
     local env=$1
+    export ENVIRONMENT=$env
+
     echo "Running initial setup for environment: ${env}"
 
     source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
+
+    # Make sure IAM roles are created
+    cd iam
+    terragrunt init
+    terragrunt plan -out=tfplan
+    # terragrunt apply tfplan
+    cd -
+
+    export ROLE_ARN=$(terragrunt output -raw ou_role_arn)
 
     # Change to the environment directory
     cd environments/${env}
 
     # Run Terragrunt to provision resources
     terragrunt init
-    terragrunt run-all plan -out=tfplan
-    terragrunt run-all apply -auto-approve tfplan
+    terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
+    #terragrunt run-all apply --terragrunt-non-interactive tfplan
 
-    cd - # Go back to the previous directory
+    cd - # Go back to root directory
 }
 
 # Function to run terragrunt with environment-specific roles
@@ -39,12 +47,21 @@ run_with_env_role() {
 
     source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
 
+    # Make sure IAM roles are created
+    cd iam
+    terragrunt init
+    terragrunt plan -out=tfplan
+    # terragrunt apply tfplan
+    cd -
+
+    export ROLE_ARN=$(terragrunt output -raw ou_role_arn)
+
     # Change to the environment directory
     cd environments/${env}
 
     # Run Terragrunt to enforce tagging
-    terragrunt run-all plan -out=tfplan
-    terragrunt run-all apply -auto-approve tfplan
+    terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
+    #terragrunt run-all apply --terragrunt-non-interactive tfplan
 
     cd - # Go back to the previous directory
 }
@@ -55,8 +72,8 @@ for env in "${environments[@]}"; do
 done
 
 # Loop through each environment and run Terragrunt with environment-specific roles
-for env in "${environments[@]}"; do
-    run_with_env_role ${env}
-done
+# for env in "${environments[@]}"; do
+#     run_with_env_role ${env}
+# done
 
-echo "Initial setup and tagging completed for all environments."
+# echo "Initial setup and tagging completed for all environments."
