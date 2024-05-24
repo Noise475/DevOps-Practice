@@ -1,10 +1,4 @@
 # environments/prod/terragrunt.hcl
-dependency "iam" {
-  config_path = "../../iam"
-  mock_outputs = {
-    ou_role_arn = "placeholder"
-  }
-}
 
 # Generate provider configuration dynamically
 generate "provider" {
@@ -20,6 +14,7 @@ provider "aws" {
 EOF
 }
 
+# S3 remote_state store
 remote_state {
   backend = "s3"
   generate = {

@@ -27,6 +27,7 @@
                 "iam:PutRolePolicy",
                 "iam:PutUserPolicy",
                 "iam:UpdateAssumeRolePolicy",
+                "iam:UntagRole",
                 "iam:TagRole",
                 "kms:Create*",
                 "kms:Describe*",

@@ -13,12 +13,12 @@ dependency "kms" {
   config_path = "../kms"
 
   mock_outputs = {
-    s3_key_id = "placeholder"
+    s3_key_arn = "placeholder"
   }
 }
 
 inputs = {
-  s3_key_id = dependency.kms.outputs.s3_key_id
+  s3_key_arn = dependency.kms.outputs.s3_key_arn
 
   tags = {
 

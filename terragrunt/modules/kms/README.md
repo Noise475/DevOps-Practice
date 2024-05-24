@@ -36,7 +36,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_private_subnet_key_id"></a> [private\_subnet\_key\_id](#output\_private\_subnet\_key\_id) | n/a |
-| <a name="output_s3_key_id"></a> [s3\_key\_id](#output\_s3\_key\_id) | n/a |
-| <a name="output_ssm_key_id"></a> [ssm\_key\_id](#output\_ssm\_key\_id) | n/a |
+| <a name="output_private_subnet_key_arn"></a> [private\_subnet\_key\_id](#output\_private\_subnet\_key\_id) | n/a |
+| <a name="output_s3_key_arn"></a> [s3\_key\_id](#output\_s3\_key\_id) | n/a |
+| <a name="output_ssm_key_arn"></a> [ssm\_key\_id](#output\_ssm\_key\_id) | n/a |
 <!-- END_TF_DOCS -->

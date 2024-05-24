@@ -1,13 +1,13 @@
 # modules/kms/outputs.tf
 
-output "s3_key_id" {
-  value = aws_kms_key.s3_key.key_id
+output "s3_key_arn" {
+  value = aws_kms_key.s3_key.arn
 }
 
-output "ssm_key_id" {
-  value = aws_kms_key.ssm_key.key_id
+output "ssm_key_arn" {
+  value = aws_kms_key.ssm_key.arn
 }
 
-output "private_subnet_key_id" {
-  value = aws_kms_key.private_subnet_key.id
+output "private_subnet_key_arn" {
+  value = aws_kms_key.private_subnet_key.arn
 }

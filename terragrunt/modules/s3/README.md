@@ -26,7 +26,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | current deploy environment | `string` | n/a | yes |
-| <a name="input_s3_key_id"></a> [s3\_key\_id](#input\_s3\_key\_id) | kms key\_id for s3 | `string` | n/a | yes |
+| <a name="input_s3_key_arn"></a> [s3\_key\_id](#input\_s3\_key\_id) | kms key\_id for s3 | `string` | n/a | yes |
 
 ## Outputs
 

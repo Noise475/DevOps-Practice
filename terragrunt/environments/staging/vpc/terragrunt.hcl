@@ -19,7 +19,7 @@ dependency "iam" {
 dependency "kms" {
   config_path = "../kms"
   mock_outputs = {
-    private_subnet_key_id = "placeholder"
+    private_subnet_key_arn = "placeholder"
   }
 }
 

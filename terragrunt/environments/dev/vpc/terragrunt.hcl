@@ -9,18 +9,10 @@ include "root" {
   expose = true
 }
 
-dependency "iam" {
-  config_path = "../../../iam"
-
-  mock_outputs = {
-    dev_role_arn = "placeholder"
-  }
-}
-
 dependency "kms" {
   config_path = "../kms"
   mock_outputs = {
-    private_subnet_key_id = "placeholder"
+    private_subnet_key_arn = "placeholder"
   }
 }
 
