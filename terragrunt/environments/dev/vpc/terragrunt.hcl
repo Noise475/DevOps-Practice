@@ -16,12 +16,7 @@ dependency "kms" {
   }
 }
 
-locals {
-  key_name = "dev-${md5("dev_key_name_string")}"
-}
-
 inputs = {
-  key_name = local.key_name
 
   tags = {
 
