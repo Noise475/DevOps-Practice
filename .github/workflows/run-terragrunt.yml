@@ -10,6 +10,7 @@ jobs:
   setup-and-plan:
     if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
+    environment: Dev
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -19,12 +20,6 @@ jobs:
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
-
-          # Install Terraform
-          wget https://releases.hashicorp.com/terraform/1.5.2/terraform_1.5.2_linux_amd64.zip
-          unzip terraform_1.5.2_linux_amd64.zip
-          sudo mv terraform /usr/local/bin/
-          terraform -v
 
           # Install Terragrunt
           wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.10/terragrunt_linux_amd64
@@ -49,16 +44,21 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.REGION }}
+          aws-region: ${{ env.REGION }}
+
+      - name: Source env vars using Chamber
+        run: |
+          eval $(chamber env ${{ env.GITHUB_ENVIRONMENT }})
+          echo "Environment variables loaded."  
 
       - name: Initialize Terragrunt
         run: |
-          cd environments/${{ vars.ENVIRONMENT }}
+          cd environments/${{ env.GITHUB_ENVIRONMENT }}
           terragrunt init
 
       - name: Run Terragrunt plan
         run: |
-          cd environments/${{ vars.ENVIRONMENT }}
+          cd environments/${{ env.GITHUB_ENVIRONMENT }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
 
@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terragrunt-plan-output
-          path: environments/${{ vars.ENVIRONMENT }}/plan_output.json
+          path: environments/${{ env.GITHUB_ENVIRONMENT }}/plan_output.json
 
   apply:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
@@ -111,9 +111,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: terragrunt-plan-output
-          path: environments/${{ vars.ENVIRONMENT }}
+          path: environments/${{ env.GITHUB_ENVIRONMENT }}
 
       - name: Run Terragrunt apply
         run: |
-          cd environments/${{ vars.ENVIRONMENT }}
+          cd environments/${{ env.GITHUB_ENVIRONMENT }}
           terragrunt run-all apply plan_output.json

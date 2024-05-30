@@ -1,14 +1,3 @@
-resource "aws_ssm_parameter" "ou_role_arn" {
-  name        = "/${var.environment}/${var.environment}_role_arn"
-  description = "Role ARN for current environment"
-  type        = "SecureString"
-  value       = var.role_arn
-
-  tags = {
-    environment = "${var.environment}"
-  }
-}
-
 resource "aws_ssm_parameter" "environment" {
   name        = "/${var.environment}/environment"
   description = "Current deployment environment"
@@ -39,17 +28,6 @@ resource "aws_ssm_parameter" "dev_role_arn" {
 
   tags = {
     environment = "${var.environment}"
-  }
-}
-
-resource "aws_ssm_parameter" "root_role_arn" {
-  name        = "/root_role_arn"
-  description = "Service Account role for root permission ARN for Account ID:${var.account_id}"
-  type        = "SecureString"
-  value       = var.root_role_arn
-
-  tags = {
-    environment = "root"
   }
 }
 
