@@ -1,5 +1,5 @@
-variable "key_name" {
-  description = "EC2 Instance key-value pair"
+variable "eks_public_key" {
+  description = "EKS Instance key-value pair"
   type        = string
 }
 
