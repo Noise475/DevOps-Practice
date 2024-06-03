@@ -30,7 +30,6 @@ inputs = {
   dev_role_arn  = dependency.iam.outputs.ou_role_arn
   root_role_arn = dependency.iam.outputs.tf_role_arn
   ssm_key_arn   = dependency.kms.outputs.ssm_key_arn
-  region        = "us-east-2"
 
   tags = {
 
