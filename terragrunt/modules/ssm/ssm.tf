@@ -9,6 +9,17 @@ resource "aws_ssm_parameter" "environment" {
   }
 }
 
+resource "aws_ssm_parameter" "region" {
+  name        = "/${var.environment}/region"
+  description = "Current aws region"
+  type        = "SecureString"
+  value       = var.region
+
+  tags = {
+    environment = "${var.environment}"
+  }
+}
+
 resource "aws_ssm_parameter" "account_id" {
   name        = "/${var.environment}/account_id"
   description = "AWS Account ID"

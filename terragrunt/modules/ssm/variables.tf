@@ -3,6 +3,12 @@ variable "environment" {
   type        = string
 }
 
+variable "region" {
+  description = "Current aws region"
+  type        = string
+}
+
+
 variable "role_arn" {
   description = "Current organization/environment role ARN"
   type        = string
