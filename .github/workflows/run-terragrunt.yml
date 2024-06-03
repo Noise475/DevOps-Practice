@@ -31,7 +31,7 @@ jobs:
           wget https://github.com/segmentio/chamber/releases/download/v2.10.4/chamber-v2.10.4-linux-amd64
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
-          chamber --version
+          chamber version
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
