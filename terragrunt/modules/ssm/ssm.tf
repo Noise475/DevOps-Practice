@@ -20,11 +20,11 @@ resource "aws_ssm_parameter" "account_id" {
   }
 }
 
-resource "aws_ssm_parameter" "dev_role_arn" {
-  name        = "/${var.environment}/dev_role_arn"
-  description = "Service Account role ARN for Dev Organization"
+resource "aws_ssm_parameter" "role_arn" {
+  name        = "/${var.environment}/role_arn"
+  description = "Service Account role ARN for ${var.environment} Organization"
   type        = "SecureString"
-  value       = var.dev_role_arn
+  value       = var.role_arn
 
   tags = {
     environment = "${var.environment}"
