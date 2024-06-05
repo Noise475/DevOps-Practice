@@ -1,7 +1,6 @@
 # Terragrunt Usage
 
-This folder treats this repo as a monorepo (containing helm/helmfile config within the same repo as terraform(terragrunt) config) and creates
-an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
+This folder treats this repo as a monorepo (containing helm/helmfile config within the same repo as terraform(terragrunt) config) and creates an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
 
 ## Terragrunt setup
 ``` shell
@@ -131,3 +130,21 @@ will output the results of `terraform plan` for the following modules:
 
 ## Terraform-docs
 Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed
+
+## Creating a key-pair
+You may find that creating an rsa key directly results in too big a char set for AWS/Terraform to process(greater than 255 error). This can be overcome by using the cli to create a .pem file, then creating a public key off of that.
+
+1. `aws ec2 create-key-pair --key-name eks_dev_key --query 'KeyMaterial' --output text > eks_dev_key.pem`
+
+2. `ssh-keygen -y -f eks_server_key.pem > eks_server_key.pub`
+
+You can reference the key directly in the /environments/<env-name>/vpc/terragrunt.hcl
+```
+inputs = {
+  private_subnet_key_arn = dependency.kms.outputs.private_subnet_key_arn
+  eks_public_key         = "ssh-rsa AAAAB3NzaC1yc2..."
+  tags = {
+
+  }
+} 
+```

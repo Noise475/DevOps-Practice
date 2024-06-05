@@ -43,17 +43,23 @@ jobs:
 
       - name: Source env vars using Chamber
         run: |
-          eval $(chamber env ${{ env.GITHUB_ENVIRONMENT }})
-          echo "Environment variables loaded."  
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            export ENVIRONMENT="staging"
+          else
+            export ENVIRONMENT="dev"
+          fi
+
+          eval $(chamber env $ENVIRONMENT)
+          echo "Environment variables loaded."
 
       - name: Initialize Terragrunt
         run: |
-          cd environments/${{ env.GITHUB_ENVIRONMENT }}
+          cd environments/$ENVIRONMENT
           terragrunt init
 
       - name: Run Terragrunt plan
         run: |
-          cd environments/${{ env.GITHUB_ENVIRONMENT }}
+          cd environments/$ENVIRONMENT
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
 
@@ -61,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terragrunt-plan-output
-          path: environments/${{ env.GITHUB_ENVIRONMENT }}/plan_output.json
+          path: environments/$ENVIRONMENT/plan_output.json
 
   apply:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
@@ -108,9 +114,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terragrunt-plan-output
-          path: environments/${{ env.GITHUB_ENVIRONMENT }}
+          path: environments/$ENVIRONMENT
 
       - name: Run Terragrunt apply
         run: |
-          cd environments/${{ env.GITHUB_ENVIRONMENT }}
+          cd environments/$ENVIRONMENT
           terragrunt run-all apply plan_output.json
