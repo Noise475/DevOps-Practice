@@ -1,6 +1,6 @@
 # Terragrunt Usage
 
-This folder treats this repo as a monorepo (containing helm/helmfile config within the same repo as terraform(terragrunt) config) and creates an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
+This folder treats this repo as a monorepo (containing terraform module config within the same repo as terragrunt config) and creates an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
 
 ## Terragrunt setup
 ``` shell
