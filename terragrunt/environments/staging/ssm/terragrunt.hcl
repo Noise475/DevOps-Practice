@@ -14,8 +14,8 @@ dependency "iam" {
   config_path = "../../../iam"
 
   mock_outputs = {
-    staging_role_arn  = "placeholder"
-    root_role_arn = "placeholder"
+    staging_role_arn = "placeholder"
+    root_role_arn    = "placeholder"
   }
 }
 
@@ -28,9 +28,9 @@ dependency "kms" {
 }
 
 inputs = {
-  staging_role_arn  = dependency.iam.outputs.ou_role_arn
-  root_role_arn = dependency.iam.outputs.tf_role_arn
-  ssm_key_arn    = dependency.kms.outputs.ssm_key_arn
+  staging_role_arn = dependency.iam.outputs.ou_role_arn
+  root_role_arn    = dependency.iam.outputs.tf_role_arn
+  ssm_key_arn      = dependency.kms.outputs.ssm_key_arn
 
   tags = {
 

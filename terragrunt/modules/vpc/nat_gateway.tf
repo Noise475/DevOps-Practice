@@ -2,7 +2,7 @@
 
 # Instance key pair
 resource "aws_key_pair" "eks" {
-  key_name   = "eks_server_key"
+  key_name   = "${var.environment}_eks_server_key"
   public_key = var.eks_public_key
 }
 

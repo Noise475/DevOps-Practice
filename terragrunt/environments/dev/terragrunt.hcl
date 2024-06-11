@@ -1,5 +1,9 @@
 # environments/dev/terragrunt.hcl
 
+terraform {
+  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
+}
+
 # Generate provider.tf configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
@@ -25,10 +29,6 @@ remote_state {
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
   }
-}
-
-terraform {
-  source = "../..//modules" #"git::git@github.com:Noise475/DevOps-Practice.git/terragrunt//modules`?ref=0.0.0"
 }
 
 inputs = {

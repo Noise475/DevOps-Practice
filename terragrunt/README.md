@@ -80,7 +80,7 @@ This folder treats this repo as a monorepo (containing terraform module config w
 ```
 
 ### Terragrunt file setup
- Terragrunt files are held at multiple levels:
+ terragrunt.hcl files are held at multiple levels:
   1. The root of the `terragrunt` directory 
   2. Under each environment directory: 
      - `terragrunt/environments/dev`
@@ -92,7 +92,7 @@ This folder treats this repo as a monorepo (containing terraform module config w
 ## How to run commands
 Terragrunt as a terraform wrapper is usually running terraform commands as a group. Practically this means:
 
-`terragrunt plan` can be ran in each module folder which will deliver the same output as `terraform plan`, but can take into account your settings in your terragrunt.hcl (like provider/backend file configs).
+`terragrunt plan` can be ran in each terragrunt module folder which will deliver the same output as `terraform plan`, but can take into account your settings in your terragrunt.hcl (like provider/backend file configs).
 
 ```
 INFO[0000] Downloading Terraform configurations from file:///Users/guestadmin/git/DevOps-Practice/terragrunt/modules into /Users/guestadmin/git/DevOps-Practice/terragrunt/environments/dev/vpc/.terragrunt-cache/Sc8-jha5f51vUf2NSfZAz4EYlHE/xyQE6GfL4jWSqLyKZKDrYOybgfE 
@@ -129,7 +129,10 @@ will output the results of `terraform plan` for the following modules:
 - vpc
 
 ## Terraform-docs
-Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed
+Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed. 
+
+using homebrew:
+`brew install terraform-docs`
 
 ## Creating a key-pair
 You may find that creating an rsa key directly results in too big a char set for AWS/Terraform to process(greater than 255 error). This can be overcome by using the ed25519 standard to create a key.
