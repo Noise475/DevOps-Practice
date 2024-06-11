@@ -4,9 +4,6 @@ resource "aws_ssm_parameter" "environment" {
   type        = "SecureString"
   value       = var.environment
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "region" {
@@ -15,9 +12,6 @@ resource "aws_ssm_parameter" "region" {
   type        = "SecureString"
   value       = var.region
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "account_id" {
@@ -26,9 +20,6 @@ resource "aws_ssm_parameter" "account_id" {
   type        = "SecureString"
   value       = var.account_id
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "role_arn" {
@@ -37,9 +28,6 @@ resource "aws_ssm_parameter" "role_arn" {
   type        = "SecureString"
   value       = var.role_arn
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "sso_instance_arn" {
@@ -48,9 +36,6 @@ resource "aws_ssm_parameter" "sso_instance_arn" {
   type        = "SecureString"
   value       = var.sso_instance_arn
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "permission_set_arn" {
@@ -59,9 +44,6 @@ resource "aws_ssm_parameter" "permission_set_arn" {
   type        = "SecureString"
   value       = var.permission_set_arn
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }
 
 resource "aws_ssm_parameter" "sso_group_id" {
@@ -70,7 +52,4 @@ resource "aws_ssm_parameter" "sso_group_id" {
   type        = "SecureString"
   value       = var.sso_group_id
 
-  tags = {
-    environment = "${var.environment}"
-  }
 }

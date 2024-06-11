@@ -9,10 +9,17 @@ include "root" {
   expose = true
 }
 
+dependency "iam" {
+  config_path = "../../../iam"
+  mock_outputs = {
+    ou_role_arn = "dev_role_arn"
+  }
+}
+
 dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
-    vpc_id  = "fake-vpc-id"
+    vpc_id  = "dev-vpc-id"
     subnets = []
   }
 }
@@ -23,6 +30,7 @@ inputs = {
   cluster_version = "1.28"
   vpc_id          = dependency.vpc.outputs.vpc_id
   subnets         = dependency.vpc.outputs.subnets
+  ou_role_arn     = dependency.iam.outputs.ou_role_arn
 
   tags = {
 

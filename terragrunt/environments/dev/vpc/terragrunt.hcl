@@ -18,7 +18,8 @@ dependency "kms" {
 
 inputs = {
   private_subnet_key_arn = dependency.kms.outputs.private_subnet_key_arn
-  eks_public_key         = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+8GOSiLmugMq86ptAW9hDToexMingO2tiatTaJAwY8"
+  eks_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+8GOSiLmugMq86ptAW9hDToexMingO2tiatTaJAwY8"
+
   tags = {
 
   }

@@ -10,4 +10,5 @@ locals {
 
 inputs = {
   key_name = local.key_name
+  eks_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICKRGhfxo4sqmtkxodQuigEFWFgMIEA19B1uFNDheKdJ"
 }

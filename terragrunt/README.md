@@ -132,17 +132,15 @@ will output the results of `terraform plan` for the following modules:
 Module documentation for terragrunt is generated using the `generate-docs.sh` script which requires `terraform-docs` to be installed
 
 ## Creating a key-pair
-You may find that creating an rsa key directly results in too big a char set for AWS/Terraform to process(greater than 255 error). This can be overcome by using the cli to create a .pem file, then creating a public key off of that.
+You may find that creating an rsa key directly results in too big a char set for AWS/Terraform to process(greater than 255 error). This can be overcome by using the ed25519 standard to create a key.
 
-1. `aws ec2 create-key-pair --key-name eks_dev_key --query 'KeyMaterial' --output text > eks_dev_key.pem`
-
-2. `ssh-keygen -y -f eks_server_key.pem > eks_server_key.pub`
+1. `ssh-keygen -t ed25519 -f eks_prod_key -N ""`
 
 You can reference the key directly in the /environments/<env-name>/vpc/terragrunt.hcl
 ```
 inputs = {
   private_subnet_key_arn = dependency.kms.outputs.private_subnet_key_arn
-  eks_public_key         = "ssh-rsa AAAAB3NzaC1yc2..."
+  eks_public_key         = "ssh-ed25519 AAAAC3NzaC1lZ..."
   tags = {
 
   }

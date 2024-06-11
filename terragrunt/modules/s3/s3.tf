@@ -5,8 +5,7 @@ resource "aws_s3_bucket" "bucket-env-example" {
   bucket = "${var.environment}-remote-state-terraform-bucket"
 
   tags = {
-    Name        = "${var.environment}-remote-state-terraform-bucket"
-    Environment = var.environment
+    Name = "${var.environment}-remote-state-terraform-bucket"
   }
 }
 

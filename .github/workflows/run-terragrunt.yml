@@ -10,7 +10,6 @@ jobs:
   setup-and-plan:
     if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
-    environment: Dev
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4

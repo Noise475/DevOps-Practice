@@ -5,5 +5,15 @@ variable "eks_public_key" {
 
 variable "environment" {
   description = "Current OU"
-  type = string
+  type        = string
+}
+
+variable "environments" {
+  description = "List of all environments"
+  type        = map(string)
+  default = {
+    dev     = "Development Environment"
+    staging = "Staging Environment"
+    prod    = "Production Environment"
+  }
 }

@@ -17,11 +17,16 @@ variable "cluster_version" {
 
 variable "region" {
   description = "current AWS region"
-  type = string
-  default = "us-east-2"
+  type        = string
+  default     = "us-east-2"
 }
 
 variable "environment" {
   description = "current aws environment"
-  type = string
+  type        = string
+}
+
+variable "ou_role_arn" {
+  description = "current environment role arn"
+  type        = string
 }

@@ -37,7 +37,8 @@ inputs = {
   role_arn    = "${get_env("ROLE_ARN")}"
   account_id  = "${get_env("ACCOUNT_ID")}"
   tags = {
-    OrgID     = "dev"
-    Terraform = "true"
+    OrgID       = "dev"
+    environment = "dev"
+    Terraform   = "true"
   }
 }
