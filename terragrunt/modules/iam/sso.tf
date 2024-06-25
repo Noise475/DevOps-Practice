@@ -1,16 +1,55 @@
-# modules/iam/main.tf
+# modules/iam/sso.tf
 
 # SSO configuration for AWS access
+resource "aws_iam_role" "sso_assumable_role" {
+  name = "sso_assumable_role"
 
-# data "aws_ssoadmin_instances" "example" {}
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/AWSReservedSSO_YourPermissionSetName_*"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
 
-# resource "aws_ssoadmin_account_assignment" "example" {
-#   instance_arn       = var.sso_instance_arn
-#   permission_set_arn = var.permission_set_arn
+  tags = {
+    OrgID     = var.environment
+    Terraform = "true"
+  }
+}
 
-#   principal_id   = var.sso_group_id
-#   principal_type = "GROUP"
+resource "aws_iam_role_policy_attachment" "sso_assumable_role_policy" {
+  role       = aws_iam_role.sso_assumable_role.name
+  policy_arn = "arn:aws:iam::aws:policy/YourPolicyArn"
+}
 
-#   target_id   = var.account_id
-#   target_type = "AWS_ACCOUNT"
-# }
+data "aws_caller_identity" "current" {}
+
+
+resource "aws_iam_ssoadmin_permission_set" "assume_role_permission_set" {
+  instance_arn = data.aws_ssoadmin_instances.main.arn
+  name         = "AssumeTerraformRolePermissionSet"
+
+  tags = {
+    OrgID     = var.environment
+    Terraform = "true"
+  }
+
+  inline_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Action : "sts:AssumeRole",
+        Resource : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform_role"
+      }
+    ]
+  })
+}
+
+data "aws_ssoadmin_instances" "main" {}

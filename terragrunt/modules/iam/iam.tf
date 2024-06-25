@@ -7,7 +7,7 @@
 # Define terraform_role for infrastructure administration
 resource "aws_iam_role" "terraform_role" {
   name = "terraform_role"
-  assume_role_policy = templatefile("${path.module}/policies/assume-root-policy.json", {
+  assume_role_policy = templatefile("${path.module}/policies/assume-tf-policy.json", {
     account_id = var.account_id
   })
   tags = {
@@ -20,7 +20,7 @@ resource "aws_iam_role" "ou_role" {
   for_each = toset(var.environments)
 
   name = each.key
-  assume_role_policy = templatefile("${path.module}/policies/assume-tf-policy.json", {
+  assume_role_policy = templatefile("${path.module}/policies/assume-env-policy.json", {
     account_id  = var.account_id
     environment = each.key
   })

@@ -1,12 +1,10 @@
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${account_id}:role/terraform_role"
-            },
-            "Action": "sts:AssumeRole"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": {
+      "AWS": ["arn:aws:iam::${account_id}:root", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/AWSReservedSSO_DevOps_*"]
+    },
+    "Action": "sts:AssumeRole"
+  }]
 }

@@ -6,8 +6,8 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::503489311732:role/${environment}",
-          "arn:aws:iam::503489311732:role/terraform_role"
+          "arn:aws:iam::590183659157:role/${environment}",
+          "arn:aws:iam::590183659157:role/terraform_role"
         ]
       },
       "Action": [

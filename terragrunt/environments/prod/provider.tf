@@ -2,6 +2,6 @@
 provider "aws" {
   region = "us-east-2"
   assume_role {
-    role_arn = "arn:aws:iam::503489311732:role/terragrunt"
+    role_arn = "arn:aws:iam::590183659157:role/terragrunt"
   }
 }
