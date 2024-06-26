@@ -47,8 +47,7 @@
                 "ssm:*",
                 "sso:ListInstances",
                 "sso:ListAccountAssignments",
-                "dynamodb:*",
-                "vpc:*"
+                "dynamodb:*"
             ],
             "Resource": "*",
             "Condition": {

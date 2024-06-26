@@ -9,6 +9,7 @@ resource "aws_iam_role" "terraform_role" {
   name = "terraform_role"
   assume_role_policy = templatefile("${path.module}/policies/assume-tf-policy.json", {
     account_id = var.account_id
+    region = var.region
   })
   tags = {
     Environment = "root"

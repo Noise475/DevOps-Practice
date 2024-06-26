@@ -1,10 +1,15 @@
 {
   "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Principal": {
-      "AWS": ["arn:aws:iam::${account_id}:root", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/AWSReservedSSO_DevOps_*"]
-    },
-    "Action": "sts:AssumeRole"
-  }]
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::${account_id}:root",
+          "arn:aws:iam::${account_id}:role/aws-reserved/sso.amazonaws.com/${region}/AWSReservedSSO_assume_tf_role_57695f9f969a63e6"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
 }

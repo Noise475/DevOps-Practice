@@ -6,7 +6,7 @@ This folder treats this repo as a monorepo (containing terraform module config w
 ``` shell
 .
 ├── README.md
-├── backend.tf
+├── assume-role.sh
 ├── environments
 │   ├── dev
 │   │   ├── dynamodb
@@ -17,6 +17,8 @@ This folder treats this repo as a monorepo (containing terraform module config w
 │   │   │   └── terragrunt.hcl
 │   │   ├── provider.tf
 │   │   ├── s3
+│   │   │   └── terragrunt.hcl
+│   │   ├── ssm
 │   │   │   └── terragrunt.hcl
 │   │   ├── terragrunt.hcl
 │   │   └── vpc
@@ -31,6 +33,8 @@ This folder treats this repo as a monorepo (containing terraform module config w
 │   │   ├── provider.tf
 │   │   ├── s3
 │   │   │   └── terragrunt.hcl
+│   │   ├── ssm
+│   │   │   └── terragrunt.hcl
 │   │   ├── terragrunt.hcl
 │   │   └── vpc
 │   │       └── terragrunt.hcl
@@ -44,38 +48,73 @@ This folder treats this repo as a monorepo (containing terraform module config w
 │       ├── provider.tf
 │       ├── s3
 │       │   └── terragrunt.hcl
+│       ├── ssm
+│       │   └── terragrunt.hcl
 │       ├── terragrunt.hcl
 │       └── vpc
 │           └── terragrunt.hcl
 ├── generate-docs.sh
+├── iam
+│   └── terragrunt.hcl
+├── initial-env-setup.sh
 ├── modules
 │   ├── dynamodb
+│   │   ├── README.md
 │   │   ├── dynamodb.tf
+│   │   ├── outputs.tf
 │   │   └── variables.tf
 │   ├── eks
+│   │   ├── README.md
+│   │   ├── data.tf
 │   │   ├── eks.tf
-│   │   ├── iam.tf
 │   │   ├── inputs.tf
 │   │   ├── policies
 │   │   │   └── iam.json
 │   │   └── variables.tf
+│   ├── iam
+│   │   ├── README.md
+│   │   ├── iam.tf
+│   │   ├── output.tf
+│   │   ├── policies
+│   │   │   ├── assume-env-policy.json
+│   │   │   ├── assume-tf-policy.json
+│   │   │   ├── eks-policy.json
+│   │   │   ├── ou-terraform-policy.json
+│   │   │   ├── root-terraform-policy.json
+│   │   │   └── terraform-state-policy.json
+│   │   ├── sso.tf
+│   │   └── variables.tf
 │   ├── kms
+│   │   ├── README.md
 │   │   ├── kms.tf
 │   │   ├── outputs.tf
-│   │   └── policies
-│   │       ├── s3.json
-│   │       └── subnet.json
-│   ├── s3
 │   │   ├── policies
-│   │   │   └── dynamodb.json
+│   │   │   └── kms-policy.json
+│   │   └── variables.tf
+│   ├── ou_creation
+│   │   ├── README.md
+│   │   ├── data.tf
+│   │   ├── ou_creation.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── s3
+│   │   ├── README.md
+│   │   ├── policies
+│   │   │   └── s3-policy.json
 │   │   ├── s3.tf
 │   │   └── variables.tf
+│   ├── ssm
+│   │   ├── README.md
+│   │   ├── ssm.tf
+│   │   └── variables.tf
 │   └── vpc
+│       ├── README.md
 │       ├── nat_gateway.tf
 │       ├── outputs.tf
 │       ├── variables.tf
 │       └── vpc.tf
-├── provider.tf
+├── ou_creation
+│   └── terragrunt.hcl
 └── terragrunt.hcl
 ```
 
@@ -88,6 +127,39 @@ This folder treats this repo as a monorepo (containing terraform module config w
      - `terragrunt/environments/prod`
   3. Under **EACH** module being loading in the environment
      * `terragrunt/environments/<env_name>/<module_name>` 
+
+## Cloud Access
+This example was built with AWS as the cloud provider in mind, but should work similarly with other providers suchs as azure and google cloud provided you update providers & respetive terraform code and configuration.
+
+### Using SSO
+The SSO config (Using IAM Identity Center) Will need to be created manually in AWS Account. After initial setup via console, it is possible to add terraform configuration for permission sets, and account and group assignments. An example can be found below.
+
+To gain access to a user created via SSO you'll need to use the `aws configure sso` command; follow prompts - when it asks for 
+an SSO URL it can be found on the identity center dashboard - search for *Sign-in URL for IAM users in this account* and copy the link there.
+
+```
+resource "aws_ssoadmin_permission_set" "devops_permission_set" {
+  instance_arn = data.aws_ssoadmin_instances.example.arns[0] # SSO instance ARN
+  name         = "DevOpsPermissionSet"
+  description  = "Permission set for DevOps team"
+  session_duration = "PT8H"
+
+  tags = {
+    "Environment" = "Dev"
+  }
+...
+}
+
+
+resource "aws_ssoadmin_account_assignment" "devops_assignment" {
+  instance_arn       = data.aws_ssoadmin_instances.example.arns[0]
+  permission_set_arn = aws_ssoadmin_permission_set.devops_permission_set.arn
+  principal_id       = "devops-group-id" # This should be the ID of the DevOps group
+  principal_type     = "GROUP"
+  target_id          = "aws-account-id" # The AWS account ID to assign the permissions to
+  target_type        = "AWS_ACCOUNT"
+}
+```
 
 ## How to run commands
 Terragrunt as a terraform wrapper is usually running terraform commands as a group. Practically this means:

@@ -23,7 +23,7 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    bucket         = "prod-remote-state-terraform-bucket"
+    bucket         = "prod-remote-state-tf-bucket"
     region         = "${get_env("REGION")}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
