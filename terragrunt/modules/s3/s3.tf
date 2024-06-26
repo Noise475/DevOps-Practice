@@ -2,10 +2,10 @@
 
 # Create remote state buckets
 resource "aws_s3_bucket" "bucket-env-example" {
-  bucket = "${var.environment}-remote-state-terraform-bucket"
+  bucket = "${var.environment}-remote-state-tf-bucket"
 
   tags = {
-    Name = "${var.environment}-remote-state-terraform-bucket"
+    Name = "${var.environment}-remote-state-tf-bucket"
   }
 }
 

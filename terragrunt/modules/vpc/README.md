@@ -17,10 +17,14 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_eip.eks_nat_eip_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_eip.eks_nat_eip_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_eip.eks_nat_eip_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
 | [aws_instance.eks_nat_instance_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_instance.eks_nat_instance_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_instance.eks_nat_instance_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_internet_gateway.eks_igw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
+| [aws_key_pair.eks](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
 | [aws_nat_gateway.eks_nat_gateway_a](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_nat_gateway.eks_nat_gateway_b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_nat_gateway.eks_nat_gateway_c](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
@@ -47,8 +51,9 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_eks_public_key"></a> [eks\_public\_key](#input\_eks\_public\_key) | EKS Instance key-value pair | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Current OU | `string` | n/a | yes |
-| <a name="input_key_name"></a> [key\_name](#input\_key\_name) | EC2 Instance key-value pair | `string` | n/a | yes |
+| <a name="input_environments"></a> [environments](#input\_environments) | List of all environments | `map(string)` | <pre>{<br>  "dev": "Development Environment",<br>  "prod": "Production Environment",<br>  "staging": "Staging Environment"<br>}</pre> | no |
 
 ## Outputs
 

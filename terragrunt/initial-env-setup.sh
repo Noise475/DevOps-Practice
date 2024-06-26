@@ -16,6 +16,13 @@ run_terragrunt() {
     # Assume the terraform_role and set AWS credentials
     source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
 
+    # Ensure Org units are created
+    cd ou_creation
+    terragrunt init
+    terragrunt plan -out=tfplan
+    terragrunt apply tfplan
+    cd -
+
     # Ensure IAM roles are created
     cd iam
     terragrunt init
