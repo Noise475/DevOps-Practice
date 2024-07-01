@@ -43,12 +43,14 @@ jobs:
 
       - name: Configure & Login AWS SSO
         run: |
-          aws configure sso set sso_start_url $SSO_START_URL
-          aws configure sso set sso_region $AWS_REGION
-          aws configure sso set sso_account_id $ACCOUNT_ID
-          aws configure sso set sso_role_name $SSO_ROLE_NAME
-          aws configure sso set region $AWS_REGION
-          aws sso login
+          mkdir -p ~/.aws
+          echo "[profile sso-profile]" > ~/.aws/config
+          echo "sso_start_url = ${{ secrets.AWS_SSO_START_URL }}" >> ~/.aws/config
+          echo "sso_region = $AWS_REGION" >> ~/.aws/config
+          echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
+          echo "sso_role_name = ${{ secrets.AWS_SSO_ROLE_NAME }}" >> ~/.aws/config
+          echo "region = $AWS_REGION" >> ~/.aws/config
+          aws sso login --profile sso-profile
         
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -119,11 +121,14 @@ jobs:
 
       - name: Configure & Login AWS SSO
         run: |
-          aws configure sso set sso_start_url $SSO_START_URL
-          aws configure sso set sso_region $AWS_REGION
-          aws configure sso set sso_account_id $ACCOUNT_ID
-          aws configure sso set sso_role_name $SSO_ROLE_NAME
-          aws sso login
+          mkdir -p ~/.aws
+          echo "[profile sso-profile]" > ~/.aws/config
+          echo "sso_start_url = ${{ secrets.AWS_SSO_START_URL }}" >> ~/.aws/config
+          echo "sso_region = $AWS_REGION" >> ~/.aws/config
+          echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
+          echo "sso_role_name = ${{ secrets.AWS_SSO_ROLE_NAME }}" >> ~/.aws/config
+          echo "region = $AWS_REGION" >> ~/.aws/config
+          aws sso login --profile sso-profile
             
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
