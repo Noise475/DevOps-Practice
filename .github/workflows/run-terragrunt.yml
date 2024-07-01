@@ -49,21 +49,21 @@ jobs:
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
 
-      - name: Configure & Login AWS SSO
-        run: |
-          mkdir -p ~/.aws
-          echo "[profile sso-profile]" > ~/.aws/config
-          echo "sso_start_url = $SSO_START_URL" >> ~/.aws/config
-          echo "sso_region = $REGION" >> ~/.aws/config
-          echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
-          echo "sso_role_name = $SSO_ROLE_NAME" >> ~/.aws/config
-          echo "region = $REGION" >> ~/.aws/config
-          aws sso login --profile sso-profile
-        env: 
-          REGION: ${{ vars.AWS_REGION }}
-          SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
-          ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME}}
+      # - name: Configure & Login AWS SSO
+      #   run: |
+      #     mkdir -p ~/.aws
+      #     echo "[profile sso-profile]" > ~/.aws/config
+      #     echo "sso_start_url = $SSO_START_URL" >> ~/.aws/config
+      #     echo "sso_region = $REGION" >> ~/.aws/config
+      #     echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
+      #     echo "sso_role_name = $SSO_ROLE_NAME" >> ~/.aws/config
+      #     echo "region = $REGION" >> ~/.aws/config
+      #     aws sso login --profile sso-profile
+      #   env: 
+      #     REGION: ${{ vars.AWS_REGION }}
+      #     SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
+      #     ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      #     SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME}}
         
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
