@@ -54,7 +54,7 @@ jobs:
           mkdir -p ~/.aws
           echo "[profile sso-profile]" > ~/.aws/config
           echo "sso_start_url = $SSO_START_URL" >> ~/.aws/config
-          echo "sso_region = $REGION >> ~/.aws/config
+          echo "sso_region = $REGION" >> ~/.aws/config
           echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
           echo "sso_role_name = $SSO_ROLE_NAME" >> ~/.aws/config
           echo "region = $REGION" >> ~/.aws/config
@@ -136,7 +136,7 @@ jobs:
           mkdir -p ~/.aws
           echo "[profile sso-profile]" > ~/.aws/config
           echo "sso_start_url = $SSO_START_URL" >> ~/.aws/config
-          echo "sso_region = $REGION >> ~/.aws/config
+          echo "sso_region = $REGION" >> ~/.aws/config
           echo "sso_account_id = $ACCOUNT_ID" >> ~/.aws/config
           echo "sso_role_name = $SSO_ROLE_NAME" >> ~/.aws/config
           echo "region = $REGION" >> ~/.aws/config
