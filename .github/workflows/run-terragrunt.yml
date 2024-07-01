@@ -43,11 +43,11 @@ jobs:
 
       - name: Configure & Login AWS SSO
         run: |
-          aws configure set sso_start_url $SSO_START_URL
-          aws configure set sso_region $AWS_REGION
-          aws configure set sso_account_id $ACCOUNT_ID
-          aws configure set sso_role_name $SSO_ROLE_NAME
-          aws configure set region $AWS_REGION
+          aws configure sso set sso_start_url $SSO_START_URL
+          aws configure sso set sso_region $AWS_REGION
+          aws configure sso set sso_account_id $ACCOUNT_ID
+          aws configure sso set sso_role_name $SSO_ROLE_NAME
+          aws configure sso set region $AWS_REGION
           aws sso login
         
       - name: Configure AWS credentials
@@ -119,11 +119,10 @@ jobs:
 
       - name: Configure & Login AWS SSO
         run: |
-          aws configure set sso_start_url $SSO_START_URL
-          aws configure set sso_region $AWS_REGION
-          aws configure set sso_account_id $ACCOUNT_ID
-          aws configure set sso_role_name $SSO_ROLE_NAME
-          aws configure set region $AWS_REGION
+          aws configure sso set sso_start_url $SSO_START_URL
+          aws configure sso set sso_region $AWS_REGION
+          aws configure sso set sso_account_id $ACCOUNT_ID
+          aws configure sso set sso_role_name $SSO_ROLE_NAME
           aws sso login
             
       - name: Configure AWS credentials
