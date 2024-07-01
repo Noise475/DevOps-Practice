@@ -17,15 +17,26 @@ data "aws_identitystore_group" "main" {
 }
 
 resource "aws_ssoadmin_permission_set" "assume_tf_role_permission_set" {
-  description      = "Assume tf_role permission"
+  description      = "Assume terraform_role permission"
   instance_arn     = tolist(data.aws_ssoadmin_instances.main.arns)[0]
-  relay_state      = "https://s3.console.aws.amazon.com/s3/home?region=us-east-1#"
-  session_duration = "PT1H"
+  relay_state      = "https://s3.console.aws.amazon.com/s3/home?region=us-east-2#"
+  session_duration = "PT8H"
   name             = "AssumeTerraformRolePermissionSet"
+}
 
-  tags = {
-    Terraform = "true"
-  }
+resource "aws_ssoadmin_permission_set_inline_policy" "assume_tf_role_permission_set_policy" {
+  inline_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Action : "sts:AssumeRole",
+        Resource : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform_role"
+      }
+    ]
+  })
+  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
+  permission_set_arn = aws_ssoadmin_permission_set.assume_tf_role_permission_set.arn
 }
 
 resource "aws_ssoadmin_account_assignment" "devops_group_assignment" {

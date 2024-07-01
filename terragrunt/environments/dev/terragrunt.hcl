@@ -36,6 +36,7 @@ inputs = {
   region      = "${get_env("REGION")}"
   role_arn    = "${get_env("ROLE_ARN")}"
   account_id  = "${get_env("ACCOUNT_ID")}"
+  
   tags = {
     OrgID       = "dev"
     environment = "dev"

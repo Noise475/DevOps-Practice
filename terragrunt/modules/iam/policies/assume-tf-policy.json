@@ -5,8 +5,7 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::${account_id}:root",
-          "arn:aws:iam::${account_id}:role/aws-reserved/sso.amazonaws.com/${region}/AWSReservedSSO_assume_tf_role_57695f9f969a63e6"
+          "arn:aws:iam::${account_id}:root"      
         ]
       },
       "Action": "sts:AssumeRole"

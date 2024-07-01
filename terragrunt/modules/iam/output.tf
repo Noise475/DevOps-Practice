@@ -11,7 +11,7 @@ output "tf_role_arn" {
 }
 
 output "sso_instance_arn" {
-  value = data.aws_ssoadmin_instances.main.arns
+  value = tolist(data.aws_ssoadmin_instances.main.arns)[0]
 }
 
 output "sso_group_id" {
