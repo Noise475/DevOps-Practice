@@ -1,5 +1,9 @@
 name: Plan and Apply IAC
 
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
 on:  
   push:
     branches:
@@ -7,7 +11,7 @@ on:
   pull_request:
     branches:
       - 'master'
-
+      
 jobs:
   setup-and-plan:
     if: github.ref != 'refs/heads/master'
@@ -139,7 +143,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.TF_ROLE_ARN }}
 
-      - name: Configure AWS credentials
+      - name: Configure Env credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}

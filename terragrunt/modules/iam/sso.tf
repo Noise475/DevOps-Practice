@@ -25,15 +25,8 @@ resource "aws_ssoadmin_permission_set" "assume_tf_role_permission_set" {
 }
 
 resource "aws_ssoadmin_permission_set_inline_policy" "assume_tf_role_permission_set_policy" {
-  inline_policy = jsonencode({
-    Version : "2012-10-17",
-    Statement : [
-      {
-        Effect : "Allow",
-        Action : "sts:AssumeRole",
-        Resource : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform_role"
-      }
-    ]
+  inline_policy = templatefile("${path.module}/policies/assume-tf-permission-set.json", {
+    account_id  = var.account_id
   })
   instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.assume_tf_role_permission_set.arn
