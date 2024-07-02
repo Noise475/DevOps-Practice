@@ -21,3 +21,7 @@ output "sso_group_id" {
 output "permission_set_arn" {
   value = aws_ssoadmin_permission_set.assume_tf_role_permission_set.arn
 }
+
+output "gh_role_arn" {
+  value = aws_iam_role.github_oidc_role.arn
+}
