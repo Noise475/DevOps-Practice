@@ -5,7 +5,7 @@ terraform {
 }
 
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -17,4 +17,9 @@ inputs = {
   ]
   environment = "${get_env("ENVIRONMENT")}"
   region      = "${get_env("REGION")}"
+
+  tags = {
+    Terraform   = true
+    Region      = "${get_env("REGION")}"
+  }
 }

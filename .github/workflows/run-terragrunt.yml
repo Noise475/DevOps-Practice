@@ -1,32 +1,33 @@
 name: Plan and Apply IAC
 
-permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
-
-on:  
+on:
   push:
     branches:
       - '*'
   pull_request:
     branches:
       - 'master'
-      
-jobs:
-  setup-and-plan:
-    if: github.ref != 'refs/heads/master'
-    runs-on: ubuntu-latest
 
-    env: 
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, stage, prod]
+        include:
+          - environment: dev
+            previous: []
+          - environment: stage
+            previous: [plan_dev]
+          - environment: prod
+            previous: [plan_stage]
+
+    env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME }}
       SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
 
-    strategy:
-      matrix:
-        environment: [dev, stage, prod]
-  
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -48,24 +49,24 @@ jobs:
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
-        
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.TF_ROLE_ARN }}
-  
-      - name: Configure AWS credentials
-        id: aws-creds
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
-  
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
+          role-session-name: GitHubActions
+
       - name: Source env vars using Chamber
         run: |
-          eval $(chamber env ${{ matrix.environment }})
+          export ENVIRONMENT="${{ matrix.environment }}"
+          eval $(chamber env $ENVIRONMENT)
           echo "Environment variables loaded."
+
+      - name: Initialize Terragrunt
+        run: |
+          cd environments/${{ matrix.environment }}
+          terragrunt init
 
       - name: Run Terragrunt plan
         run: |
@@ -76,23 +77,19 @@ jobs:
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: terragrunt-plan-output
-          path: environments/$ENVIRONMENT/plan_output.json
+          name: terragrunt-plan-output-${{ matrix.environment }}
+          path: environments/${{ matrix.environment }}/plan_output.json
 
   apply:
-    if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
     runs-on: ubuntu-latest
-    needs: setup-and-plan
+    needs: [plan]
+    if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME }}
       SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
-
-    strategy:
-      matrix:
-        environment: [dev, stage, prod]
 
     steps:
       - name: Checkout the code
@@ -114,33 +111,22 @@ jobs:
           wget https://github.com/segmentio/chamber/releases/download/v2.10.4/chamber-v2.10.4-linux-amd64
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
-          chamber --version
+          chamber version
 
       - name: Configure AWS credentials
-        id: aws-creds
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.TF_ROLE_ARN }}
-
-      - name: Configure Env credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ env.ROLE_ARN }}
-
-      - name: Source env vars using Chamber
-        run: |
-          eval $(chamber env ${{ matrix.environment }})
-          echo "Environment variables loaded."
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
+          role-session-name: GitHubActions
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-          name: terragrunt-plan-output
-          path: environments/$ENVIRONMENT
+          name: terragrunt-plan-output-${{ matrix.environment }}
+          path: environments/${{ matrix.environment }}
 
       - name: Run Terragrunt apply
         run: |
-          cd environments/$ENVIRONMENT
+          cd environments/${{ matrix.environment }}
           terragrunt run-all apply plan_output.json

@@ -47,3 +47,10 @@ variable "github_org" {
   type        = string
   default     = ""
 }
+
+variable "tags" {
+  description = "A map of tags to apply to all resources"
+  type        = map(string)
+  default     = {}
+}
+  

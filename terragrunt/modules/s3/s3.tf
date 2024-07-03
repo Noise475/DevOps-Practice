@@ -4,9 +4,7 @@
 resource "aws_s3_bucket" "bucket-env-example" {
   bucket = "${var.environment}-remote-state-tf-bucket"
 
-  tags = {
-    Name = "${var.environment}-remote-state-tf-bucket"
-  }
+  tags = var.tags
 }
 
 # Add kms key encryption
@@ -19,6 +17,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" 
       sse_algorithm     = "aws:kms"
     }
   }
+
 }
 
 # Create S3 terrafrom access policy

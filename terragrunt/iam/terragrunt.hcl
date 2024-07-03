@@ -24,6 +24,7 @@ inputs = {
   org_id        = dependency.ou_creation.outputs.current_ou_id
 
   tags = {
-    Terraform = "true"
+    Terraform   = true
+    Region      = "${get_env("REGION")}"
   }
 }

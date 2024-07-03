@@ -9,11 +9,10 @@ resource "aws_iam_role" "terraform_role" {
   name = "terraform_role"
   assume_role_policy = templatefile("${path.module}/policies/assume-tf-policy.json", {
     account_id = var.account_id
-    region = var.region
+    region     = var.region
   })
-  tags = {
-    Environment = "root"
-  }
+
+  tags = var.tags
 }
 
 # Define IAM roles for each environment
@@ -26,9 +25,7 @@ resource "aws_iam_role" "ou_role" {
     environment = each.key
   })
 
-  tags = {
-    Environment = each.key
-  }
+  tags = var.tags
 }
 
 #######################################################
@@ -41,6 +38,7 @@ resource "aws_iam_policy" "tf_policy" {
   description = "administrative terraform policy for root"
 
   policy = file("${path.module}/policies/root-terraform-policy.json")
+  tags = var.tags
 }
 
 # Define policies for each environment
@@ -52,6 +50,7 @@ resource "aws_iam_policy" "ou_tf_policy" {
   policy = templatefile("${path.module}/policies/ou-terraform-policy.json", {
     environment = each.key
   })
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "ou_tf_state_policy" {
@@ -65,6 +64,8 @@ resource "aws_iam_policy" "ou_tf_state_policy" {
     environment = each.key
     region      = var.region
   })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "eks_policy" {
@@ -75,6 +76,8 @@ resource "aws_iam_policy" "eks_policy" {
   policy = templatefile("${path.module}/policies/eks-policy.json", {
     environment = each.key
   })
+
+  tags = var.tags
 }
 
 #######################################################

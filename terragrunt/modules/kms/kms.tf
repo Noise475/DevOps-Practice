@@ -12,9 +12,7 @@ resource "aws_kms_key" "private_subnet_key" {
     account_id  = var.account_id
   })
 
-  tags = {
-    environment = var.environment
-  }
+  tags = var.tags
 }
 
 # S3 Keys
@@ -29,9 +27,7 @@ resource "aws_kms_key" "s3_key" {
     account_id  = var.account_id
   })
 
-  tags = {
-    environment = var.environment
-  }
+  tags = var.tags
 }
 
 # SSM keys
@@ -46,9 +42,7 @@ resource "aws_kms_key" "ssm_key" {
     account_id  = var.account_id
   })
 
-  tags = {
-    environment = var.environment
-  }
+  tags = var.tags
 }
 
 # Create aliases for the KMS keys

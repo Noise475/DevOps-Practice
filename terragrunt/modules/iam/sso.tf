@@ -22,6 +22,8 @@ resource "aws_ssoadmin_permission_set" "assume_tf_role_permission_set" {
   relay_state      = "https://s3.console.aws.amazon.com/s3/home?region=us-east-2#"
   session_duration = "PT8H"
   name             = "AssumeTerraformRolePermissionSet"
+
+  tags = var.tags
 }
 
 resource "aws_ssoadmin_permission_set_inline_policy" "assume_tf_role_permission_set_policy" {

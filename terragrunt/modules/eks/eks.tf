@@ -7,6 +7,7 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   vpc_config {
     subnet_ids = [var.subnets]
   }
+  tags = var.tags
 }
 
 # EKS Node Group
@@ -25,4 +26,6 @@ resource "aws_eks_node_group" "terragrunt_group" {
   update_config {
     max_unavailable = 1
   }
+
+    tags = var.tags
 }
