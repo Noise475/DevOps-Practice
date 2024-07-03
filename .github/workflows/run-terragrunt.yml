@@ -1,5 +1,9 @@
 name: Plan and Apply IAC
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:

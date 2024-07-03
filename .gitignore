@@ -7,3 +7,4 @@ packer/
 **/samconfig.toml
 **/.terragrunt*
 **/.terraform.lock*
+destroy-all.sh
