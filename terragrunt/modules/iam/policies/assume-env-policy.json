@@ -4,7 +4,10 @@
         {
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::${account_id}:role/terraform_role"
+                "AWS": [
+                    "arn:aws:iam::${account_id}:role/terraform_role",
+                    "arn:aws:iam::${account_id}:role/github_role"
+                ]
             },
             "Action": "sts:AssumeRole"
         }

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### Only run this file from the ./terragrunt directory ###
+
 # set -e # Exit immediately if a command exits with a non-zero status; Will close IDE terminal
 set -u # Treat unset variables as an error
 

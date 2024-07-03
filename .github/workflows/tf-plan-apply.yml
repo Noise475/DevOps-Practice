@@ -1,26 +1,19 @@
 name: Plan and Apply IAC
 
 on:
-  push:
-    branches:
-      - '*'
-  pull_request:
-    branches:
-      - 'master'
-
+    workflow_call:
+      inputs:
+        environment:
+          required: true
+          type: string
+      secrets:
+        AWS_ACCOUNT_ID:
+          required: true
+        GH_ROLE_ARN:
+          required: true
 jobs:
   plan:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, stage, prod]
-        include:
-          - environment: dev
-            previous: []
-          - environment: stage
-            previous: [plan_dev]
-          - environment: prod
-            previous: [plan_stage]
 
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
@@ -57,26 +50,26 @@ jobs:
 
       - name: Source env vars using Chamber
         run: |
-          export ENVIRONMENT="${{ matrix.environment }}"
+          export ENVIRONMENT="${{ inputs.environment }}"
           eval $(chamber env $ENVIRONMENT)
           echo "Environment variables loaded."
 
       - name: Initialize Terragrunt
         run: |
-          cd environments/${{ matrix.environment }}
+          cd environments/${{ inputs.environment }}
           terragrunt init
 
       - name: Run Terragrunt plan
         run: |
-          cd environments/${{ matrix.environment }}
+          cd environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: terragrunt-plan-output-${{ matrix.environment }}
-          path: environments/${{ matrix.environment }}/plan_output.json
+          name: terragrunt-plan-output-${{ inputs.environment }}
+          path: environments/${{ inputs.environment }}/plan_output.json
 
   apply:
     runs-on: ubuntu-latest
@@ -119,15 +112,15 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-          aws sts assume-role --role-arn ${{ secrets.TERRAFORM_ROLE_ARN }} --role-session-name GitHubActions --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
+          aws sts assume-role --role-arn ${{ inputs.ROLE_ARN }} --role-session-name GitHubActions --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-          name: terragrunt-plan-output-${{ matrix.environment }}
-          path: environments/${{ matrix.environment }}
+          name: terragrunt-plan-output-${{ inputs.environment }}
+          path: environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
         run: |
-          cd environments/${{ matrix.environment }}
+          cd environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json

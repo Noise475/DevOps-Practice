@@ -9,5 +9,7 @@ resource "aws_dynamodb_table" "state_lock" {
     name = "LockID"
     type = "S"
   }
+
+  tags = var.tags
 }
 

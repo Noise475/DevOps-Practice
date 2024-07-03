@@ -5,8 +5,7 @@
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::${account_id}:root",
-          "arn:aws:iam::${account_id}:role/github_role"
+          "arn:aws:iam::${account_id}:root"
         ]
       },
       "Action": "sts:AssumeRole"
