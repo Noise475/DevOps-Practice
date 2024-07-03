@@ -50,8 +50,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.ROLE_ARN }}
-          role-session-name: GitHubActions
+          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
+          role-session-name: git
 
       - name: Source env vars using Chamber
         run: |
@@ -112,12 +112,12 @@ jobs:
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: GitHubActions
+          role-session-name: git
 
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-          aws sts assume-role --role-arn ${{ inputs.ROLE_ARN }} --role-session-name GitHubActions --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
+          aws sts assume-role --role-arn ${{ inputs.ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
