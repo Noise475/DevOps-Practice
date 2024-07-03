@@ -8,6 +8,10 @@ on:
     branches:
       - 'master'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   dev:
     uses: ./.github/workflows/tf-plan-apply.yml

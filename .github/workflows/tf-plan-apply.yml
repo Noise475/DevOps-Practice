@@ -1,5 +1,9 @@
 name: Plan and Apply IAC
 
+permissions:
+    id-token: write
+    contents: read
+
 on:
     workflow_call:
       inputs:
@@ -15,10 +19,6 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
-
-    permissions:
-        id-token: write
-        contents: read
 
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
@@ -50,7 +50,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
+          role-to-assume: ${{ secrets.ROLE_ARN }}
           role-session-name: GitHubActions
 
       - name: Source env vars using Chamber
