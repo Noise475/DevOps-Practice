@@ -1,9 +1,5 @@
 name: Plan and Apply IAC
 
-permissions:
-    id-token: write
-    contents: read
-
 on:
     workflow_call:
       inputs:
@@ -19,6 +15,10 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
+
+    permissions:
+        id-token: write
+        contents: read
 
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
