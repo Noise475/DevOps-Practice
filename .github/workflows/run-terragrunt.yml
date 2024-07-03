@@ -9,125 +9,28 @@ on:
       - 'master'
 
 jobs:
-  plan:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, stage, prod]
-        include:
-          - environment: dev
-            previous: []
-          - environment: stage
-            previous: [plan_dev]
-          - environment: prod
-            previous: [plan_stage]
+  dev:
+    uses: ./.github/workflows/reusable-plan-apply.yml
+    with:
+      environment: dev
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
 
-    env:
-      AWS_REGION: ${{ vars.AWS_REGION }}
-      ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  stage:
+    uses: ./.github/workflows/reusable-plan-apply.yml
+    needs: dev
+    with:
+      environment: staging
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
 
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: |
-          # Update package lists and install basic dependencies
-          sudo apt-get update
-          sudo apt-get install -y wget unzip jq
-
-          # Install Terragrunt
-          wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.10/terragrunt_linux_amd64
-          chmod +x terragrunt_linux_amd64
-          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
-          terragrunt -v
-
-          # Install Chamber
-          wget https://github.com/segmentio/chamber/releases/download/v2.10.4/chamber-v2.10.4-linux-amd64
-          chmod +x chamber-v2.10.4-linux-amd64
-          sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
-          chamber version
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: GitHubActions
-
-      - name: Source env vars using Chamber
-        run: |
-          export ENVIRONMENT="${{ matrix.environment }}"
-          eval $(chamber env $ENVIRONMENT)
-          echo "Environment variables loaded."
-
-      - name: Initialize Terragrunt
-        run: |
-          cd environments/${{ matrix.environment }}
-          terragrunt init
-
-      - name: Run Terragrunt plan
-        run: |
-          cd environments/${{ matrix.environment }}
-          terragrunt run-all plan -out=tfplan
-          terragrunt show -json tfplan > plan_output.json
-
-      - name: Upload plan output as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: terragrunt-plan-output-${{ matrix.environment }}
-          path: environments/${{ matrix.environment }}/plan_output.json
-
-  apply:
-    runs-on: ubuntu-latest
-    needs: [plan]
-    if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
-
-    env:
-      AWS_REGION: ${{ vars.AWS_REGION }}
-      ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: |
-          # Update package lists and install basic dependencies
-          sudo apt-get update
-          sudo apt-get install -y wget unzip jq
-
-          # Install Terragrunt
-          wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.10/terragrunt_linux_amd64
-          chmod +x terragrunt_linux_amd64
-          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
-          terragrunt -v
-
-          # Install Chamber
-          wget https://github.com/segmentio/chamber/releases/download/v2.10.4/chamber-v2.10.4-linux-amd64
-          chmod +x chamber-v2.10.4-linux-amd64
-          sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
-          chamber version
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: GitHubActions
-
-      - name: Assume Terraform Role
-        id: assume-terraform-role
-        run: |
-          aws sts assume-role --role-arn ${{ secrets.TERRAFORM_ROLE_ARN }} --role-session-name GitHubActions --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
-
-      - name: Download plan output artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: terragrunt-plan-output-${{ matrix.environment }}
-          path: environments/${{ matrix.environment }}
-
-      - name: Run Terragrunt apply
-        run: |
-          cd environments/${{ matrix.environment }}
-          terragrunt run-all apply plan_output.json
+  prod:
+    uses: ./.github/workflows/reusable-plan-apply.yml
+    needs: stage
+    with:
+      environment: prod
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}

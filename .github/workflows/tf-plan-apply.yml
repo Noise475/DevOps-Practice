@@ -1,5 +1,9 @@
 name: Plan and Apply IAC
 
+permissions:
+    id-token: write
+    contents: read
+
 on:
     workflow_call:
       inputs:
@@ -11,6 +15,7 @@ on:
           required: true
         GH_ROLE_ARN:
           required: true
+    
 jobs:
   plan:
     runs-on: ubuntu-latest
