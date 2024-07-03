@@ -23,7 +23,7 @@ jobs:
             previous: [plan_stage]
 
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
       ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME }}
       SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
@@ -86,7 +86,7 @@ jobs:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
       ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       SSO_ROLE_NAME: ${{ secrets.AWS_SSO_ROLE_NAME }}
       SSO_START_URL: ${{ secrets.AWS_SSO_START_URL }}
@@ -119,6 +119,11 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
           role-session-name: GitHubActions
+
+      - name: Assume Terraform Role
+        id: assume-terraform-role
+        run: |
+          aws sts assume-role --role-arn ${{ secrets.TERRAFORM_ROLE_ARN }} --role-session-name GitHubActions --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
