@@ -11,16 +11,26 @@ data "aws_iam_policy_document" "github_oidc" {
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:${var.github_repo}:ref:refs/heads/*"]
     }
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
   }
 }
 
 data "aws_iam_policy_document" "github_permissions" {
   statement {
-    actions   = [
+    actions = [
       "sts:AssumeRoleWithWebIdentity",
     ]
-    resources = ["*"]  # Example: Restrict to specific resources if necessary
+    resources = ["*"] 
     effect    = "Allow"
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.github_repo}:ref:refs/heads/*"]
+    }
   }
 }
 
