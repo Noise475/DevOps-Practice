@@ -12,25 +12,14 @@ environments=("dev" "staging") # Add "prod" as needed
 run_terragrunt() {
     local env=$1
     export ENVIRONMENT=$env
+    export ACCOUNT_ID=590183659157
+    export REGION=us-east-2
+
 
     echo "Running terragrunt for environment: ${env}"
 
     # Assume the terraform_role and set AWS credentials
     source ./assume-role.sh $TF_ROLE_ARN $AWS_PROFILE
-
-    # Ensure Org units are created
-    cd ou_creation
-    terragrunt init
-    terragrunt plan -out=tfplan
-    terragrunt apply tfplan
-    cd -
-
-    # Ensure IAM roles are created
-    cd iam
-    terragrunt init
-    terragrunt plan -out=tfplan
-    terragrunt apply tfplan
-    cd -
 
     # Get the environment-specific role ARN
     export ROLE_ARN=$(terragrunt output -raw ou_role_arn)
