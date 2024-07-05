@@ -17,14 +17,15 @@ include "root" {
 }
 
 inputs = {
-  environment   = get_env("ENVIRONMENT")
-  environments  = ["dev", "staging", "prod"]
-  region        = get_env("REGION")
-  account_id    = get_env("ACCOUNT_ID")
-  org_id        = dependency.ou_creation.outputs.current_ou_id
+  environment  = get_env("ENVIRONMENT")
+  environments = ["dev", "staging", "prod"]
+  region       = get_env("REGION")
+  account_id   = get_env("ACCOUNT_ID")
+  org_id       = dependency.ou_creation.outputs.current_ou_id
+  github_org   = "Noise475"
 
   tags = {
-    Terraform   = true
-    Region      = "${get_env("REGION")}"
+    Terraform = true
+    Region    = "${get_env("REGION")}"
   }
 }
