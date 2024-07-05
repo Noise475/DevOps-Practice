@@ -6,11 +6,13 @@ data "aws_iam_policy_document" "github_oidc" {
       type        = "Federated"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
+
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:${var.github_repo}:ref:refs/heads/*"]
     }
+
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:aud"
@@ -22,15 +24,10 @@ data "aws_iam_policy_document" "github_oidc" {
 data "aws_iam_policy_document" "github_permissions" {
   statement {
     actions = [
-      "sts:AssumeRoleWithWebIdentity",
+      "sts:AssumeRole",
     ]
-    resources = ["*"] 
+    resources = ["*"]
     effect    = "Allow"
-    condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repo}:ref:refs/heads/*"]
-    }
   }
 }
 
