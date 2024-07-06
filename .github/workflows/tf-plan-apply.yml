@@ -2,10 +2,6 @@ name: Plan and Apply IAC
 
 on:
     workflow_call:
-      inputs:
-        environment:
-          required: true
-          type: string
       secrets:
         AWS_ACCOUNT_ID:
           required: true
@@ -52,6 +48,11 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
           role-session-name: git
+
+      - name: Assume Terraform Role
+        id: assume-terraform-role
+        run: |
+            aws sts assume-role --role-arn ${{ vars.ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text          
 
       - name: Source env vars using Chamber
         run: |
@@ -117,7 +118,7 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-          aws sts assume-role --role-arn ${{ inputs.ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
+          aws sts assume-role --role-arn ${{ vars.ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4

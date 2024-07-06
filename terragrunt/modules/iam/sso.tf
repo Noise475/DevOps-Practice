@@ -1,21 +1,4 @@
 # modules/iam/sso.tf
-
-# SSO configuration for AWS access
-data "aws_caller_identity" "current" {}
-
-data "aws_ssoadmin_instances" "main" {}
-
-data "aws_identitystore_group" "main" {
-  identity_store_id = tolist(data.aws_ssoadmin_instances.main.identity_store_ids)[0]
-
-  alternate_identifier {
-    unique_attribute {
-      attribute_path  = "DisplayName"
-      attribute_value = "DevOps"
-    }
-  }
-}
-
 resource "aws_ssoadmin_permission_set" "assume_tf_role_permission_set" {
   description      = "Assume terraform_role permission"
   instance_arn     = tolist(data.aws_ssoadmin_instances.main.arns)[0]
@@ -28,7 +11,7 @@ resource "aws_ssoadmin_permission_set" "assume_tf_role_permission_set" {
 
 resource "aws_ssoadmin_permission_set_inline_policy" "assume_tf_role_permission_set_policy" {
   inline_policy = templatefile("${path.module}/policies/assume-tf-permission-set.json", {
-    account_id  = var.account_id
+    account_id = var.account_id
   })
   instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.assume_tf_role_permission_set.arn

@@ -1,39 +1,3 @@
-data "aws_iam_policy_document" "github_oidc" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
-    principals {
-      type        = "Federated"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:sub"
-      values = ["repo:${var.github_org}/${var.github_repo}:ref:refs/heads/*",
-      "repo:${var.github_org}/${var.github_repo}:environment:*", 
-      "repo:${var.github_org}/${var.github_repo}:workflow:*"
-]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:aud"
-      values   = ["sts.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "github_permissions" {
-  statement {
-    actions = [
-      "sts:AssumeRole",
-    ]
-    resources = ["*"]
-    effect    = "Allow"
-  }
-}
-
 resource "aws_iam_openid_connect_provider" "github" {
   url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]

@@ -30,12 +30,6 @@ variable "github_repo" {
   default     = "DevOps-Practice"
 }
 
-variable "branch" {
-  description = "Github branch name"
-  type        = string
-  default     = "master"
-}
-
 variable "oidc_audience" {
   description = "OIDC audience" # Useful for alternate aws address like amazonw.aws.com.cn
   type        = string
