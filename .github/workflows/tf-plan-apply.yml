@@ -2,11 +2,15 @@ name: Plan and Apply IAC
 
 on:
     workflow_call:
-      secrets:
-        AWS_ACCOUNT_ID:
-          required: true
-        GH_ROLE_ARN:
-          required: true
+        inputs:
+            environment:
+                required: true
+                type: string
+        secrets:
+            AWS_ACCOUNT_ID:
+                required: true
+            GH_ROLE_ARN:
+                required: true 
 
 permissions:
     id-token: write
