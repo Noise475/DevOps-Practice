@@ -7,11 +7,10 @@ on:
                 required: true
                 type: string
         secrets:
-            AWS_ACCOUNT_ID:
-                required: true
             GH_ROLE_ARN:
-                required: true 
-
+                required: true
+            TF_ROLE_ARN:
+                required: false
 permissions:
     id-token: write
     contents: read
@@ -19,10 +18,6 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-
-    env:
-      AWS_REGION: ${{ vars.AWS_REGION }}
-      ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
     steps:
       - name: Checkout the code
@@ -86,10 +81,6 @@ jobs:
     needs: [plan]
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
-    env:
-      AWS_REGION: ${{ vars.AWS_REGION }}
-      ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -115,7 +106,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
           role-session-name: git
 

@@ -1,0 +1,21 @@
+# Lint all changes to yaml
+name: Lint GitHub Actions
+
+on: 
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run actionlint
+        uses: rhysd/actionlint@v1

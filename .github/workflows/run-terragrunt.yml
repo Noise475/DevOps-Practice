@@ -14,8 +14,8 @@ jobs:
     with:
       environment: dev
     secrets:
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   stage:
     uses: ./.github/workflows/tf-plan-apply.yml
@@ -23,8 +23,8 @@ jobs:
     with:
       environment: staging
     secrets:
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   prod:
     uses: ./.github/workflows/tf-plan-apply.yml
@@ -32,5 +32,5 @@ jobs:
     with:
       environment: prod
     secrets:
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
