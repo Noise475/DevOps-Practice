@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "github_oidc" {
     }
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = ["repo:${var.github_org}/${var.github_repo}:*"]
     }
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "github_permissions" {
   statement {
     actions = [
       "sts:AssumeRoleWithWebIdentity",
-      ":sts:AssumeRole"
+      "sts:AssumeRole"
     ]
     resources = ["*"]
     effect    = "Allow"
