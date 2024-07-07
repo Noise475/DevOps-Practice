@@ -51,35 +51,44 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-            creds=$(aws sts assume-role --role-arn ${{ secrets.TF_ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output json)
-            echo "::set-output name=aws_access_key_id::$(echo $creds | jq -r .[0])"
-            echo "::set-output name=aws_secret_access_key::$(echo $creds | jq -r .[1])"
-            echo "::set-output name=aws_session_token::$(echo $creds | jq -r .[2])"
+            creds=$(aws sts assume-role --role-arn ${{ secrets.TF_ROLE_ARN }} --role-session-name ${{ github.run_id }})
+
+            if [ $? -ne 0 ]; then
+            echo "Failed to assume role: $credentials"
+            return 1
+            fi
+
+            export AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)
+            export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)
+            export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
         
-            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .[0])" >> $GITHUB_ENV
-            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .[1])" >> $GITHUB_ENV
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .[2])" >> $GITHUB_ENV
+            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
+            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
 
       - name: Source env vars using Chamber
         run: |
             export ENVIRONMENT="${{ inputs.environment }}"
-            eval $(chamber env $ENVIRONMENT)
+            eval $(chamber env $ENVIRONMENT) > /tmp/env_vars
         
             if [ $? -ne 0 ]; then
             echo "Failed to load environment variables."
             exit 1
             fi
 
+            source /tmp/env_vars
+            rm /tmp/env_vars
+
             echo "Environment variables loaded successfully."
 
       - name: Initialize Terragrunt
         run: |
-          cd ./environments/${{ inputs.environment }}
+          cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt init
 
       - name: Run Terragrunt plan
         run: |
-          cd ./environments/${{ inputs.environment }}
+          cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
 
@@ -87,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terragrunt-plan-output-${{ inputs.environment }}
-          path: ./environments/${{ inputs.environment }}/plan_output.json
+          path: ./terragrunt/environments/${{ inputs.environment }}/plan_output.json
 
   apply:
     runs-on: ubuntu-latest
@@ -132,9 +141,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terragrunt-plan-output-${{ inputs.environment }}
-          path: ./environments/${{ inputs.environment }}
+          path: ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
         run: |
-          cd ./environments/${{ inputs.environment }}
+          cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json
