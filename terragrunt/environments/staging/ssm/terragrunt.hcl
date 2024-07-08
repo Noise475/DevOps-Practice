@@ -34,6 +34,7 @@ inputs = {
   sso_instance_arn   = dependency.iam.outputs.sso_instance_arn
   permission_set_arn = dependency.iam.outputs.permission_set_arn
   sso_group_id       = dependency.iam.outputs.sso_group_id
+  account_id         = dependency.iam.outputs.account_id
 
   tags = {
 

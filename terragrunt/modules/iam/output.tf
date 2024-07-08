@@ -25,3 +25,7 @@ output "permission_set_arn" {
 output "gh_role_arn" {
   value = aws_iam_role.github_oidc_role.arn
 }
+
+output "account_id" {
+  value = var.account_id
+}

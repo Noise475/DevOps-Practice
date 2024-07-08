@@ -17,10 +17,10 @@ include "root" {
 }
 
 inputs = {
-  environment  = get_env("ENVIRONMENT")
+  environment  = "${get_env("ENVIRONMENT")}"
   environments = ["dev", "staging", "prod"]
-  region       = get_env("REGION")
-  account_id   = get_env("ACCOUNT_ID")
+  region       = "us-east-2"
+  account_id   = "590183659157"
   org_id       = dependency.ou_creation.outputs.current_ou_id
   github_org   = "Noise475"
 
