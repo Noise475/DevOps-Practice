@@ -48,13 +48,12 @@ jobs:
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
           role-session-name: OIDC
 
-      - name: Assume Terraform Role
-        id: assume-terraform-role
+      - name: Assume Role & Source Environment
         run: |
             creds=$(aws sts assume-role --role-arn ${{ secrets.TF_ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
             if [ $? -ne 0 ]; then
-            echo "Failed to assume role: $credentials"
+            echo "Failed to assume role: $creds"
             return 1
             fi
 
@@ -62,24 +61,22 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)
             export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
         
-            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
-            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
-
-      - name: Source env vars using Chamber
-        run: |
+            echo "$AWS_ACCESS_KEY_ID >> $GITHUB_ENV
+            echo "$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV
+            echo "$AWS_SESSION_TOKEN >> $GITHUB_ENV
+            
             export ENVIRONMENT="${{ inputs.environment }}"
-            eval $(chamber env $ENVIRONMENT) > /tmp/env_vars
-        
-            if [ $? -ne 0 ]; then
-            echo "Failed to load environment variables."
-            exit 1
+            chamber env "$ENVIRONMENT" > /tmp/env_vars
+
+            if [ -s /tmp/env_vars ]; then
+                echo "Environment variables loaded successfully."
+                set -a
+                source /tmp/env_vars
+                set +a
+            else
+                echo "Failed to load environment variables."
+                exit 1
             fi
-
-            source /tmp/env_vars
-            rm /tmp/env_vars
-
-            echo "Environment variables loaded successfully."
 
       - name: Initialize Terragrunt
         run: |
