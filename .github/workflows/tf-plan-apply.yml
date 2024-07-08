@@ -67,10 +67,10 @@ jobs:
             export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
             export AWS_PROFILE=${{ github.run_id }}
         
-            echo "$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
-            echo "$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
-            echo "$AWS_SESSION_TOKEN" >> $GITHUB_ENV
-            echo "$AWS_PROFILE >> $GITHUB_ENV
+            echo $AWS_ACCESS_KEY_ID >> $GITHUB_ENV
+            echo $AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV
+            echo $AWS_SESSION_TOKEN >> $GITHUB_ENV
+            echo $AWS_PROFILE >> $GITHUB_ENV
 
       - name: Source env vars using Chamber
         run: |
