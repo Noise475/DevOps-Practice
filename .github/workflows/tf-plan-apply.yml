@@ -13,7 +13,7 @@ on:
                 required: false
             ROLE_ARN:
                 required: true
-                
+
 permissions:
     id-token: write
     contents: read
@@ -66,9 +66,9 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)
             export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
         
-            echo "$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
-            echo "$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
-            echo "$AWS_SESSION_TOKEN" >> $GITHUB_ENV
+            echo "$AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
+            echo "$AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
+            echo "$AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
 
       - name: Source env vars using Chamber
         run: |
