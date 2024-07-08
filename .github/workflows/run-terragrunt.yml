@@ -13,7 +13,6 @@ jobs:
     uses: ./.github/workflows/tf-plan-apply.yml
     with:
       environment: dev
-      
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}

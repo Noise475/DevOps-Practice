@@ -11,6 +11,9 @@ on:
                 required: true
             TF_ROLE_ARN:
                 required: false
+            ROLE_ARN:
+                required: true
+                
 permissions:
     id-token: write
     contents: read
@@ -18,6 +21,7 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
 
     steps:
       - name: Checkout the code
@@ -69,7 +73,7 @@ jobs:
       - name: Source env vars using Chamber
         run: |
             export ENVIRONMENT="${{ inputs.environment }}"
-            chamber env $ENVIRONMENT > /tmp/env_vars
+            chamber env "$ENVIRONMENT" > /tmp/env_vars
 
             if [ -s /tmp/env_vars ]; then
                 set -a
