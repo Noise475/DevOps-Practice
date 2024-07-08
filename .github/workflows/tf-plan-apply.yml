@@ -55,7 +55,7 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-            creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
+            creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
             if [ $? -ne 0 ]; then
             echo "Failed to assume role: $creds"
@@ -67,10 +67,10 @@ jobs:
             export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
             export AWS_PROFILE=${{ github.run_id }}
         
-            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
-            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
-            echo "AWS_PROFILE=${{ github.run_id }}" >> $GITHUB_ENV
+            echo "$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+            echo "$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+            echo "$AWS_SESSION_TOKEN" >> $GITHUB_ENV
+            echo "$AWS_PROFILE >> $GITHUB_ENV
 
       - name: Source env vars using Chamber
         run: |
