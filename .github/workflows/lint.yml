@@ -1,21 +1,22 @@
-# Lint all changes to yaml
-name: Lint GitHub Actions
+name: Lint GitHub Actions Workflows
 
-on: 
-  push:
-    branches:
-      - '*'
-  pull_request:
-    branches:
-      - '*'
+on: [push, pull_request]
 
 jobs:
-  actionlint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Run actionlint
-        uses: rhysd/actionlint@latest
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'
+
+    - name: Install actionlint
+      run: go install github.com/rhysd/actionlint/cmd/actionlint@latest
+
+    - name: Run actionlint
+      run: actionlint
