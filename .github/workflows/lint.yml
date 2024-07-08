@@ -18,4 +18,4 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run actionlint
-        uses: rhysd/actionlint@main
+        uses: rhysd/actionlint@latest
