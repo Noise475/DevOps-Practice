@@ -29,7 +29,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          """
+          
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
@@ -45,18 +45,18 @@ jobs:
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
-          """
+          
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: OIDC
+          role-session-name: "OIDC"
 
       - name: Assume Terraform Role
         run: |
-            """
+            
             creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
             # Fail if no creds obtained
@@ -69,7 +69,7 @@ jobs:
             echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
             echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
             echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV"
-            """
+            
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -81,7 +81,7 @@ jobs:
 
       - name: Source env vars using Chamber
         run: |
-            """
+            
             export ENVIRONMENT="${{ inputs.environment }}"
             chamber env "$ENVIRONMENT" > /tmp/env_vars
 
@@ -94,22 +94,22 @@ jobs:
                 echo "Failed to load environment variables."
                 exit 1
             fi
-            """
+            
 
       - name: Initialize Terragrunt
         run: |
-          """
+          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt init
-          """
+          
 
       - name: Run Terragrunt plan
         run: |
-          """
+          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
-          """
+          
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v3
@@ -128,7 +128,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          """
+          
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
@@ -144,7 +144,7 @@ jobs:
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
-          """
+          
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -156,7 +156,7 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-          """
+          
           creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
           # Fail if no creds obtained
@@ -169,7 +169,7 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
           echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV"
-          """
+          
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
@@ -179,7 +179,7 @@ jobs:
 
       - name: Run Terragrunt apply
         run: |
-          """
+          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json
-          """
+          
