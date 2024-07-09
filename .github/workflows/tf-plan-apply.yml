@@ -29,6 +29,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          """
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
@@ -44,6 +45,7 @@ jobs:
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
+          """
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -54,20 +56,20 @@ jobs:
 
       - name: Assume Terraform Role
         run: |
-            creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
+            """
+            creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
+            # Fail if no creds obtained
             if [ $? -ne 0 ]; then
             echo "Failed to assume role: $creds"
             exit 1
             fi
-
-            export AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)
-            export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)
-            export AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)
-        
+            
+            # export credentials to shell env
             echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
             echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
+            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV"
+            """
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -79,6 +81,7 @@ jobs:
 
       - name: Source env vars using Chamber
         run: |
+            """
             export ENVIRONMENT="${{ inputs.environment }}"
             chamber env "$ENVIRONMENT" > /tmp/env_vars
 
@@ -91,17 +94,22 @@ jobs:
                 echo "Failed to load environment variables."
                 exit 1
             fi
+            """
 
       - name: Initialize Terragrunt
         run: |
+          """
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt init
+          """
 
       - name: Run Terragrunt plan
         run: |
+          """
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
+          """
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v3
@@ -120,6 +128,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          """
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
@@ -135,6 +144,7 @@ jobs:
           chmod +x chamber-v2.10.4-linux-amd64
           sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
           chamber version
+          """
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -146,7 +156,20 @@ jobs:
       - name: Assume Terraform Role
         id: assume-terraform-role
         run: |
-          aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name git --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text
+          """
+          creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
+
+          # Fail if no creds obtained
+          if [ $? -ne 0 ]; then
+          echo "Failed to assume role: $creds"
+          exit 1
+          fi
+          
+          # export credentials to shell env
+          echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV"
+          """
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
@@ -156,5 +179,7 @@ jobs:
 
       - name: Run Terragrunt apply
         run: |
+          """
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json
+          """

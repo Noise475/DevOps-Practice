@@ -27,6 +27,7 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Current Environment | `string` | n/a | yes |
 | <a name="input_ou_names"></a> [ou\_names](#input\_ou\_names) | List of OU names to create | `list(object({ name = string }))` | n/a | yes |
 | <a name="input_parent_ou_id"></a> [parent\_ou\_id](#input\_parent\_ou\_id) | ID of the parent OU (optional) | `string` | `"null"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
 

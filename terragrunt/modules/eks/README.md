@@ -32,6 +32,7 @@ No modules.
 | <a name="input_ou_role_arn"></a> [ou\_role\_arn](#input\_ou\_role\_arn) | current environment role arn | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | current AWS region | `string` | `"us-east-2"` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | The IDs of the subnets of the EKS cluster | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC where the EKS cluster will be created | `string` | n/a | yes |
 
 ## Outputs

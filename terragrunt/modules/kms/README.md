@@ -31,6 +31,7 @@ No modules.
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS account | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Current AWS Environment | `string` | n/a | yes |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | AWS role to grant kms permissions | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
 
