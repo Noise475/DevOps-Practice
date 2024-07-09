@@ -52,23 +52,21 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: "OIDC"
 
       - name: Assume Terraform Role
         run: |
-            
             creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
             # Fail if no creds obtained
-            if [ $? -ne 0 ]; then
-            echo "Failed to assume role: $creds"
-            exit 1
+            if ! echo "$creds" | jq -e '.AccessKeyId' >/dev/null 2>&1; then
+              echo "Failed to assume role: $creds"
+              exit 1
             fi
-            
+
             # export credentials to shell env
             echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
             echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV"
+            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
             
 
       - name: Configure AWS credentials
@@ -81,7 +79,6 @@ jobs:
 
       - name: Source env vars using Chamber
         run: |
-            
             export ENVIRONMENT="${{ inputs.environment }}"
             chamber env "$ENVIRONMENT" > /tmp/env_vars
 
@@ -98,14 +95,12 @@ jobs:
 
       - name: Initialize Terragrunt
         run: |
-          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt init
           
 
       - name: Run Terragrunt plan
         run: |
-          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
@@ -151,25 +146,44 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
-          role-session-name: git
 
       - name: Assume Terraform Role
-        id: assume-terraform-role
         run: |
-          
-          creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
+            creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
-          # Fail if no creds obtained
-          if [ $? -ne 0 ]; then
-          echo "Failed to assume role: $creds"
-          exit 1
-          fi
-          
-          # export credentials to shell env
-          echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
-          echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
-          
+            # Fail if no creds obtained
+            if ! echo "$creds" | jq -e '.AccessKeyId' >/dev/null 2>&1; then
+              echo "Failed to assume role: $creds"
+              exit 1
+            fi
+            
+            # export credentials to shell env
+            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> $GITHUB_ENV
+            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+
+      - name: Source env vars using Chamber
+        run: |
+            export ENVIRONMENT="${{ inputs.environment }}"
+            chamber env "$ENVIRONMENT" > /tmp/env_vars
+
+            if [ -s /tmp/env_vars ]; then
+                set -a
+                source /tmp/env_vars
+                set +a
+                echo "Environment variables loaded successfully."
+            else
+                echo "Failed to load environment variables."
+                exit 1
+            fi
 
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
@@ -179,7 +193,6 @@ jobs:
 
       - name: Run Terragrunt apply
         run: |
-          
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json
           
