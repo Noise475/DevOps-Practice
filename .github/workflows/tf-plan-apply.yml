@@ -69,11 +69,12 @@ jobs:
             fi
 
             # export credentials to shell env
-            echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> "$GITHUB_ENV"
-            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> "$GITHUB_ENV"
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> "$GITHUB_ENV"
+            {
+              echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+              echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+              echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
+            }  >> "$GITHUB_ENV"
             
-
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -170,9 +171,11 @@ jobs:
             fi
             
             # export credentials to shell env
-            echo "AWS_ACCESS_KEY_ID=$(echo $creds | jq -r .AccessKeyId)" >> "$GITHUB_ENV"
-            echo "AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -r .SecretAccessKey)" >> "$GITHUB_ENV"
-            echo "AWS_SESSION_TOKEN=$(echo $creds | jq -r .SessionToken)" >> "$GITHUB_ENV"
+            {
+              echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+              echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+              echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
+            }  >> "$GITHUB_ENV"
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
