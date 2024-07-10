@@ -22,19 +22,16 @@ variable "account_id" {
 variable "sso_instance_arn" {
   description = "ARN for SSO instance"
   type        = string
-  default     = ""
 }
 
 variable "permission_set_arn" {
   description = "permssion set ARN for SSO instance"
   type        = string
-  default     = ""
 }
 
 variable "sso_group_id" {
   description = "SSO group ID"
   type        = string
-  default     = ""
 }
 
 variable "tags" {

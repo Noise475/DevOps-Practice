@@ -26,6 +26,6 @@ inputs = {
 
   tags = {
     Terraform = true
-    Region    = "${get_env("REGION")}"
+    Region    = "us-east-2"
   }
 }
