@@ -58,8 +58,8 @@ jobs:
             creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
             # Fail if no creds obtained
-            if ! echo "$creds" | jq -e '.AccessKeyId' >/dev/null 2>&1; then
-              echo "Failed to assume role: $creds"
+            if [ -z "$creds" ]; then
+              echo "Failed to assume role"
               exit 1
             fi
 
@@ -117,13 +117,15 @@ jobs:
     needs: [plan]
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
+    environment: ${{ inputs.environment }}
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: |
-          
+
           # Update package lists and install basic dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip jq
@@ -152,8 +154,8 @@ jobs:
             creds=$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})
 
             # Fail if no creds obtained
-            if ! echo "$creds" | jq -e '.AccessKeyId' >/dev/null 2>&1; then
-              echo "Failed to assume role: $creds"
+            if [ -z "$creds" ]; then
+              echo "Failed to assume role"
               exit 1
             fi
             
