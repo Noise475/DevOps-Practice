@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
-      GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout the code
@@ -57,23 +57,24 @@ jobs:
 
       - name: Assume Terraform Role
         run: |
-            creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
-            # Extract credentials and export to environment variables
-            AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-            AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-            AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+          creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
-            # Verify that credentials were set correctly
-            if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
-              echo "Failed to source credentials"
-              exit 1
-            fi
+          # Extract credentials and export to environment variables
+          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
 
-            # export credentials as secret
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+          # Verify that credentials were set correctly
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
+            echo "Failed to source credentials"
+            exit 1
+          fi
+
+          # export credentials as secret
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -130,7 +131,7 @@ jobs:
 
     environment: ${{ inputs.environment }}
     env:
-      GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout the code
@@ -164,24 +165,24 @@ jobs:
 
       - name: Assume Terraform Role
         run: |
-            creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
-            # Extract credentials and export to environment variables
-            AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-            AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-            AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
-            AWS_PROFILE=${{ github.run_id }}
+          creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
-            # Verify that credentials were set correctly
-            if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
-              echo "Failed to source credentials"
-              exit 1
-            fi
-            
-            # export credentials as secret
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
-            gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+          # Extract credentials and export to environment variables
+          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+
+          # Verify that credentials were set correctly
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
+            echo "Failed to source credentials"
+            exit 1
+          fi
+
+          # export credentials as secret
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
+          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
