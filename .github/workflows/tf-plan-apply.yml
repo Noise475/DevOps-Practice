@@ -59,17 +59,9 @@ jobs:
 
             # Extract credentials and export to environment variables
             AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-            export AWS_ACCESS_KEY_ID
-
             AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-            export AWS_SECRET_ACCESS_KEY
-
             AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
-            export AWS_SESSION_TOKEN
-
             AWS_PROFILE=${{ github.run_id }}
-            export AWS_PROFILE
-
 
             # Verify that credentials were set correctly
             if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
