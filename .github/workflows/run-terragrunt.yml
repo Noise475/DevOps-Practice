@@ -16,6 +16,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   stage:
     uses: ./.github/workflows/tf-plan-apply.yml
@@ -25,6 +26,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   prod:
     uses: ./.github/workflows/tf-plan-apply.yml
@@ -34,3 +36,4 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
