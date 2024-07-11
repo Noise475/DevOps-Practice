@@ -58,10 +58,18 @@ jobs:
             creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
             # Extract credentials and export to environment variables
-            export AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-            export AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-            export AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
-            export AWS_PROFILE=${{ github.run_id }}
+            AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+            export AWS_ACCESS_KEY_ID
+
+            AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+            export AWS_SECRET_ACCESS_KEY
+
+            AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+            export AWS_SESSION_TOKEN
+
+            AWS_PROFILE=${{ github.run_id }}
+            export AWS_PROFILE
+
 
             # Verify that credentials were set correctly
             if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
@@ -162,10 +170,17 @@ jobs:
             creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
             # Extract credentials and export to environment variables
-            export AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-            export AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-            export AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
-            export AWS_PROFILE=${{ github.run_id }}
+            AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+            export AWS_ACCESS_KEY_ID
+
+            AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+            export AWS_SECRET_ACCESS_KEY
+
+            AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+            export AWS_SESSION_TOKEN
+
+            AWS_PROFILE=${{ github.run_id }}
+            export AWS_PROFILE
 
             # Verify that credentials were set correctly
             if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
@@ -214,4 +229,3 @@ jobs:
         run: |
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json
-          
