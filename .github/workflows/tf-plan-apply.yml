@@ -13,7 +13,7 @@ on:
                 required: false
             ROLE_ARN:
                 required: true
-            GH_PAT:
+            GH_TOKEN:
                 required: true
 
 
@@ -25,7 +25,7 @@ jobs:
   plan:
     runs-on: ubuntu-latest
     env:
-      GH_PAT: ${{ secrets.GH_CLI_PAT }}
+      GH_TOKEN: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
 
     steps:
@@ -134,7 +134,7 @@ jobs:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
     env:
-      GH_PAT: ${{ secrets.GH_CLI_PAT }}
+      GH_TOKEN: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
 
     steps:
