@@ -70,7 +70,6 @@ jobs:
           
           # Extract credentials and export to environment variables
           AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.Credentials.AccessKeyId')
-          echo $AWS_ACCESS_KEY_ID
           AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.Credentials.SecretAccessKey')
           AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.Credentials.SessionToken')
 
@@ -80,16 +79,17 @@ jobs:
             exit 1
           fi
 
+          echo "$AWS_ACCESS_KEY_ID" > credentials.txt
+          echo "$AWS_SECRET_ACCESS_KEY" >> credentials.txt
+          echo "$AWS_SESSION_TOKEN" >> credentials.txt
+
+          cat credentials.txt
+
           # Auth to github repo
           echo "$GH_CLI_PAT" | gh auth login --with-token 
 
           # Export credentials as secret
-          gh secret set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
-          echo "${{ secrets.AWS_ACCESS_KEY_ID }}" | wc -c
-          gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
-          gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
-        env:
-          GH_CLI_PAT: "${{ secrets.GH_CLI_PAT}}"
+          gh secret set -f credentials.txt
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -201,8 +201,6 @@ jobs:
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
-        env:
-          GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
