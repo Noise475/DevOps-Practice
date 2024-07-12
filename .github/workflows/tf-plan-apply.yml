@@ -14,7 +14,7 @@ on:
                 required: false
             ROLE_ARN:
                 required: true
-            GH_PAT:
+            GH_CLI_PAT:
                 required: true
             AWS_ACCESS_KEY_ID:
                 required: false
@@ -32,7 +32,7 @@ jobs:
   plan:
     runs-on: ubuntu-latest
     env:
-      GH_PAT: "$GH_PAT"
+      GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout the code
@@ -81,12 +81,14 @@ jobs:
           fi
 
           # Auth to github repo
-          gh auth login --with-token "$GH_PAT"
+          gh auth login --with-token "$GH_CLI_PAT"
 
           # Export credentials as secret
           gh secret set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
           gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
           gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+        env:
+          GH_CLI_PAT: "${{ secrets.GH_CLI_PAT}}"
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -143,7 +145,7 @@ jobs:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
     env:
-      GH_PAT: "$GH_PAY"
+      GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
 
     steps:
@@ -193,14 +195,14 @@ jobs:
           fi
 
           # Auth to github repo
-          gh auth login --with-token "$GH_PAT"
+          gh auth login --with-token "${{ secrets.GH_CLI_PAT }}"
 
           # export credentials as secret
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
