@@ -79,17 +79,17 @@ jobs:
             exit 1
           fi
 
-          echo "$AWS_ACCESS_KEY_ID" > credentials.txt
-          echo "$AWS_SECRET_ACCESS_KEY" >> credentials.txt
-          echo "$AWS_SESSION_TOKEN" >> credentials.txt
-
-          cat credentials.txt
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" > key_id.txt
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" > access_key.txt
+          echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" > token.txt
 
           # Auth to github repo
           echo "$GH_CLI_PAT" | gh auth login --with-token 
 
           # Export credentials as secret
-          gh secret set -f credentials.txt
+          gh secret set -f key_id.txt
+          gh secret set -f access_key.txt
+          gh secret set -f token.txt
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
