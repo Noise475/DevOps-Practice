@@ -68,7 +68,7 @@ jobs:
         run: |
 
           creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
-
+          echo "$creds"
           # Extract credentials and export to environment variables
           AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
           AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
@@ -84,9 +84,9 @@ jobs:
           echo "$GH_CLI_PAT" | gh auth login --with-token 
 
           # Export credentials as secret
-          gh variable set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
-          gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
-          gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+          gh variable set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+          gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+          gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
         env:
           GH_CLI_PAT: "${{ secrets.GH_CLI_PAT}}"
 
@@ -95,14 +95,14 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
       - name: Source env vars using Chamber
         run: |
-            export AWS_ACCESS_KEY_ID="${{ env.AWS_ACCESS_KEY_ID }}"
-            export AWS_SECRET_ACCESS_KEY="${{ env.AWS_SECRET_ACCESS_KEY }}"
-            export AWS_SESSION_TOKEN="${{ env.AWS_SESSION_TOKEN }}"
+            export AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
+            export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            export AWS_SESSION_TOKEN="${{ secrets.AWS_SESSION_TOKEN }}"
             export ENVIRONMENT="${{ inputs.environment }}"
 
             chamber env "$ENVIRONMENT" > /tmp/env_vars
