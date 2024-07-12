@@ -6,6 +6,7 @@ on:
             environment:
                 required: true
                 type: string
+
         secrets:
             GH_ROLE_ARN:
                 required: true
@@ -13,7 +14,7 @@ on:
                 required: false
             ROLE_ARN:
                 required: true
-            GH_TOKEN:
+            GH_PAT:
                 required: true
             AWS_ACCESS_KEY_ID:
                 required: false
@@ -31,9 +32,8 @@ jobs:
   plan:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GH_CLI_PAT }}
+      GH_PAT: "$GH_PAT"
     environment: ${{ inputs.environment }}
-
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
@@ -80,10 +80,13 @@ jobs:
             exit 1
           fi
 
-          # export credentials as secret
-          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
-          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
-          gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+          # Auth to github repo
+          gh auth login --with-token "$GH_PAT"
+
+          # Export credentials as secret
+          gh secret set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
+          gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
+          gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -140,7 +143,7 @@ jobs:
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
 
     env:
-      GH_TOKEN: ${{ secrets.GH_CLI_PAT }}
+      GH_PAT: "$GH_PAY"
     environment: ${{ inputs.environment }}
 
     steps:
@@ -189,10 +192,15 @@ jobs:
             exit 1
           fi
 
+          # Auth to github repo
+          gh auth login --with-token "$GH_PAT"
+
           # export credentials as secret
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SECRET_ACCESS_KEY"
           gh secret set MYSECRET --env "${{ inputs.environment }}" --body "$AWS_SESSION_TOKEN"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure AWS terraform credentials
         uses: aws-actions/configure-aws-credentials@v4
