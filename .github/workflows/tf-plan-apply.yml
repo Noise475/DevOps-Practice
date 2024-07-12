@@ -69,7 +69,9 @@ jobs:
           creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
           
           # Extract credentials and export to environment variables
+          echo "$creds" | jq -r '.Credentials.AccessKeyId'
           AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.Credentials.AccessKeyId')
+          echo $AWS_ACCESS_KEY_ID
           AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.Credentials.SecretAccessKey')
           AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.Credentials.SessionToken')
 
@@ -83,7 +85,7 @@ jobs:
           echo "$GH_CLI_PAT" | gh auth login --with-token 
 
           # Export credentials as secret
-          gh variable set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+          gh secret set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
           gh secret set AWS_SECRET_ACCESS_KEY --env "${{ inputs.environment }}" --body AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
           gh secret set AWS_SESSION_TOKEN --env "${{ inputs.environment }}" --body AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
         env:
