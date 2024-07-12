@@ -66,14 +66,12 @@ jobs:
 
       - name: Assume Terraform Role
         run: |
-
           creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
           
           # Extract credentials and export to environment variables
-          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-          echo $AWS_ACCESS_KEY_ID
-          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.Credentials.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.Credentials.SecretAccessKey')
+          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.Credentials.SessionToken')
 
           # Verify that credentials were set correctly
           if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
@@ -184,9 +182,9 @@ jobs:
           creds="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
 
           # Extract credentials and export to environment variables
-          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
-          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
-          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+          AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.Credentials.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.Credentials.SecretAccessKey')
+          AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.Credentials.SessionToken')
 
           # Verify that credentials were set correctly
           if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
