@@ -81,7 +81,7 @@ jobs:
           fi
 
           # Auth to github repo
-          gh auth login --with-token "$GH_CLI_PAT"
+          echo "$GH_CLI_PAT" | gh auth login --with-token 
 
           # Export credentials as secret
           gh secret set AWS_ACCESS_KEY_ID --env "${{ inputs.environment }}" --body "$AWS_ACCESS_KEY_ID"
