@@ -31,8 +31,6 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    env:
-      GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout the code
@@ -64,34 +62,28 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
 
-      - name: Source env vars using Chamber
-        run: |
-            export ENVIRONMENT="${{ inputs.environment }}"
-
-            chamber env "$ENVIRONMENT" > /tmp/env_vars
-
-            if [ -s /tmp/env_vars ]; then
-                set -a
-                source /tmp/env_vars
-                set +a
-                echo "Environment variables loaded successfully."
-            else
-                echo "Failed to load environment variables."
-                exit 1
-            fi       
-
-      - name: Initialize Terragrunt
-        run: |
-          cd ./terragrunt/environments/${{ inputs.environment }}
-          terragrunt init
-          
-
       - name: Run Terragrunt plan
         run: |
+
+          # Source env vars
+          export ENVIRONMENT="${{ inputs.environment }}"
+
+          chamber env "$ENVIRONMENT" > /tmp/env_vars
+
+          if [ -s /tmp/env_vars ]; then
+              set -a
+              source /tmp/env_vars
+              set +a
+              echo "Environment variables loaded successfully."
+          else
+              echo "Failed to load environment variables."
+              exit 1
+          fi
+
+          # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan -out=tfplan
           terragrunt show -json tfplan > plan_output.json
-          
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v3
@@ -104,9 +96,6 @@ jobs:
     needs: [plan]
 
     if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
-
-    env:
-      GH_CLI_PAT: ${{ secrets.GH_CLI_PAT }}
     environment: ${{ inputs.environment }}
 
     steps:
@@ -139,28 +128,29 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.GH_ROLE_ARN }}
 
-      - name: Source env vars using Chamber
-        run: |
-            export ENVIRONMENT="${{ inputs.environment }}"
-            chamber env "$ENVIRONMENT" > /tmp/env_vars
-
-            if [ -s /tmp/env_vars ]; then
-                set -a
-                source /tmp/env_vars
-                set +a
-                echo "Environment variables loaded successfully."
-            else
-                echo "Failed to load environment variables."
-                exit 1
-            fi
-
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-          name: terragrunt-plan-output-${{ inputs.environment }}
-          path: ./terragrunt/environments/${{ inputs.environment }}
+            name: terragrunt-plan-output-${{ inputs.environment }}
+            path: ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
         run: |
+
+          # Source parameter store vars via chamber
+          export ENVIRONMENT="${{ inputs.environment }}"
+          chamber env "$ENVIRONMENT" > /tmp/env_vars
+
+          if [ -s /tmp/env_vars ]; then
+              set -a
+              source /tmp/env_vars
+              set +a
+              echo "Environment variables loaded successfully."
+          else
+              echo "Failed to load environment variables."
+              exit 1
+          fi
+
+          # Run Apply
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all apply plan_output.json

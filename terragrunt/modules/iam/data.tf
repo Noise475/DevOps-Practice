@@ -43,6 +43,7 @@ data "aws_iam_policy_document" "github_permissions" {
   statement {
     actions = [
       "ec2:*",
+      "eks:*",
       "kms:Create*",
       "kms:Describe*",
       "kms:Enable*",
@@ -65,11 +66,5 @@ data "aws_iam_policy_document" "github_permissions" {
     ]
     resources = ["*"]
     effect    = "Allow"
-    
-    condition {
-      test     = "StringEquals"
-      variable = "aws:RequestTag/OrgID"
-      values   = var.environments
-    }
   }
 }
