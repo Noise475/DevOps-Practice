@@ -14,8 +14,6 @@ on:
                 required: false
             ROLE_ARN:
                 required: true
-            GH_CLI_PAT:
-                required: true
             AWS_ACCESS_KEY_ID:
                 required: false
             AWS_SECRET_ACCESS_KEY:
