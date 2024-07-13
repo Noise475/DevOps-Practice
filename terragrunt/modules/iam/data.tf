@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "github_oidc" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values = ["repo:${var.github_org}/${var.github_repo}:*"]
+      values   = ["repo:${var.github_org}/${var.github_repo}:*"]
     }
 
     condition {
@@ -42,10 +42,34 @@ data "aws_iam_policy_document" "github_oidc" {
 data "aws_iam_policy_document" "github_permissions" {
   statement {
     actions = [
-      "sts:AssumeRoleWithWebIdentity",
-      "sts:AssumeRole"
+      "ec2:*",
+      "kms:Create*",
+      "kms:Describe*",
+      "kms:Enable*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Update*",
+      "kms:Revoke*",
+      "kms:Disable*",
+      "kms:Get*",
+      "kms:Delete*",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion",
+      "organizations:Describe*",
+      "organizations:List*",
+      "s3:*",
+      "ssm:*",
+      "sso:ListInstances",
+      "sso:ListAccountAssignments",
+      "dynamodb:*"
     ]
     resources = ["*"]
     effect    = "Allow"
+    
+    condition {
+      test     = "StringEquals"
+      variable = "aws:RequestTag/OrgID"
+      values   = var.environments
+    }
   }
 }
