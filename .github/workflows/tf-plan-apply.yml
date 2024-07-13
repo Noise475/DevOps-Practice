@@ -80,7 +80,7 @@ jobs:
 
           # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
-          terragrunt run-all plan -out=tfplan
+          terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
           terragrunt show -json tfplan > plan_output.json
 
       - name: Upload plan output as artifact
@@ -151,4 +151,4 @@ jobs:
 
           # Run Apply
           cd ./terragrunt/environments/${{ inputs.environment }}
-          terragrunt run-all apply plan_output.json
+          terragrunt run-all apply --terragrunt-non-interactive plan_output.json
