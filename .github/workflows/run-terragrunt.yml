@@ -1,0 +1,36 @@
+name: Plan and Apply IAC
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  dev:
+    uses: ./.github/workflows/tf-plan-apply.yml
+    with:
+      environment: dev
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+
+  stage:
+    uses: ./.github/workflows/tf-plan-apply.yml
+    needs: dev
+    with:
+      environment: staging
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+
+  prod:
+    uses: ./.github/workflows/tf-plan-apply.yml
+    needs: stage
+    with:
+      environment: prod
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}

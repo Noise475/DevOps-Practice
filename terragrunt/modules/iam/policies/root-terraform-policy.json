@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:*",
+                "iam:*",
+                "kms:*",
+                "organizations:*",
+                "s3:*",
+                "ssm:*",
+                "sso:*",
+                "dynamodb:*",
+                "identitystore:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
