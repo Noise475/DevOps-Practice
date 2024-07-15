@@ -8,3 +8,4 @@ packer/
 **/.terragrunt*
 **/.terraform.lock*
 destroy-all.sh
+apply-all.sh
