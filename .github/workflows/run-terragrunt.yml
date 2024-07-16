@@ -18,7 +18,6 @@ jobs:
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
   dev_apply:
-    if: ${{ github.event_name == 'pull_request' }}
     needs: [dev_plan]
     uses: ./.github/workflows/tf-apply.yml
     with:
@@ -28,9 +27,7 @@ jobs:
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
   stage_plan:
-    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'refs/heads/master' }}
     uses: ./.github/workflows/tf-plan.yml
-    needs: [dev_plan]
     with:
       environment: staging
     secrets:
@@ -48,9 +45,7 @@ jobs:
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
   prod_plan:
-    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'refs/heads/master' }}
     uses: ./.github/workflows/tf-plan.yml
-    needs: [stage_plan]
     with:
       environment: prod
     secrets:
