@@ -10,7 +10,6 @@ on:
 
 jobs:
   dev_plan:
-    if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/tf-plan.yml
     with:
       environment: dev
