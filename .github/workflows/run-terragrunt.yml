@@ -9,28 +9,57 @@ on:
       - 'master'
 
 jobs:
-  dev:
-    uses: ./.github/workflows/tf-plan-apply.yml
+  dev_plan:
+    uses: ./.github/workflows/tf-plan.yml
     with:
       environment: dev
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
-  stage:
+  dev_apply:
+    needs: [dev_plan]
+    uses: ./.github/workflows/tf-apply.yml
+    with:
+      environment: dev
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+
+  stage_plan:
     if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/master'
-    uses: ./.github/workflows/tf-plan-apply.yml
-    needs: dev
+    uses: ./.github/workflows/tf-plan.yml
+    needs: [dev_plan]
     with:
       environment: staging
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
-  prod:
+  stage_apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/tf-apply.yml
+    needs: [stage_plan]
+    with:
+      environment: staging
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+
+  prod_plan:
     if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/master'
+    uses: ./.github/workflows/tf-plan.yml
+    needs: [stage_plan]
+    with:
+      environment: prod
+    secrets:
+      GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
+      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+
+  prod_apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     uses: ./.github/workflows/tf-plan-apply.yml
-    needs: stage
+    needs: [stage_apply]
     with:
       environment: prod
     secrets:
