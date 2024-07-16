@@ -19,7 +19,7 @@ jobs:
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
   dev_apply:
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'push' }}
     needs: [dev_plan]
     uses: ./.github/workflows/tf-apply.yml
     with:
