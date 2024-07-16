@@ -16,7 +16,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
-
+      
   dev_apply:
     needs: [dev_plan]
     uses: ./.github/workflows/tf-apply.yml
@@ -35,7 +35,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
-
+      
   stage_apply:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     uses: ./.github/workflows/tf-apply.yml
