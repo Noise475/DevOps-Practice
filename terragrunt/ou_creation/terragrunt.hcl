@@ -1,7 +1,7 @@
 # terragrunt/ou_creation/terragrunt.hcl
 
 terraform {
-  source = "../modules/ou_creation" #"git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/ou_creation?ref=0.0.0"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ou_creation?ref=0.0.1"
 }
 
 include "root" {
