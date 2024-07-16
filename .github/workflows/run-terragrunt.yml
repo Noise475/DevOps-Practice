@@ -58,7 +58,7 @@ jobs:
 
   prod_apply:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/tf-plan-apply.yml
+    uses: ./.github/workflows/tf-apply.yml
     needs: [stage_apply]
     with:
       environment: prod
