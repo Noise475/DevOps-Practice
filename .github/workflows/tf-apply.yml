@@ -75,4 +75,4 @@ jobs:
 
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
-            terragrunt run-all apply --terragrunt-non-interactive plan_output.json
+            terragrunt run-all apply --terragrunt-non-interactive plan_output_${{ inputs.environment }}.json
