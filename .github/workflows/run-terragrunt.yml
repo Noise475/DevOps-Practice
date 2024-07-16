@@ -20,7 +20,7 @@ jobs:
 
   dev_apply:
     needs: [dev_plan]
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     uses: ./.github/workflows/tf-apply.yml
     with:
       environment: dev
@@ -38,7 +38,6 @@ jobs:
       ROLE_ARN: ${{ secrets.ROLE_ARN }}
 
   stage_apply:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     uses: ./.github/workflows/tf-apply.yml
     needs: [stage_plan]
     with:
