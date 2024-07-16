@@ -53,7 +53,7 @@ jobs:
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-            name: tfplan_${{ inputs.environment }}
+            name: tfplan_${{ inputs.environment }}.json
             path: ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
@@ -75,4 +75,4 @@ jobs:
 
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
-            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}
+            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}.json
