@@ -8,16 +8,9 @@ on:
         secrets:
             GH_ROLE_ARN:
                 required: true
-            TF_ROLE_ARN:
-                required: false
             ROLE_ARN:
                 required: true
-            AWS_ACCESS_KEY_ID:
-                required: false
-            AWS_SECRET_ACCESS_KEY:
-                required: false
-            AWS_SESSION_TOKEN:
-                required: false
+
 permissions:
     id-token: write
     contents: read
@@ -26,7 +19,6 @@ jobs:
   apply:
     runs-on: ubuntu-latest
 
-    if: github.event_name == 'pull_request' && contains(github.base_ref, 'refs/heads/master')
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout the code
