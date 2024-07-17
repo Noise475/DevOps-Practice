@@ -54,9 +54,11 @@ jobs:
       - name: Run Terragrunt plan
         run: |
 
+          # Assume env-appropriate role
+          source ./assume-role.sh ${{ secrets.ROLE_ARN }} ${{ github.run_id }}
+
           # Source env vars
           export ENVIRONMENT="${{ inputs.environment }}"
-
           chamber env "$ENVIRONMENT" > /tmp/env_vars
 
           if [ -s /tmp/env_vars ]; then
