@@ -56,6 +56,9 @@ jobs:
             name: tfplan_${{ inputs.environment }}
             path: ./terragrunt/environments/${{ inputs.environment }}
 
+      - name: Unzip artifact
+        run: unzip ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.zip -d ./terragrunt/environments/${{ inputs.environment }}
+
       - name: Run Terragrunt apply
         run: |
 
@@ -75,4 +78,4 @@ jobs:
 
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
-            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}
+            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}.json
