@@ -35,7 +35,5 @@ inputs = {
   sso_group_id       = dependency.iam.outputs.sso_group_id
   account_id         = dependency.iam.outputs.account_id
 
-  tags = {
-
-  }
+  tags = include.root.inputs.tags
 }

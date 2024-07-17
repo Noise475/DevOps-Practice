@@ -18,8 +18,6 @@ dependency "iam" {
 
 inputs = {
   role_arn = dependency.iam.outputs.ou_role_arn
-  
-  tags = {
 
-  }
+  tags = include.root.inputs.tags
 }

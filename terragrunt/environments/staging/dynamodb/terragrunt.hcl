@@ -15,7 +15,5 @@ include "root" {
 }
 
 inputs = {
-  tags = {
-
-  }
+tags = include.root.inputs.tags
 }

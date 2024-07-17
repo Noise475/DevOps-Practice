@@ -31,13 +31,21 @@ remote_state {
   }
 }
 
+locals {
+  tags = {
+    OrgID       = "dev"
+    Environment = "dev"
+    Terraform   = "true"
+  }
+}
+
 inputs = {
   environment = "dev"
   region      = "${get_env("REGION")}"
   role_arn    = "${get_env("ROLE_ARN")}"
   account_id  = "${get_env("ACCOUNT_ID")}"
 
-  tags_all = {
+  tags = {
     OrgID       = "dev"
     Environment = "dev"
     Terraform   = "true"

@@ -9,3 +9,5 @@ packer/
 **/.terraform.lock*
 destroy-all.sh
 apply-all.sh
+plan-all-output.sh
+*.plan

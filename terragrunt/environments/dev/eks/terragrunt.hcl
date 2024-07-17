@@ -32,7 +32,5 @@ inputs = {
   subnets         = dependency.vpc.outputs.subnets
   ou_role_arn     = dependency.iam.outputs.ou_role_arn
 
-  tags = {
-
-  }
+  tags = include.root.inputs.tags
 }

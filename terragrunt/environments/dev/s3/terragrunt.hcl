@@ -20,7 +20,5 @@ dependency "kms" {
 inputs = {
   s3_key_arn = dependency.kms.outputs.s3_key_arn
 
-  tags = {
-
-  }
+  tags = include.root.inputs.tags
 }

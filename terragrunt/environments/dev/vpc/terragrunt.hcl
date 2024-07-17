@@ -22,7 +22,5 @@ inputs = {
   s3_key_arn             = dependency.kms.outputs.s3_key_arn
   eks_public_key         = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+8GOSiLmugMq86ptAW9hDToexMingO2tiatTaJAwY8"
 
-  tags = {
-
-  }
+  tags = include.root.inputs.tags
 }

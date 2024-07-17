@@ -15,7 +15,5 @@ dependency "s3" {
 }
 
 inputs = {
-  tags = {
-
-  }
+tags = include.root.inputs.tags
 }
