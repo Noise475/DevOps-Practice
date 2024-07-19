@@ -11,3 +11,5 @@ destroy-all.sh
 apply-all.sh
 plan-all-output.sh
 *.plan
+tg-import.sh
+assume-role.sh
