@@ -63,7 +63,7 @@ jobs:
         run: |
 
             # Assume env-appropriate role
-            source ./assume-role.sh ${{ secrets.ROLE_ARN }} ${{ github.run_id }}
+            source ./terragrunt/assume-role.sh ${{ secrets.ROLE_ARN }} ${{ github.run_id }}
 
             # Source parameter store vars via chamber
             export ENVIRONMENT="${{ inputs.environment }}"

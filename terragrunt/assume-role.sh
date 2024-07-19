@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# set -e # Exit immediately if a command exits with a non-zero status - Will crash terminal in VSCode
+# set -e # Exit immediately if a command exits with a non-zero status - Will crash terminal in some IDEs
 set -u # unset vars cause error
-
-# Setup Env - replace with appropriate region and profile
-export REGION=us-east-2 AWS_PROFILE=noise
 
 # Usage: ./assume-role.sh <role-arn> <session-name>
 
@@ -23,13 +20,11 @@ if ! command -v jq &>/dev/null; then
     return 1
 fi
 
-# Check if AWS environment variables are set
-if [ -n "${AWS_ACCESS_KEY_ID:-}" ]; then
-    echo "Exiting current assumed role..."
-    unset AWS_ACCESS_KEY_ID
-    unset AWS_SECRET_ACCESS_KEY
-    unset AWS_SESSION_TOKEN
-fi
+# Unset env vars if old keys exists
+unset AWS_ACCESS_KEY_ID 
+unset AWS_SECRET_ACCESS_KEY 
+unset AWS_SESSION_TOKEN
+
 
 # Assume the IAM role and retrieve temporary credentials
 credentials=$(aws sts assume-role --role-arn "$role_arn" --role-session-name "$session_name" 2>&1)
@@ -55,11 +50,6 @@ fi
 export AWS_ACCESS_KEY_ID="$aws_access_key_id"
 export AWS_SECRET_ACCESS_KEY="$aws_secret_access_key"
 export AWS_SESSION_TOKEN="$aws_session_token"
-
-# Optionally, update AWS CLI configuration file
-# aws configure set aws_access_key_id "$aws_access_key_id"
-# aws configure set aws_secret_access_key "$aws_secret_access_key"
-# aws configure set aws_session_token "$aws_session_token"
 
 # Check identity
 identity=$(aws sts get-caller-identity 2>&1)
