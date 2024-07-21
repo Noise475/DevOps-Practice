@@ -55,10 +55,8 @@ jobs:
         run: |
 
           # Assume the env IAM role and get temporary credentials
-          CREDENTIALS=""
-          STATUS=""
-
-          CREDENTIALS="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
+          OUTPUT="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
+          CREDENTIAL="$OUTPUT"
           STATUS="$?"
 
           # Check if the assume-role command was successful
@@ -68,9 +66,9 @@ jobs:
           fi
 
           # Extract the temporary credentials from the JSON response
-          export AWS_ACCESS_KEY_ID=$(echo "${CREDENTIALS}" | jq -r '.Credentials.AccessKeyId')
-          export AWS_SECRET_ACCESS_KEY=$(echo "${CREDENTIALS}" | jq -r '.Credentials.SecretAccessKey')
-          export AWS_SESSION_TOKEN=$(echo "${CREDENTIALS}" | jq -r '.Credentials.SessionToken')
+          export AWS_ACCESS_KEY_ID=$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
 
           # Verify the new credentials
           aws sts get-caller-identity

@@ -59,10 +59,8 @@ jobs:
         run: |
 
             # Assume the env IAM role and get temporary credentials
-            CREDENTIALS=""
-            STATUS=""
 
-            CREDENTIALS="$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")"
+            CREDENTIALS="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
             STATUS="$?"
 
             # Check if the assume-role command was successful
@@ -92,5 +90,5 @@ jobs:
 
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
-            ls -l ./terragrunt/environments/${{ inputs.environment }}
+            ls -l 
             terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}.json
