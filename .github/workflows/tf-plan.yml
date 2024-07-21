@@ -55,20 +55,22 @@ jobs:
         run: |
 
           # Assume the env IAM role and get temporary credentials
-          OUTPUT="$(aws sts assume-role --role-arn ${{ secrets.ROLE_ARN }} --role-session-name ${{ github.run_id }})"
-          CREDENTIALS="$OUTPUT"
-          STATUS="$?"
+          CREDENTIALS=$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")
 
           # Check if the assume-role command was successful
-          if [ "$STATUS" -ne 0 ]; then
+          if [ ! "$CREDENTIALS" ]; then
             echo "Failed to assume role"
             exit 1
           fi
 
           # Extract the temporary credentials from the JSON response
-          export AWS_ACCESS_KEY_ID=$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
-          export AWS_SECRET_ACCESS_KEY=$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
-          export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
+          AWS_ACCESS_KEY_ID =$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY =$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
+          AWS_SESSION_TOKEN =$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
+
+          export AWS_ACCESS_KEY_ID
+          export AWS_SECRET_ACCESS_KEY
+          export AWS_SESSION_TOKEN
 
           # Verify the new credentials
           aws sts get-caller-identity
@@ -89,11 +91,11 @@ jobs:
 
           # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
-          terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
-          terragrunt show -json tfplan > tfplan_${{ inputs.environment }}.json
+          terragrunt run-all plan --terragrunt-non-interactive -out=tfplan_${{ inputs.environment }}.zip
+          ls -l
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan_${{ inputs.environment }}
-          path: ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.json
+          path: ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.zip
