@@ -53,17 +53,14 @@ jobs:
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-            name: tfplan_${{ inputs.environment }}
+            name: tfplan_${{ inputs.environment }}.json
             path: ./terragrunt/environments/${{ inputs.environment }}
-
-      - name: Unzip artifact
-        run: unzip ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.zip -d ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
         run: |
 
             # Assume the env IAM role and get temporary credentials
-            CREDENTIALS=$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")
+            CREDENTIALS="$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")"
 
             # Check if the assume-role command was successful
             if [ $? -ne 0 ]; then
