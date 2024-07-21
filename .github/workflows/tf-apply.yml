@@ -93,4 +93,4 @@ jobs:
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
             ls -l 
-            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}.zip
+            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}
