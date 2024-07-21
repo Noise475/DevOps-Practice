@@ -21,8 +21,9 @@ inputs = {
   environments = ["dev", "staging", "prod"]
   region       = "us-east-2"
   account_id   = "590183659157"
-  org_id       = dependency.ou_creation.outputs.current_ou_id
+  Org_ID       = dependency.ou_creation.outputs.current_ou_id
   github_org   = "Noise475"
+  table_name   = "root-terraform-lock-table"
 
   tags = {
     Terraform = true

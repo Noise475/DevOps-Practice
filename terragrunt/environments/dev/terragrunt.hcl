@@ -11,6 +11,7 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${get_env("REGION")}"
+
 }
 EOF
 }
@@ -31,14 +32,6 @@ remote_state {
   }
 }
 
-locals {
-  tags = {
-    OrgID       = "dev"
-    Environment = "dev"
-    Terraform   = "true"
-  }
-}
-
 inputs = {
   environment = "dev"
   region      = "${get_env("REGION")}"
@@ -46,7 +39,7 @@ inputs = {
   account_id  = "${get_env("ACCOUNT_ID")}"
 
   tags = {
-    OrgID       = "dev"
+    Org_ID      = "dev"
     Environment = "dev"
     Terraform   = "true"
   }

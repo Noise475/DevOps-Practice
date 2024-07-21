@@ -11,6 +11,9 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${get_env("REGION")}"
+  assume_role {
+    role_arn = "${get_env("ROLE_ARN")}"
+  }
 }
 EOF
 }
@@ -37,7 +40,7 @@ inputs = {
   account_id  = "${get_env("ACCOUNT_ID")}"
 
   tags = {
-    OrgID       = "staging"
+    Org_ID       = "staging"
     environment = "staging"
     Terraform   = "true"
   }

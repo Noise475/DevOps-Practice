@@ -19,7 +19,7 @@ variable "account_id" {
   type        = string
 }
 
-variable "org_id" {
+variable "Org_ID" {
   description = "AWS Organization ID"
   type        = string
 }
@@ -40,6 +40,11 @@ variable "github_org" {
   description = "Github organization name"
   type        = string
   default     = ""
+}
+
+variable "table_name" {
+  description = "Dynamodb table name"
+  type = string
 }
 
 variable "tags" {

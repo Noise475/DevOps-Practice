@@ -21,5 +21,7 @@ inputs = {
   tags = {
     Terraform   = true
     Region      = "${get_env("REGION")}"
+    Environment = "${get_env("ENVIRONMENT")}"
+    Org_ID       = "${get_env("ENVIRONMENT")}"
   }
 }

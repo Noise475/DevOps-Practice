@@ -1,7 +1,7 @@
 # environments/staging/eks/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git.git//terragrunt/modules/eks?ref=0.0.1"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.1"
 }
 
 include "root" {

@@ -50,7 +50,7 @@ No modules.
 | <a name="input_github_org"></a> [github\_org](#input\_github\_org) | Github organization name | `string` | `""` | no |
 | <a name="input_github_repo"></a> [github\_repo](#input\_github\_repo) | Github repo name | `string` | `"DevOps-Practice"` | no |
 | <a name="input_oidc_audience"></a> [oidc\_audience](#input\_oidc\_audience) | OIDC audience | `string` | `""` | no |
-| <a name="input_org_id"></a> [org\_id](#input\_org\_id) | AWS Organization ID | `string` | n/a | yes |
+| <a name="input_Org_ID"></a> [org\_id](#input\_org\_id) | AWS Organization ID | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | current AWS region | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
 

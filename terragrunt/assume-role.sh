@@ -20,11 +20,10 @@ if ! command -v jq &>/dev/null; then
     return 1
 fi
 
-# Unset env vars if old keys exists
+# Remove stale credentials
 unset AWS_ACCESS_KEY_ID 
 unset AWS_SECRET_ACCESS_KEY 
 unset AWS_SESSION_TOKEN
-
 
 # Assume the IAM role and retrieve temporary credentials
 credentials=$(aws sts assume-role --role-arn "$role_arn" --role-session-name "$session_name" 2>&1)

@@ -38,7 +38,7 @@ resource "aws_iam_policy" "tf_policy" {
   description = "administrative terraform policy for root"
 
   policy = file("${path.module}/policies/root-terraform-policy.json")
-  tags = var.tags
+  tags   = var.tags
 }
 
 # Define policies for each environment
@@ -49,6 +49,9 @@ resource "aws_iam_policy" "ou_tf_policy" {
 
   policy = templatefile("${path.module}/policies/ou-terraform-policy.json", {
     environment = each.key
+    region      = var.region
+    account_id  = var.account_id
+    table_name  = var.table_name
   })
   tags = var.tags
 }
@@ -60,7 +63,7 @@ resource "aws_iam_policy" "ou_tf_state_policy" {
 
   policy = templatefile("${path.module}/policies/terraform-state-policy.json", {
     account_id  = var.account_id
-    org_id      = var.org_id
+    Org_ID      = var.Org_ID
     environment = each.key
     region      = var.region
   })

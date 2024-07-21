@@ -5,56 +5,70 @@
             "Effect": "Allow",
             "Action": [
                 "ec2:*",
-                "iam:AttachRolePolicy",
-                "iam:AttachUserPolicy",
-                "iam:CreateGroup",
-                "iam:CreatePolicy",
-                "iam:CreatePolicyVersion",
-                "iam:CreateRole",
-                "iam:DeletePolicy",
-                "iam:DeletePolicyVersion",
-                "iam:DeleteRole",
-                "iam:DetachRolePolicy",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
-                "iam:GetRole",
-                "iam:ListAttachedRolePolicies",
-                "iam:ListEntitiesForPolicy",
-                "iam:ListInstanceProfilesForRole",
-                "iam:ListPolicyVersions",
-                "iam:ListRolePolicies",
-                "iam:PassRole",
-                "iam:PutRolePolicy",
-                "iam:PutUserPolicy",
-                "iam:UpdateAssumeRolePolicy",
-                "iam:UntagRole",
-                "iam:TagRole",
-                "kms:Create*",
-                "kms:Describe*",
-                "kms:Enable*",
-                "kms:List*",
-                "kms:Put*",
-                "kms:Update*",
-                "kms:Revoke*",
-                "kms:Disable*",
-                "kms:Get*",
-                "kms:Delete*",
-                "kms:ScheduleKeyDeletion",
-                "kms:CancelKeyDeletion",
-                "organizations:Describe*",
-                "organizations:List*",
+                "iam:*",
+                "kms:*",
+                "organizations:*",
                 "s3:*",
                 "ssm:*",
-                "sso:ListInstances",
-                "sso:ListAccountAssignments",
+                "sso:*",
                 "dynamodb:*"
             ],
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:RequestTag/OrgID": "${environment}"
+                    "aws:RequestTag/Org_ID": "${environment}"
                 }
             }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:*",
+                "iam:*",
+                "kms:*",
+                "organizations:*",
+                "s3:*",
+                "ssm:*",
+                "sso:*",
+                "dynamodb:*"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Org_ID": "${environment}"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParametersByPath"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem"
+            ],
+            "Resource": "arn:aws:dynamodb:${region}:${account_id}:table/${table_name}"
         }
     ]
 }

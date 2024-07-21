@@ -57,7 +57,7 @@ jobs:
             path: ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Unzip artifact
-        run: unzip ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }} -d ./terragrunt/environments/${{ inputs.environment }}
+        run: unzip ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.zip -d ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
         run: |
