@@ -11,7 +11,9 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${get_env("REGION")}"
-
+  assume_role {
+    role_arn = "${get_env("ROLE_ARN")}"
+  }
 }
 EOF
 }

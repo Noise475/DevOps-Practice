@@ -42,7 +42,7 @@ inputs = {
 
   tags = {
     Org_ID      = "prod"
-    environment = "prod"
+    Environment = "prod"
     Terraform   = "true"
   }
 }
