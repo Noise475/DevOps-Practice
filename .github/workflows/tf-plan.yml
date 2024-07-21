@@ -93,5 +93,5 @@ jobs:
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tfplan_${{ inputs.environment }}.json
+          name: tfplan_${{ inputs.environment }}
           path: ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}.json

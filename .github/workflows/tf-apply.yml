@@ -43,7 +43,6 @@ jobs:
             sudo mv chamber-v2.10.4-linux-amd64 /usr/local/bin/chamber
             chamber version
                 
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -53,7 +52,7 @@ jobs:
       - name: Download plan output artifact
         uses: actions/download-artifact@v4
         with:
-            name: tfplan_${{ inputs.environment }}.json
+            name: tfplan_${{ inputs.environment }}
             path: ./terragrunt/environments/${{ inputs.environment }}
 
       - name: Run Terragrunt apply
@@ -61,9 +60,10 @@ jobs:
 
             # Assume the env IAM role and get temporary credentials
             CREDENTIALS="$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")"
+            STATUS=$?
 
             # Check if the assume-role command was successful
-            if [ $? -ne 0 ]; then
+            if [ "$STATUS" -ne 0 ]; then
                 echo "Failed to assume role"
                 exit 1
             fi
