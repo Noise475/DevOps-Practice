@@ -49,12 +49,6 @@ jobs:
             aws-region: ${{ vars.AWS_REGION }}
             role-to-assume: ${{ secrets.GH_ROLE_ARN }}
 
-      - name: Download plan output artifact
-        uses: actions/download-artifact@v4
-        with:
-            name: tfplan_${{ inputs.environment }}
-            path: ./terragrunt/environments/${{ inputs.environment }}
-
       - name: Run Terragrunt apply
         run: |
 
@@ -93,4 +87,4 @@ jobs:
             # Run Apply
             cd ./terragrunt/environments/${{ inputs.environment }}
             ls -l 
-            terragrunt run-all apply --terragrunt-non-interactive tfplan_${{ inputs.environment }}
+            terragrunt run-all apply --terragrunt-non-interactive

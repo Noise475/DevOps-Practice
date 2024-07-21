@@ -91,12 +91,5 @@ jobs:
 
           # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
-          terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
-          terragrunt show tfplan > tfplan_${{ inputs.environment }}
-          ls -l
+          terragrunt run-all plan --terragrunt-non-interactive
 
-      - name: Upload plan output as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan_${{ inputs.environment }}
-          path: ./terragrunt/environments/${{ inputs.environment }}/tfplan_${{ inputs.environment }}
