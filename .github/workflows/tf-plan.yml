@@ -56,6 +56,7 @@ jobs:
 
           # Assume the env IAM role and get temporary credentials
           CREDENTIALS="$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")"
+          STATUS="$?"
 
           # Check if the assume-role command was successful
           if [ $? -ne 0 ]; then
@@ -88,7 +89,7 @@ jobs:
           # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan --terragrunt-non-interactive -out=tfplan
-          terragrunt show -json tfplan > tfplan.json
+          terragrunt show -json tfplan > tfplan_${{ inputs.environment }}.json
 
       - name: Upload plan output as artifact
         uses: actions/upload-artifact@v4
