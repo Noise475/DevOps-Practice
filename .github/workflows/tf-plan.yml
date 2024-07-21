@@ -92,7 +92,7 @@ jobs:
           # Run plan
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan --terragrunt-non-interactive -out=tfplan_${{ inputs.environment }}
-          terragrunt show -json tfplan > tfplan_${{ inputs.environment }}
+          terragrunt show tfplan_${{ inputs.environment }} > tfplan_${{ inputs.environment }}
           ls -l
 
       - name: Upload plan output as artifact
