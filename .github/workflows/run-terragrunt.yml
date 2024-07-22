@@ -16,7 +16,7 @@ jobs:
       environment: dev
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   dev_apply:
     needs: [dev_plan]
@@ -26,7 +26,7 @@ jobs:
       environment: dev
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   stage_plan:
     uses: ./.github/workflows/tf-plan.yml
@@ -35,7 +35,7 @@ jobs:
       environment: staging
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   stage_apply:
     uses: ./.github/workflows/tf-apply.yml
@@ -44,7 +44,7 @@ jobs:
       environment: staging
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   prod_plan:
     uses: ./.github/workflows/tf-plan.yml
@@ -53,7 +53,7 @@ jobs:
       environment: prod
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
 
   prod_apply:
     uses: ./.github/workflows/tf-apply.yml
@@ -62,4 +62,4 @@ jobs:
       environment: prod
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
-      ROLE_ARN: ${{ secrets.ROLE_ARN }}
+      TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}

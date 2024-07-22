@@ -10,7 +10,7 @@ on:
         secrets:
             GH_ROLE_ARN:
                 required: true
-            ROLE_ARN:
+            TF_ROLE_ARN:
                 required: true
 
 permissions:
