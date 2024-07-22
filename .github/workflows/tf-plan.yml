@@ -55,7 +55,7 @@ jobs:
         run: |
 
           # Assume the env IAM role and get temporary credentials
-          CREDENTIALS=$(aws sts assume-role --role-arn "${{ secrets.ROLE_ARN }}" --role-session-name "${{ github.run_id }}")
+          CREDENTIALS=$(aws sts assume-role --role-arn "${{ secrets.TF_ROLE_ARN }}" --role-session-name "${{ github.run_id }}")
 
           # Check if the assume-role command was successful
           if [ ! "$CREDENTIALS" ]; then
