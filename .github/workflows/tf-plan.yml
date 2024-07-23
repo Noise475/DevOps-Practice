@@ -91,7 +91,7 @@ jobs:
 
           # Run ${{ inputs.environment}} plan
           for dir in ou_creation iam kms s3 environments/${{ inputs.environment }}; do
-            cd ./terragrunt/$dir
+          cd ./terragrunt/aws-region/"$REGION"/"$dir"
             terragrunt run-all plan --terragrunt-non-interactive
             cd -
           done
