@@ -31,6 +31,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS Account ID | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Current environment | `string` | n/a | yes |
+| <a name="input_environments"></a> [environments](#input\_environments) | Map of environments | `list(string)` | n/a | yes |
 | <a name="input_permission_set_arn"></a> [permission\_set\_arn](#input\_permission\_set\_arn) | permssion set ARN for SSO instance | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Current aws region | `string` | n/a | yes |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | Current organization/environment role ARN | `string` | n/a | yes |
