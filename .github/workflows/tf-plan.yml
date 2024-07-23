@@ -93,3 +93,9 @@ jobs:
           cd ./terragrunt/environments/${{ inputs.environment }}
           terragrunt run-all plan --terragrunt-non-interactive
 
+          # Run ${{ inputs.environment}} plan
+          for dir in iam kms s3 environments/${{ inputs.environment }}; do
+            cd ./terragrunt/$dir
+            terragrunt run-all plan --terragrunt-non-interactive
+            cd -
+          done

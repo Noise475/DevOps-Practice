@@ -85,7 +85,10 @@ jobs:
                 exit 1
             fi
 
-            # Run Apply
-            cd ./terragrunt/environments/${{ inputs.environment }}
-            ls -l 
-            terragrunt run-all apply --terragrunt-non-interactive
+            # Run ${{ inputs.environment}} Apply
+            for dir in iam kms s3 environments/${{ inputs.environment }}; do
+              cd ./terragrunt/$dir
+              terragrunt run-all apply --terragrunt-non-interactive
+              cd -
+            done
+          

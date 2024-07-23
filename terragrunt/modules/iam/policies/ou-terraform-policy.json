@@ -42,35 +42,6 @@
         {
             "Effect": "Allow",
             "Action": [
-                "ssm:DescribeParameters",
-                "ssm:GetParametersByPath",
-                "ssm:getParameter",
-                "s3:HeadBucket",
-                "s3:GetObject",
-                "s3:ListBucket",
-				"kms:DeleteAlias",
-				"kms:ListAliases",
-				"kms:CreateAlias",
-				"kms:UpdateAlias",
-				"kms:GetPublicKey",
-				"kms:GetParametersForImport",
-				"kms:GetKeyRotationStatus",
-				"kms:GetKeyPolicy",
-				"kms:DescribeKey",
-				"kms:DescribeCustomKeyStores",
-				"kms:ListGrants",
-				"kms:ListKeyPolicies",
-				"kms:ListKeyRotations",
-				"kms:ListKeys",
-				"kms:ListResourceTags",
-				"kms:ListRetirableGrants",
-                "kms:ScheduleKeyDeletion"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
                 "s3:ListBucket"
             ],
             "Resource": "arn:aws:s3:::root-remote-state-tf-bucket"

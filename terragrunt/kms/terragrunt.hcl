@@ -1,7 +1,7 @@
-# environments/dev/kms/terragrunt.hcl
+# terragrunt/kms/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.1"
+  source = "../modules/kms"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.1"
 }
 
 include "root" {
@@ -10,7 +10,7 @@ include "root" {
 }
 
 dependency "iam" {
-  config_path = "../../../iam"
+  config_path = "../iam"
   mock_outputs = {
     ou_role_arn = "fake-role-arn"
   }
@@ -18,6 +18,7 @@ dependency "iam" {
 
 inputs = {
   role_arn = dependency.iam.outputs.ou_role_arn
+  account_id = "590183659157"
 
   tags = include.root.inputs.tags
 }
