@@ -58,7 +58,7 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/OrgUnit": "${environment}"
+                    "aws:ResourceTag/Org_ID": "${environment}"
                 }
             }
         },
@@ -119,7 +119,7 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:RequestTag/OrgUnit": "${environment}"
+                    "aws:RequestTag/Org_ID": "${environment}"
                 }
             }
         }
