@@ -1,7 +1,7 @@
 # us-east-2/s3/terragrunt.hcl
 
 terraform {
-  source = "../modules/s3" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/s3?ref=0.0.1"
+  source = "../modules/s3" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/s3?ref=0.0.3"
 }
 
 include "root" {

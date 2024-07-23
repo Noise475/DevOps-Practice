@@ -1,7 +1,7 @@
 # us-east-2/kms/terragrunt.hcl
 
 terraform {
-  source = "../modules/kms"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.1"
+  source = "../modules/kms"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.3"
 }
 
 include "root" {

@@ -1,7 +1,7 @@
 # terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.1"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.3"
 }
 
 # Generate provider configuration dynamically

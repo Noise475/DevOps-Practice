@@ -1,7 +1,7 @@
 # us-east-2/ssm/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.1"
+  source = "../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.3"
 }
 
 include "root" {

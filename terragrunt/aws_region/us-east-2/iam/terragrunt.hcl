@@ -1,7 +1,7 @@
 # us-east-2/iam/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/iam"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.2"
+  source = "../../../modules/iam"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.3"
 }
 
 dependency "ou_creation" {
