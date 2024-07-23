@@ -44,7 +44,7 @@ variable "github_org" {
 
 variable "table_name" {
   description = "Dynamodb table name"
-  type = string
+  type        = string
 }
 
 variable "tags" {

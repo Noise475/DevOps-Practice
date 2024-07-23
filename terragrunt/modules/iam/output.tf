@@ -29,3 +29,7 @@ output "gh_role_arn" {
 output "account_id" {
   value = var.account_id
 }
+
+output "environments" {
+  value = var.environments
+}

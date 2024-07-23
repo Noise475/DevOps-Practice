@@ -3,6 +3,11 @@ variable "environment" {
   type        = string
 }
 
+variable "environments" {
+  description = "Map of environments"
+  type        = list(string)
+}
+
 variable "region" {
   description = "Current aws region"
   type        = string
