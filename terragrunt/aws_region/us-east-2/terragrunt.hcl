@@ -1,4 +1,4 @@
-# terragrunt.hcl
+# environments/dev/ssm/terragrunt.hcl
 
 terraform {
   source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.3"

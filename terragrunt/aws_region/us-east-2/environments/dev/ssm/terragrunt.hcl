@@ -1,7 +1,7 @@
-# us-east-2/ssm/terragrunt.hcl
+# environments/dev/ssm/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.3"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.3"
 }
 
 include "root" {
@@ -10,7 +10,7 @@ include "root" {
 }
 
 dependency "iam" {
-  config_path = "../iam"
+  config_path = "../../../iam"
 
   mock_outputs = {
     dev_role_arn  = "placeholder"
@@ -35,8 +35,7 @@ inputs = {
   permission_set_arn = dependency.iam.outputs.permission_set_arn
   sso_group_id       = dependency.iam.outputs.sso_group_id
   account_id         = dependency.iam.outputs.account_id
-  environment        = "${get_env("ENVIRONMENT")}"
   environments       = dependency.iam.outputs.environments
 
-  tags = merge(include.root.inputs.tags, { Org_ID = "${get_env("ENVIRONMENT")}", Environment = "${get_env("ENVIRONMENT")}" })
+  tags = include.root.inputs.tags
 }

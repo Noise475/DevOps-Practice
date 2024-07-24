@@ -86,7 +86,7 @@ jobs:
             fi
 
             # Run ${{ inputs.environment}} Apply
-            for dir in ou_creation iam kms s3 environments/${{ inputs.environment }}; do
+            for dir in kms s3 environments/${{ inputs.environment }}; do
               cd ./terragrunt/aws_region/"$REGION"/"$dir"
               terragrunt run-all apply --terragrunt-non-interactive
               cd -

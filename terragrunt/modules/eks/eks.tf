@@ -4,9 +4,17 @@
 resource "aws_eks_cluster" "terragrunt_cluster" {
   name     = var.cluster_name
   role_arn = var.ou_role_arn
+
   vpc_config {
     subnet_ids = [var.subnets]
   }
+
+  depends_on = [
+    aws_vpc.eks_vpc,
+    aws_subnet.eks_subnet_a,
+    aws_subnet.eks_subnet_b,
+    aws_subnet.eks_subnet_c
+  ]
   tags = var.tags
 }
 
@@ -27,5 +35,5 @@ resource "aws_eks_node_group" "terragrunt_group" {
     max_unavailable = 1
   }
 
-    tags = var.tags
+  tags = var.tags
 }

@@ -10,7 +10,7 @@ include "root" {
 }
 
 dependency "kms" {
-  config_path = "../../../kms"
+  config_path = "../kms"
   mock_outputs = {
     private_subnet_key_arn = "placeholder"
     s3_key_arn             = "placeholder"

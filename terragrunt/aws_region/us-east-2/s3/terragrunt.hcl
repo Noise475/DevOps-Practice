@@ -10,7 +10,7 @@ include "root" {
 }
 
 dependency "kms" {
-  config_path = "../kms"
+  config_path = "../environments/${get_env("ENVIRONMENT")}/kms"
 
   mock_outputs = {
     s3_key_arn = "placeholder"

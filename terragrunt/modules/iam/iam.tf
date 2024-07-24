@@ -34,7 +34,7 @@ resource "aws_iam_role" "ou_role" {
 
 # Define policies for terraform_role
 resource "aws_iam_policy" "tf_policy" {
-  name        = "root-terraform-policy"
+  name        = "root-tf-policy"
   description = "administrative terraform policy for root"
 
   policy = file("${path.module}/policies/root-terraform-policy.json")
