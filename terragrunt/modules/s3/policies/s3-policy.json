@@ -11,11 +11,7 @@
         ]
       },
       "Action": [
-        "s3:GetBucketLocation",
-        "s3:GetBucketPolicy",
-        "s3:GetObject",
-        "s3:PutBucketPolicy",
-        "s3:PutObject"
+        "s3:*"
       ],
       "Resource": [
         "arn:aws:s3:::${environment}-remote-state-tf-bucket",

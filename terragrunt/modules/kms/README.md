@@ -37,6 +37,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_kms_arn_map"></a> [kms\_arn\_map](#output\_kms\_arn\_map) | n/a |
 | <a name="output_private_subnet_key_arn"></a> [private\_subnet\_key\_arn](#output\_private\_subnet\_key\_arn) | n/a |
 | <a name="output_s3_key_arn"></a> [s3\_key\_arn](#output\_s3\_key\_arn) | n/a |
 | <a name="output_ssm_key_arn"></a> [ssm\_key\_arn](#output\_ssm\_key\_arn) | n/a |

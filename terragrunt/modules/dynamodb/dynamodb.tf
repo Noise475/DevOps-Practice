@@ -12,4 +12,3 @@ resource "aws_dynamodb_table" "state_lock" {
 
   tags = var.tags
 }
-
