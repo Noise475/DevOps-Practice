@@ -10,64 +10,37 @@ resource "aws_key_pair" "eks" {
 
 
 # Instances for NAT Gateway
-resource "aws_instance" "eks_nat_instance_a" {
+resource "aws_instance" "eks_nat_instance" {
+  for_each = {
+    "a" = aws_subnet.private_subnets["a"].id
+    "b" = aws_subnet.private_subnets["b"].id
+    "c" = aws_subnet.private_subnets["c"].id
+  }
+
   ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.eks_private_subnet_a.id
+  subnet_id     = each.value
   key_name      = aws_key_pair.eks.key_name
 
-  tags = var.tags
-}
-
-resource "aws_instance" "eks_nat_instance_b" {
-  ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.eks_private_subnet_b.id
-  key_name      = aws_key_pair.eks.key_name
-
-  tags = var.tags
-}
-
-resource "aws_instance" "eks_nat_instance_c" {
-  ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.eks_private_subnet_c.id
-  key_name      = aws_key_pair.eks.key_name
-
-  tags = var.tags
+  tags = merge(var.tags,
+  { Name = "nat-instance-${each.key}-${var.environment}" })
 }
 
 # Elastic IPs for NAT Gateways
-resource "aws_eip" "eks_nat_eip_a" {
+resource "aws_eip" "eks_nat_eip" {
+  for_each = toset(["a", "b", "c"])
 
-}
-
-resource "aws_eip" "eks_nat_eip_b" {
-
-}
-
-resource "aws_eip" "eks_nat_eip_c" {
-
+  tags = merge(var.tags,
+  { Name = "nat-eip-${each.key}-${var.environment}" })
 }
 
 # NAT Gateways
-resource "aws_nat_gateway" "eks_nat_gateway_a" {
-  allocation_id = aws_eip.eks_nat_eip_a.id
-  subnet_id     = aws_subnet.eks_private_subnet_a.id
+resource "aws_nat_gateway" "eks_nat_gateway" {
+  for_each = toset(["a", "b", "c"])
 
-  tags = var.tags
-}
+  allocation_id = aws_eip.eks_nat_eip[each.key].id
+  subnet_id     = aws_subnet.public_subnets[each.key].id
 
-resource "aws_nat_gateway" "eks_nat_gateway_b" {
-  allocation_id = aws_eip.eks_nat_eip_b.id
-  subnet_id     = aws_subnet.eks_private_subnet_b.id
-
-  tags = var.tags
-}
-
-resource "aws_nat_gateway" "eks_nat_gateway_c" {
-  allocation_id = aws_eip.eks_nat_eip_c.id
-  subnet_id     = aws_subnet.eks_private_subnet_c.id
-
-  tags = var.tags
+  tags = merge(var.tags,
+  { Name = "nat-gateway-${each.key}-${var.environment}" })
 }

@@ -36,7 +36,12 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "subnets" {
+variable "public_subnet_ids" {
   description = "List of subnets for EKS cluster"
-  type = list(string)
+  type        = list(string)
+}
+
+variable "private_subnet_ids" {
+  description = "List of subnets for EKS cluster"
+  type        = list(string)
 }

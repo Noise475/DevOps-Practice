@@ -14,7 +14,9 @@ resource "aws_s3_bucket" "bucket_env_example" {
 
 # Add kms key encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" {
-  bucket = aws_s3_bucket.bucket_env_example.id
+  for_each = aws_s3_bucket.bucket_env_example
+
+  bucket = each.value.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -22,12 +24,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" 
       sse_algorithm     = "aws:kms"
     }
   }
-
 }
 
 # Enable Versioning
 resource "aws_s3_bucket_versioning" "versioning_example" {
-  bucket = aws_s3_bucket.example.id
+  for_each = aws_s3_bucket.bucket_env_example
+
+  bucket = each.value.bucket
+
   versioning_configuration {
     status = "Enabled"
   }
@@ -35,6 +39,8 @@ resource "aws_s3_bucket_versioning" "versioning_example" {
 
 # Create S3 terrafrom access policy
 resource "aws_s3_bucket_policy" "tf_policy" {
-  bucket = aws_s3_bucket.bucket-env-example.id
-  policy = templatefile("./policies/s3-policy.json", { environment = var.environment })
+  for_each = aws_s3_bucket.bucket_env_example
+
+  bucket = each.value.bucket
+  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = each.key })
 }

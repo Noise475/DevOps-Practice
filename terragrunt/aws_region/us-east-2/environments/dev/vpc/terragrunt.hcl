@@ -18,11 +18,25 @@ dependency "kms" {
 }
 
 inputs = {
-  cidr_block           = "10.2.0.0/16"
-  public_subnet_cidrs  = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
-  private_subnet_cidrs = ["10.2.4.0/24", "10.2.5.0/24", "10.2.6.0/24"]
+  cidr_block = "10.2.0.0/16"
 
-  availability_zones   = ["us-east-2a", "us-east-2b", "us-east-2c"]
+  public_subnet_cidrs = {
+    a = "10.2.1.0/24"
+    b = "10.2.2.0/24"
+    c = "10.2.3.0/24"
+  }
+
+  private_subnet_cidrs = {
+    a = "10.2.4.0/24"
+    b = "10.2.5.0/24"
+    c = "10.2.6.0/24"
+  }
+
+  availability_zones = { 
+    a = "us-east-2a"
+    b = "us-east-2b"
+    c = "us-east-2c"
+  }
 
   private_subnet_key_arn = dependency.kms.outputs.private_subnet_key_arn
   s3_key_arn             = dependency.kms.outputs.s3_key_arn
