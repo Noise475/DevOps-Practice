@@ -20,7 +20,7 @@ dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
     vpc_id  = "dev-vpc-id"
-    subnets = ["placeholder"]
+    subnets = ["placeholder","placeholder2"]
   }
 }
 

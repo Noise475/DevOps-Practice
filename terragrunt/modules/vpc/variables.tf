@@ -23,3 +23,13 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "public_subnet_cidrs" {
+  description = "Map of public subnet cidrs"
+  type = map(string)
+}
+
+variable "private_subnet_cidrs" {
+  description = "Map of private subnet cidrs"
+  type = map(string)
+}

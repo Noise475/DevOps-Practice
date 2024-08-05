@@ -39,54 +39,24 @@ resource "aws_route_table_association" "eks_subnet_c_association" {
 }
 
 # Public Subnets
-resource "aws_subnet" "eks_subnet_a" {
+resource "aws_subnet" "public_subnets" {
+  for_each = { for sub, cidr in var.public_subnet_cidrs : sub => cidr }
+
   vpc_id                  = aws_vpc.eks_vpc.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-2a"
-  map_public_ip_on_launch = true
-
-  tags = var.tags
-}
-
-resource "aws_subnet" "eks_subnet_b" {
-  vpc_id                  = aws_vpc.eks_vpc.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-2b"
-  map_public_ip_on_launch = true
-
-  tags = var.tags
-}
-
-resource "aws_subnet" "eks_subnet_c" {
-  vpc_id                  = aws_vpc.eks_vpc.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "us-east-2c"
+  cidr_block              = each.value
+  availability_zone       = var.availability_zones[each.key]
   map_public_ip_on_launch = true
 
   tags = var.tags
 }
 
 # Private Subnets
-resource "aws_subnet" "eks_private_subnet_a" {
+resource "aws_subnet" "private_subnets" {
+  for_each = { for idx, cidr in var.private_subnet_cidrs : idx => cidr }
+
   vpc_id            = aws_vpc.eks_vpc.id
-  cidr_block        = "10.0.4.0/24"
-  availability_zone = "us-east-2a"
-
-  tags = var.tags
-}
-
-resource "aws_subnet" "eks_private_subnet_b" {
-  vpc_id            = aws_vpc.eks_vpc.id
-  cidr_block        = "10.0.5.0/24"
-  availability_zone = "us-east-2b"
-
-  tags = var.tags
-}
-
-resource "aws_subnet" "eks_private_subnet_c" {
-  vpc_id            = aws_vpc.eks_vpc.id
-  cidr_block        = "10.0.6.0/24"
-  availability_zone = "us-east-2c"
+  cidr_block        = each.value
+  availability_zone = var.availability_zones[each.key]
 
   tags = var.tags
 }
