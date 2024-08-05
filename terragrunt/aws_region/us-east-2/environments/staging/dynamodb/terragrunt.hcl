@@ -1,7 +1,7 @@
 # us-east-2/environmentsstaging/dynamodb/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/dynamodb?ref=0.0.3"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/dynamodb?ref=0.0.4"
 }
 
 dependency "s3" {

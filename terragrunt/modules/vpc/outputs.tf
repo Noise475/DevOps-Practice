@@ -5,11 +5,11 @@ output "vpc_id" {
 }
 
 output "subnets" {
-  value = concat(aws_subnet.eks_subnet_a[*].id,
-    aws_subnet.eks_subnet_b[*].id,
-    aws_subnet.eks_subnet_c[*].id,
-    aws_subnet.eks_private_subnet_a[*].id,
-    aws_subnet.eks_private_subnet_b[*].id,
-    aws_subnet.eks_private_subnet_c[*].id
-  )
+  value = [ aws_subnet.eks_subnet_a.id,
+    aws_subnet.eks_subnet_b.id,
+    aws_subnet.eks_subnet_c.id,
+    aws_subnet.eks_private_subnet_a.id,
+    aws_subnet.eks_private_subnet_b.id,
+    aws_subnet.eks_private_subnet_c.id
+  ]
 }

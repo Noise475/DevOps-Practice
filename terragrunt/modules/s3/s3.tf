@@ -1,15 +1,20 @@
 # module/s3/main.tf
 
 # Create remote state buckets
-resource "aws_s3_bucket" "bucket-env-example" {
-  bucket = "${var.environment}-remote-state-tf-bucket"
+resource "aws_s3_bucket" "bucket_env_example" {
+  for_each = toset(var.environments)
 
-  tags = var.tags
+  bucket = "${each.key}-remote-state-tf-bucket"
+
+  tags = {
+    Name        = "${each.key}-remote-state-tf-bucket"
+    Environment = each.key
+  }
 }
 
 # Add kms key encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" {
-  bucket = aws_s3_bucket.bucket-env-example.id
+  bucket = aws_s3_bucket.bucket_env_example.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -18,6 +23,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt_example" 
     }
   }
 
+}
+
+# Enable Versioning
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.example.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 # Create S3 terrafrom access policy

@@ -6,15 +6,9 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
   role_arn = var.ou_role_arn
 
   vpc_config {
-    subnet_ids = [var.subnets]
+    subnet_ids = var.subnets
   }
 
-  depends_on = [
-    aws_vpc.eks_vpc,
-    aws_subnet.eks_subnet_a,
-    aws_subnet.eks_subnet_b,
-    aws_subnet.eks_subnet_c
-  ]
   tags = var.tags
 }
 
@@ -22,8 +16,8 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
 resource "aws_eks_node_group" "terragrunt_group" {
   cluster_name    = aws_eks_cluster.terragrunt_cluster.name
   node_group_name = "terragrunt_group_example"
-  node_role_arn   = var.ou_role_arn
-  subnet_ids      = [var.subnets]
+  node_role_arn   = aws_iam_role.eks_node_instance_role.arn
+  subnet_ids      = var.subnets
 
   scaling_config {
     desired_size = 1
@@ -34,6 +28,9 @@ resource "aws_eks_node_group" "terragrunt_group" {
   update_config {
     max_unavailable = 1
   }
+
+  depends_on = [
+  aws_eks_cluster.terragrunt_cluster]
 
   tags = var.tags
 }

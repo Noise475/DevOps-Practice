@@ -20,8 +20,7 @@ if ! command -v jq &>/dev/null; then
     return 1
 fi
 
-# Unset vars if necessary
-if [ -n $AWS_ACCESS_KEY_ID ]; then
+if [ -n "${AWS_SESSION_TOKEN+x}" ]; then
     unset AWS_ACCESS_KEY_ID
     unset AWS_SECRET_ACCESS_KEY
     unset AWS_SESSION_TOKEN

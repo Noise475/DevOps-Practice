@@ -1,7 +1,7 @@
 # us-east-2/environmentsdev/eks/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.3"
+  source = "../../../../../modules/eks"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.4"
 }
 
 include "root" {
@@ -20,14 +20,14 @@ dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
     vpc_id  = "dev-vpc-id"
-    subnets = []
+    subnets = ["placeholder"]
   }
 }
 
 # dev-specific variables
 inputs = {
   cluster_name    = "dev-eks-cluster"
-  cluster_version = "1.28"
+  cluster_version = "1.30"
   vpc_id          = dependency.vpc.outputs.vpc_id
   subnets         = dependency.vpc.outputs.subnets
   ou_role_arn     = dependency.iam.outputs.ou_role_arn

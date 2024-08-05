@@ -1,7 +1,7 @@
 # environments/staging/ssm/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.3"
+  source = "../../../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.4"
 }
 
 include "root" {
@@ -10,7 +10,7 @@ include "root" {
 }
 
 dependency "iam" {
-  config_path = "../iam"
+  config_path = "../../../iam"
 
   mock_outputs = {
     dev_role_arn  = "placeholder"

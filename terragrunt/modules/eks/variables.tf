@@ -34,5 +34,9 @@ variable "ou_role_arn" {
 variable "tags" {
   description = "A map of tags to apply to all resources"
   type        = map(string)
-  default     = {}
+}
+
+variable "subnets" {
+  description = "List of subnets for EKS cluster"
+  type = list(string)
 }

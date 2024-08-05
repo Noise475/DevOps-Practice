@@ -1,3 +1,3 @@
 output "bucket_arn" {
- value = aws_s3_bucket.bucket-env-example.arn
+  value = { for env, bucket in aws_s3_bucket.bucket_env_example : env => bucket.arn }
 }
