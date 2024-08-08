@@ -1,0 +1,97 @@
+// Jenkins pipeline script
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Latest Code') {
+            steps {
+                git branch: 'master', url: 'git@github.com:secure-cicd-pipeline-construction-oaaikn.git'
+            }
+        }
+
+        stage('Build & Run Docker Container') {
+            steps {
+                script {
+                    sh 'docker-compose up --build'
+                }
+            }
+        }
+
+        stage('Install security tools') {
+            steps {
+                script {
+                    // Install OWASP ZAP CLI
+                    sh 'curl -sSL https://raw.githubusercontent.com/zaproxy/zaproxy/main/docker/zap-cli-install.sh | sh'
+                    
+                    // Install Nikto
+                    sh '''
+                        apt-get update
+                        apt-get install -y nikto
+                    '''
+
+                    // Install Trivy
+                    sh '''
+                        wget https://github.com/aquasecurity/trivy/releases/download/v0.34.0/trivy_0.34.0_Linux-64bit.deb
+                        dpkg -i trivy_0.34.0_Linux-64bit.deb
+                        rm trivy_0.34.0_Linux-64bit.deb
+                    '''
+
+                }
+            }
+
+        }
+
+        stage('Run Security Scans') {
+            steps {
+                script {
+                    // Run zap scan
+                    sh 'zap-cli quick-scan --self-contained --start-options \'-config api.disablekey=true\' http://localhost:8080'
+
+                    // Run Nikto scan
+                    sh 'nikto -host http://localhost:8080'
+
+                    // Run Trivy scan
+                    sh 'trivy image hello-world:latest'
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                // Your code here
+                /* foregoing getting this step working for time
+                   pretty straightforward:
+                   sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin' 
+                   sh 'docker tag hello-world:latest $DOCKER_USERNAME/hello-world:latest'
+                   sh 'docker push $DOCKER_USERNAME/hello-world:latest'
+                */
+                }
+            }
+        }
+
+        stage('Deploy to AWS') {
+            steps {
+                script {
+                // Add your AWS deployment script here
+                /* Choosing to forgo this step for time; 
+                   The idea here is what type of deploy 
+                   ECS? EKS? I'll try to outline a high 
+                   level below
+
+                   ECS/EKS:
+                   - AWS Login (IAM setup) 
+                   - create cluster
+                   - define task definition/k8s config(EKS)
+                   - register task definition/Apply deployment
+                   - create the php service & attach task definition
+                */
+                }
+            }
+        }
+    }
+}
+
+/* groovylint-disable-next-line LineLength */
+Please replace 'git@github.com:YourRepository.git' with your actual Git repository URL. The security scan tool script and AWS deployment script are placeholders that you'll need to replace with your actual scripts.
