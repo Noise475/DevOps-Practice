@@ -2,6 +2,8 @@
 
 This folder treats this repo as a monorepo (containing terraform module config within the same repo as terragrunt config) and creates an eks-cluster with remote-state handled by S3 and state-locking within Dynamodb
 
+I don't recommend monorepo style for your terraform modules if you'll be controlling versions by tagging; As you'll need to cut a new tag for the whole repo on every module update. I'll denote this within the repo by designating module updates as pre-release tags.
+
 ## Terragrunt setup
 ``` shell
 .
