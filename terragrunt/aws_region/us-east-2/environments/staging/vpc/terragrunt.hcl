@@ -1,4 +1,4 @@
-# us-east-2/environmentsstaging/vpc/terragrunt.hcl
+2 # us-east-2/environmentsstaging/vpc/terragrunt.hcl
 
 terraform {
   source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.4"
@@ -19,9 +19,20 @@ dependency "kms" {
 }
 
 inputs = {
-  cidr_block           = "10.1.0.0/16"
-  public_subnet_cidrs  = ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
-  private_subnet_cidrs = ["10.1.4.0/24", "10.1.5.0/24", "10.1.6.0/24"]
+  cidr_block = "10.10.0.0/16"
+
+  public_subnet_cidrs = [
+    "10.10.1.0/24",
+    "10.10.2.0/24",
+    "10.10.3.0/24"
+  ]
+
+  private_subnet_cidrs = [
+    "10.10.4.0/24",
+    "10.10.5.0/24",
+    "10.10.6.0/24"
+  ]
+
 
   availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
 

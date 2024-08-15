@@ -36,6 +36,7 @@ remote_state {
 
 inputs = {
   environment = "prod"
+  environments = ["prod"]
   region      = "us-east-2"
   role_arn    = "${get_env("ROLE_ARN")}"
   account_id  = "${get_env("ACCOUNT_ID")}"
@@ -44,6 +45,7 @@ inputs = {
     Org_ID      = "prod"
     Environment = "prod"
     Terraform   = "true"
+    Region      = "us-east-2"
   }
 }
 

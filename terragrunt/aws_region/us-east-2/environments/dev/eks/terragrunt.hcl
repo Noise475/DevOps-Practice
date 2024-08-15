@@ -25,10 +25,45 @@ dependency "vpc" {
   }
 }
 
+
 # dev-specific variables
 inputs = {
   cluster_name    = "dev-eks-cluster"
   cluster_version = "1.30"
+
+  eks_clusters = {
+    "dev" = {
+      name               = "dev-cluster"
+      role_arn           = dependency.iam.outputs.ou_role_arn
+      public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
+      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      version            = "1.30"
+      tags = {
+        Name = "dev-cluster"
+      }
+    }
+  }
+
+  eks_node_groups = {
+    "dev" = {
+      node_group_name    = "dev-node-group"
+      public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
+      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      version            = "1.30"
+      scaling_config = {
+        desired_size = 2
+        max_size     = 3
+        min_size     = 1
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+      tags = {
+        Name = "dev-node-group"
+      }
+    }
+  }
+
 
   public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
   private_subnet_ids = dependency.vpc.outputs.private_subnet_ids

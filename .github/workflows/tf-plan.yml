@@ -89,9 +89,6 @@ jobs:
               exit 1
           fi
 
-          # Run ${{ inputs.environment}} plan
-          for dir in kms s3 environments/${{ inputs.environment }}; do
-          cd ./terragrunt/aws_region/"$REGION"/"$dir"
-            terragrunt run-all plan --terragrunt-non-interactive
-            cd -
-          done
+          # Run ${{ inputs.environment}} terragrunt plan
+          cd ./terragrunt/aws_region/"$REGION"/"$ENVIRONMENT"
+          terragrunt run-all plan --terragrunt-non-interactive

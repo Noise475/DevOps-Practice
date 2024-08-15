@@ -10,12 +10,7 @@ variable "environment" {
 
 variable "environments" {
   description = "Map of all environments"
-  type        = map(string)
-  default = {
-    dev     = "Development Environment"
-    staging = "Staging Environment"
-    prod    = "Production Environment"
-  }
+  type        = list(string)
 }
 
 variable "tags" {
@@ -37,4 +32,9 @@ variable "private_subnet_cidrs" {
 variable "availability_zones" {
   description = "Map of availability zones"
   type        = map(string)
+}
+
+variable "cidr_block" {
+  description = "VPC cidr block range"
+  type        = string
 }

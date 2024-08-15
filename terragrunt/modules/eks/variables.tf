@@ -1,8 +1,36 @@
 # modules/eks/variables.tf
 
-variable "cluster_name" {
-  description = "The name of the EKS cluster"
-  type        = string
+# Cluster config map
+variable "eks_clusters" {
+  description = "Map of EKS clusters"
+  type = map(object({
+    name               = string
+    role_arn           = string
+    public_subnet_ids  = list(string)
+    private_subnet_ids = list(string)
+    version            = string
+    tags               = map(string)
+  }))
+}
+
+# Node group config map
+variable "eks_node_groups" {
+  description = "Map of EKS node groups"
+  type = map(object({
+    node_group_name    = string
+    public_subnet_ids  = list(string)
+    private_subnet_ids = list(string)
+    version            = string
+    scaling_config = object({
+      desired_size = number
+      max_size     = number
+      min_size     = number
+    })
+    update_config = object({
+      max_unavailable = number
+    })
+    tags = map(string)
+  }))
 }
 
 variable "vpc_id" {

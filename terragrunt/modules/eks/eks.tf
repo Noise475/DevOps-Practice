@@ -1,36 +1,42 @@
 # modules/eks/main.tf
 
-# EKS Cluster
+# EKS Clusters
 resource "aws_eks_cluster" "terragrunt_cluster" {
-  name     = var.cluster_name
-  role_arn = var.ou_role_arn
+  for_each = var.eks_clusters
+
+  name     = each.value.name
+  role_arn = each.value.role_arn
 
   vpc_config {
-    subnet_ids = concat(var.public_subnet_ids, var.private_subnet_ids)
+    subnet_ids = concat(each.value.public_subnet_ids, each.value.private_subnet_ids)
   }
 
-  tags = var.tags
+  tags = each.value.tags
 }
 
-# EKS Node Group
+
+# Node Groups
 resource "aws_eks_node_group" "terragrunt_group" {
-  cluster_name    = aws_eks_cluster.terragrunt_cluster.name
-  node_group_name = "terragrunt_group_example"
+  for_each = var.eks_node_groups
+
+  cluster_name    = aws_eks_cluster.terragrunt_cluster[each.key].name
+  node_group_name = each.value.node_group_name
   node_role_arn   = aws_iam_role.eks_node_instance_role.arn
-  subnet_ids      = concat(var.public_subnet_ids, var.private_subnet_ids)
+  subnet_ids      = concat(each.value.public_subnet_ids, each.value.private_subnet_ids)
 
   scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 1
+    desired_size = each.value.scaling_config.desired_size
+    max_size     = each.value.scaling_config.max_size
+    min_size     = each.value.scaling_config.min_size
   }
 
   update_config {
-    max_unavailable = 1
+    max_unavailable = each.value.update_config.max_unavailable
   }
 
   depends_on = [
-  aws_eks_cluster.terragrunt_cluster]
+    aws_eks_cluster.terragrunt_cluster
+  ]
 
-  tags = var.tags
+  tags = each.value.tags
 }
