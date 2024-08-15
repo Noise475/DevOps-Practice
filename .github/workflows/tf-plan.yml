@@ -90,5 +90,5 @@ jobs:
           fi
 
           # Run ${{ inputs.environment}} terragrunt plan
-          cd ./terragrunt/aws_region/"$REGION"/"$ENVIRONMENT"
+          cd ./terragrunt/aws_region/"$REGION"/environment/"$ENVIRONMENT"
           terragrunt run-all plan --terragrunt-non-interactive

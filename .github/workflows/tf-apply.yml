@@ -86,5 +86,5 @@ jobs:
             fi
 
             # Run ${{ inputs.environment}} terragrunt apply
-            cd ./terragrunt/aws_region/"$REGION"/"$ENVIRONMENT"
+            cd ./terragrunt/aws_region/"$REGION"/environment/"$ENVIRONMENT"
             terragrunt run-all apply --terragrunt-non-interactive
