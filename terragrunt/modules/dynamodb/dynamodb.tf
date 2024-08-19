@@ -9,7 +9,7 @@ terraform {
 }
 
 resource "aws_dynamodb_table" "state_lock" {
-  name         = "${var.environment}-terraform-lock-table"
+  name         = "root-terraform-lock-table"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 

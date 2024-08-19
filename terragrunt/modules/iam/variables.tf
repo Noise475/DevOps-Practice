@@ -19,7 +19,7 @@ variable "account_id" {
   type        = string
 }
 
-variable "Org_ID" {
+variable "org_id" {
   description = "AWS Organization ID"
   type        = string
 }

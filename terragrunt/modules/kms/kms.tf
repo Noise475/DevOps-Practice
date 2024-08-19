@@ -55,7 +55,7 @@ resource "aws_kms_key" "ssm_key" {
 
 # Create aliases for the KMS keys
 resource "aws_kms_alias" "s3_key_alias" {
-  name          = "alias/${var.environment}-tf-state-key"
+  name          = "alias/${var.environment}-s3-tf-state-key"
   target_key_id = aws_kms_key.s3_key.key_id
 }
 

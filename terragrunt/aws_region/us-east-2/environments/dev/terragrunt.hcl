@@ -1,7 +1,12 @@
-# us-east-2/environmentsdev/terragrunt.hcl
+# us-east-2/environments/dev/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+  source = "../../../../modules" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+}
+
+locals {
+  region   = "us-east-2"
+  role_arn = "arn:aws:iam::590183659157:role/dev"
 }
 
 # Generate provider.tf configuration dynamically
@@ -10,9 +15,9 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${local.region}"
   assume_role {
-    role_arn = "${get_env("ROLE_ARN")}"
+    role_arn = "${local.role_arn}"
   }
 }
 EOF
@@ -26,8 +31,8 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    bucket         = "dev-remote-state-tf-bucket"
-    region         = "us-east-2"
+    bucket         = "root-remote-state-tf-bucket"
+    region         = "${local.region}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
@@ -35,16 +40,17 @@ remote_state {
 }
 
 inputs = {
-  environment          = "dev"
-  environments         = ["dev"]
-  region               = "us-east-2"
-  role_arn             = "${get_env("ROLE_ARN")}"
-  account_id           = "${get_env("ACCOUNT_ID")}"
+  environment  = "dev"
+  environments = ["dev"]
+  region       = "${local.region}"
+  role_arn     = "${local.role_arn}"
+  account_id   = "${get_env("ACCOUNT_ID")}"
+  org_id       = "${get_env("ORG_ID")}"
 
   tags = {
-    Org_ID      = "dev"
+    Org_ID      = "${get_env("ORG_ID")}"
     Environment = "dev"
     Terraform   = "true"
-    Region      = "us-east-2"
+    Region      = "${local.region}"
   }
 }

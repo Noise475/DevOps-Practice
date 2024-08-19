@@ -4,7 +4,9 @@
         {
             "Effect": "Allow",
             "Action": [
+                "autoscaling:*",
                 "ec2:*",
+                "eks:*",
                 "iam:*",
                 "kms:*",
                 "organizations:*",

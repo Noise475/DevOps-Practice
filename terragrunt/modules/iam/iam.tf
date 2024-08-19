@@ -20,6 +20,8 @@ resource "aws_iam_role" "terraform_role" {
     region     = var.region
   })
 
+  max_session_duration = 14400 # 4 hours
+
   tags = var.tags
 }
 
@@ -34,6 +36,8 @@ resource "aws_iam_role" "ou_role" {
   })
 
   tags = var.tags
+
+  max_session_duration = 14400 # 4 hours
 }
 
 #######################################################
@@ -60,34 +64,8 @@ resource "aws_iam_policy" "ou_tf_policy" {
     region      = var.region
     account_id  = var.account_id
     table_name  = var.table_name
+    org_id      = var.org_id
   })
-  tags = var.tags
-}
-
-resource "aws_iam_policy" "ou_tf_state_policy" {
-  for_each    = toset(var.environments)
-  name        = "${each.key}-terraform-state-policy"
-  description = "Terraform state policy for ${each.key}"
-
-  policy = templatefile("${path.module}/policies/terraform-state-policy.json", {
-    account_id  = var.account_id
-    Org_ID      = var.Org_ID
-    environment = each.key
-    region      = var.region
-  })
-
-  tags = var.tags
-}
-
-resource "aws_iam_policy" "eks_policy" {
-  for_each    = toset(var.environments)
-  name        = "${each.key}-eks-policy"
-  description = "IAM policy for Amazon EKS"
-
-  policy = templatefile("${path.module}/policies/eks-policy.json", {
-    environment = each.key
-  })
-
   tags = var.tags
 }
 
@@ -109,20 +87,4 @@ resource "aws_iam_policy_attachment" "ou_tf_policy_attachment" {
   name       = "${each.key}-terraform-policy-attachment"
   roles      = [aws_iam_role.ou_role[each.key].name]
   policy_arn = aws_iam_policy.ou_tf_policy[each.key].arn
-}
-
-resource "aws_iam_policy_attachment" "ou_state_policy_attachment" {
-  for_each = toset(var.environments)
-
-  name       = "${each.key}-terraform-state-policy-attachment"
-  roles      = [aws_iam_role.ou_role[each.key].name, aws_iam_role.terraform_role.name]
-  policy_arn = aws_iam_policy.ou_tf_state_policy[each.key].arn
-}
-
-resource "aws_iam_policy_attachment" "eks_policy_attachment" {
-  for_each = toset(var.environments)
-
-  name       = "${each.key}-eks-policy-attachment"
-  roles      = [aws_iam_role.ou_role[each.key].name]
-  policy_arn = aws_iam_policy.eks_policy[each.key].arn
 }

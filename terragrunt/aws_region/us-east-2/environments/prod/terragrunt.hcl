@@ -26,7 +26,7 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    bucket         = "prod-remote-state-tf-bucket"
+    bucket         = "root-remote-state-tf-bucket"
     region         = "us-east-2"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
@@ -38,11 +38,11 @@ inputs = {
   environment          = "prod"
   environments         = ["prod"]
   region               = "us-east-2"
-  role_arn             = "${get_env("ROLE_ARN")}"
+  role_arn             = "arn:aws:iam::590183659157:role/prod"
   account_id           = "${get_env("ACCOUNT_ID")}"
 
   tags = {
-    Org_ID      = "prod"
+    Org_ID      = "${get_env("ORG_ID")}"
     Environment = "prod"
     Terraform   = "true"
     Region      = "us-east-2"

@@ -13,6 +13,9 @@ resource "aws_s3_bucket" "bucket_env_example" {
   for_each = toset(var.environments)
 
   bucket = "${each.key}-remote-state-tf-bucket"
+  
+  # Typically don't want this but allows easier create/destroy cycles
+  force_destroy = true
 
   tags = {
     Name        = "${each.key}-remote-state-tf-bucket"
@@ -46,9 +49,9 @@ resource "aws_s3_bucket_versioning" "versioning_example" {
 }
 
 # Create S3 terrafrom access policy
-resource "aws_s3_bucket_policy" "tf_policy" {
+resource "aws_s3_bucket_policy" "s3_policy" {
   for_each = aws_s3_bucket.bucket_env_example
 
   bucket = each.value.bucket
-  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = each.key })
+  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = each.key, role_arn = var.role_arn })
 }

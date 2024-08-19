@@ -1,7 +1,7 @@
 # environments/dev/ssm/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.4"
+  source = "../../../../../modules/ssm" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.4"
 }
 
 include "root" {
@@ -25,6 +25,8 @@ dependency "kms" {
   mock_outputs = {
     ssm_key_arn = "placeholder"
   }
+
+  mock_outputs_merge_strategy_with_state = "shallow"
 }
 
 inputs = {
@@ -35,7 +37,6 @@ inputs = {
   permission_set_arn = dependency.iam.outputs.permission_set_arn
   sso_group_id       = dependency.iam.outputs.sso_group_id
   account_id         = dependency.iam.outputs.account_id
-  environments       = dependency.iam.outputs.environments
 
   tags = include.root.inputs.tags
 }

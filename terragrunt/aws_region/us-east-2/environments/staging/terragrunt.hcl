@@ -1,7 +1,11 @@
-# us-east-2/environmentsstaging/terragrunt.hcl
+# us-east-2/environments/staging/terragrunt.hcl
 
 terraform {
   source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+}
+
+locals {
+  region = "us-east-2"
 }
 
 # Generate provider configuration dynamically
@@ -10,7 +14,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = ${local.region}
   assume_role {
     role_arn = "${get_env("ROLE_ARN")}"
   }
@@ -25,8 +29,8 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    bucket         = "staging-remote-state-tf-bucket"
-    region         = "us-east-2"
+    bucket         = "root-remote-state-tf-bucket"
+    region         = ${local.region}
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "staging-terraform-lock-table"
@@ -34,16 +38,16 @@ remote_state {
 }
 
 inputs = {
-  environment          = "staging"
-  environments         = ["staging"]
-  region               = "us-east-2"
-  role_arn             = "${get_env("ROLE_ARN")}"
-  account_id           = "${get_env("ACCOUNT_ID")}"
+  environment  = "staging"
+  environments = ["staging"]
+  region       = ${local.region}
+  role_arn     = "arn:aws:iam::590183659157:role/staging"
+  account_id   = "${get_env("ACCOUNT_ID")}"
 
   tags = {
-    Org_ID      = "staging"
+    Org_ID      = "${get_env("ORG_ID")}"
     environment = "staging"
     Terraform   = "true"
-    Region      = "us-east-2"
+    Region      = ${local.region}
   }
 }

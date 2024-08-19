@@ -1,7 +1,7 @@
-# environments/dev/ssm/terragrunt.hcl
+# us-east-2/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+  source = "../../modules" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
 }
 
 locals {
@@ -37,16 +37,17 @@ remote_state {
 
 # Include the input values to use for the variables of the module.
 inputs = {
-  account_id           = "590183659157"
-  environment          = "${get_env("ENVIRONMENT")}"
-  environments         = ["dev", "staging", "prod"]
-  region               = "${local.region}"
-  role_arn             = "${get_env("ROLE_ARN")}"
-  table_name           = "root-terraform-lock-table"
+  account_id   = "${get_env("ACCOUNT_ID")}"
+  environment  = "${get_env("ENVIRONMENT")}"
+  environments = ["dev", "staging", "prod"]
+  region       = "${local.region}"
+  role_arn     = "${get_env("ROLE_ARN")}"
+  table_name   = "root-terraform-lock-table"
+  org_id       = "${get_env("ORG_ID")}"
 
 
   tags = {
-    Terraform = "true"
-    Region    = local.region
+    Terraform   = "true"
+    Region      = "${local.region}"
   }
 }

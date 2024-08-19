@@ -16,5 +16,5 @@ inputs = {
     }
   ]
 
-  tags = include.root.inputs.tags
+  tags = merge(include.root.inputs.tags, {Org_ID = "${get_env("ORG_ID")}", Environment = "${get_env("ENVIRONMENT")}" })
 }

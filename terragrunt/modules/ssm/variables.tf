@@ -43,3 +43,8 @@ variable "tags" {
   description = "A map of tags to apply to all resources"
   type        = map(string)
 }
+
+variable "org_id" {
+  description = "AWS Organization ID"
+  type        = string
+}

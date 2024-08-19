@@ -29,6 +29,11 @@ variable "private_subnet_cidrs" {
   type        = map(string)
 }
 
+variable "ou_role_name" {
+  description = "Current env iam role name"
+  type        = string
+}
+
 variable "availability_zones" {
   description = "Map of availability zones"
   type        = map(string)
@@ -36,5 +41,10 @@ variable "availability_zones" {
 
 variable "cidr_block" {
   description = "VPC cidr block range"
+  type        = string
+}
+
+variable "role_arn" {
+  description = "EKS role ARN"
   type        = string
 }

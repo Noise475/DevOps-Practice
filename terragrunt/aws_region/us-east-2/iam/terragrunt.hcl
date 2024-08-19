@@ -17,7 +17,6 @@ include "root" {
 }
 
 inputs = {
-  region     = "us-east-2"
   Org_ID     = dependency.ou_creation.outputs.current_ou_id
   github_org = "Noise475"
 

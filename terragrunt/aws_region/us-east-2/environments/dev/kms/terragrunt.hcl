@@ -1,7 +1,7 @@
 # environments/dev/kms/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.4"
+  source = "../../../../../modules/kms" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/kms?ref=0.0.4"
 }
 
 include "root" {
@@ -11,9 +11,12 @@ include "root" {
 
 dependency "iam" {
   config_path = "../../../iam"
+
   mock_outputs = {
     ou_role_arn = "fake-role-arn"
   }
+
+  mock_outputs_merge_strategy_with_state = "shallow"
 }
 
 inputs = {

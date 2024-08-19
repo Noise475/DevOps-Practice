@@ -1,8 +1,9 @@
-# us-east-2/environmentsdev/eks/terragrunt.hcl
+# us-east-2/environments/dev/eks/terragrunt.hcl
 
 terraform {
   source = "../../../../../modules/eks" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.4"
 }
+
 
 include "root" {
   path   = find_in_parent_folders()
@@ -18,38 +19,43 @@ dependency "iam" {
 
 dependency "vpc" {
   config_path = "../vpc"
+
   mock_outputs = {
     vpc_id             = "dev-vpc-id"
-    public_subnet_ids  = ["placeholder"]
-    private_subnet_ids = ["placeholder"]
+    vpc_cidr           = "placeholder"
+    eks_public_key     = "placeholder"
+    public_subnet_ids  = ["100.1.1.0/16"]
+    private_subnet_ids = ["100.10.1.0/16"]
   }
+
+  mock_outputs_merge_strategy_with_state = "shallow"
 }
 
 
 # dev-specific variables
 inputs = {
-  cluster_name    = "dev-eks-cluster"
-  cluster_version = "1.30"
+  cluster_name = "dev-eks-cluster"
+  vpc_id       = dependency.vpc.outputs.vpc_id
+  vpc_cidr     = dependency.vpc.outputs.vpc_cidr
+  ou_role_arn  = dependency.iam.outputs.ou_role_arn
 
   eks_clusters = {
     "dev" = {
       name               = "dev-cluster"
-      role_arn           = dependency.iam.outputs.ou_role_arn
       public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
       private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
       version            = "1.30"
-      tags = {
-        Name = "dev-cluster"
-      }
+      tags               = include.root.inputs.tags
     }
   }
 
   eks_node_groups = {
     "dev" = {
       node_group_name    = "dev-node-group"
+      eks_public_key     = dependency.vpc.outputs.eks_public_key
+      instance_types     = ["t2.micro"]
       public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
       private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
-      version            = "1.30"
       scaling_config = {
         desired_size = 2
         max_size     = 3
@@ -58,18 +64,11 @@ inputs = {
       update_config = {
         max_unavailable = 1
       }
-      tags = {
-        Name = "dev-node-group"
-      }
+
+      tags = include.root.inputs.tags
     }
   }
 
-
-  public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
-  private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
-
-  vpc_id      = dependency.vpc.outputs.vpc_id
-  ou_role_arn = dependency.iam.outputs.ou_role_arn
-
   tags = include.root.inputs.tags
+
 }

@@ -4,10 +4,11 @@
         {
             "Effect": "Allow",
             "Action": [
+                "autoscaling:*",
                 "ec2:*",
+                "eks:*",
                 "iam:*",
                 "kms:*",
-                "organizations:*",
                 "s3:*",
                 "ssm:*",
                 "sso:*",
@@ -16,17 +17,18 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:RequestTag/Org_ID": "${environment}"
+                    "aws:RequestTag/Org_ID": "${org_id}"
                 }
             }
         },
         {
             "Effect": "Allow",
             "Action": [
+                "autoscaling:*",
                 "ec2:*",
+                "eks:*",
                 "iam:*",
                 "kms:*",
-                "organizations:*",
                 "s3:*",
                 "ssm:*",
                 "sso:*",
@@ -35,16 +37,49 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/Org_ID": "${environment}"
+                    "aws:ResourceTag/Org_ID": "${org_id}"
                 }
             }
         },
         {
             "Effect": "Allow",
             "Action": [
-                "s3:ListBucket"
+                "ec2:Describe*",
+                "kms:ListAliases",
+                "ssm:DescribeParameters"
             ],
-            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket"
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:*"
+            ],
+            "Resource": [
+                "arn:aws:iam::${account_id}:role/${environment}-eksNodeInstanceRole",
+                "arn:aws:iam::${account_id}:role/${environment}-cluster-role",
+                "arn:aws:iam::${account_id}:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": [
+                "arn:aws:eks:us-east-2:${account_id}:cluster/${environment}-cluster",
+                "arn:aws:eks:us-east-2:${account_id}:nodegroup/${environment}-cluster/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::{environment}-remote-state-tf-bucket",
+                "arn:aws:s3:::{enviornment}-remote-state-tf-bucket/*"
+            ]
         },
         {
             "Effect": "Allow",
@@ -56,11 +91,9 @@
         {
             "Effect": "Allow",
             "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:PutItem"
+                "s3:ListBucket"
             ],
-            "Resource": "arn:aws:dynamodb:${region}:${account_id}:table/${table_name}"
+            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket"
         }
     ]
 }

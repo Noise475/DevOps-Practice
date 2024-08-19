@@ -16,11 +16,6 @@ resource "aws_ssm_parameter" "environment" {
   type        = "SecureString"
   value       = each.key
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
-
   tags = var.tags
 }
 
@@ -33,11 +28,6 @@ resource "aws_ssm_parameter" "region" {
   type        = "SecureString"
   value       = var.region
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
-
   tags = var.tags
 }
 
@@ -49,10 +39,18 @@ resource "aws_ssm_parameter" "account_id" {
   type        = "SecureString"
   value       = var.account_id
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
+
+
+  tags = var.tags
+}
+
+resource "aws_ssm_parameter" "org_id" {
+  for_each = toset(var.environments)
+
+  name        = "/${each.key}/org_id"
+  description = "AWS Organization ID"
+  type        = "SecureString"
+  value       = var.org_id
 
   tags = var.tags
 }
@@ -65,10 +63,7 @@ resource "aws_ssm_parameter" "role_arn" {
   type        = "SecureString"
   value       = var.role_arn
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
+
 
   tags = var.tags
 }
@@ -81,10 +76,7 @@ resource "aws_ssm_parameter" "sso_instance_arn" {
   type        = "SecureString"
   value       = var.sso_instance_arn
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
+
 
   tags = var.tags
 }
@@ -97,10 +89,7 @@ resource "aws_ssm_parameter" "permission_set_arn" {
   type        = "SecureString"
   value       = var.permission_set_arn
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
+
 
   tags = var.tags
 }
@@ -113,10 +102,7 @@ resource "aws_ssm_parameter" "sso_group_id" {
   type        = "SecureString"
   value       = var.sso_group_id
 
-  lifecycle {
-    prevent_destroy = true  # Prevents Terraform from deleting the parameter
-    ignore_changes  = false # Allows Terraform to update the value
-  }
+
 
   tags = var.tags
 }

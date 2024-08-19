@@ -31,19 +31,19 @@ resource "aws_route_table" "eks_public_rt" {
   tags = merge(var.tags, { Name = "public-rt-${var.environment}" })
 }
 
+# Route Table Associations for Public Subnets
 resource "aws_route_table_association" "eks_subnet_a_association" {
-  subnet_id      = aws_subnet.public_subnets["a"].id
+  for_each = aws_subnet.public_subnets
+
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.eks_public_rt.id
 }
 
-resource "aws_route_table_association" "eks_subnet_b_association" {
-  subnet_id      = aws_subnet.public_subnets["b"].id
-  route_table_id = aws_route_table.eks_public_rt.id
-}
-
-resource "aws_route_table_association" "eks_subnet_c_association" {
-  subnet_id      = aws_subnet.public_subnets["c"].id
-  route_table_id = aws_route_table.eks_public_rt.id
+# Route to Internet Gateway for Public Subnets
+resource "aws_route" "eks_public_rt_route" {
+  route_table_id         = aws_route_table.eks_public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.eks_igw.id
 }
 
 # Public Subnets
@@ -70,8 +70,8 @@ resource "aws_subnet" "private_subnets" {
 }
 
 # Route Tables for Private Subnets
-resource "aws_route_table" "eks_private_rt" {
-  for_each = toset(["a", "b", "c"])
+resource "aws_route_table" "eks_private_rt_table" {
+  for_each = aws_subnet.private_subnets
 
   vpc_id = aws_vpc.eks_vpc.id
 
@@ -82,22 +82,9 @@ resource "aws_route_table" "eks_private_rt" {
 
 # Routes For Private Subnets
 resource "aws_route" "eks_private_rt" {
-  for_each = {
-    "a" = aws_route_table.eks_private_rt["a"].id
-    "b" = aws_route_table.eks_private_rt["b"].id
-    "c" = aws_route_table.eks_private_rt["c"].id
-  }
+  for_each = aws_subnet.private_subnets
 
-  route_table_id         = each.value
+  route_table_id         = aws_route_table.eks_private_rt_table[each.key].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.eks_nat_gateway[each.key].id
-}
-
-# Security Groups
-resource "aws_security_group" "eks_cluster_sg" {
-  name        = "eks-cluster-sg"
-  description = "Security group for EKS cluster"
-  vpc_id      = aws_vpc.eks_vpc.id
-
-  tags = var.tags
 }

@@ -6,7 +6,12 @@
             "Action": "sts:AssumeRole",
             "Resource": [
                 "arn:aws:iam::${account_id}:role/terraform_role"
-            ]
+            ],
+            "Condition": {
+                "NumericLessThan": {
+                    "aws:DurationSeconds": 14400
+                }
+            }
         },
         {
             "Effect": "Allow",

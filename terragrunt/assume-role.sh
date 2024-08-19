@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# set -e # Exit immediately if a command exits with a non-zero status - Will crash terminal in some IDEs
 set -u # unset vars cause error
 
 # Usage: ./assume-role.sh <role-arn> <session-name>

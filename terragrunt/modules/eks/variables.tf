@@ -1,10 +1,15 @@
 # modules/eks/variables.tf
+
+variable "account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
+
 # Cluster config map
 variable "eks_clusters" {
   description = "Map of EKS clusters"
   type = map(object({
     name               = string
-    role_arn           = string
     public_subnet_ids  = list(string)
     private_subnet_ids = list(string)
     version            = string
@@ -17,9 +22,10 @@ variable "eks_node_groups" {
   description = "Map of EKS node groups"
   type = map(object({
     node_group_name    = string
+    eks_public_key     = string
+    instance_types     = list(string)
     public_subnet_ids  = list(string)
     private_subnet_ids = list(string)
-    version            = string
     scaling_config = object({
       desired_size = number
       max_size     = number
@@ -32,13 +38,8 @@ variable "eks_node_groups" {
   }))
 }
 
-variable "vpc_id" {
-  description = "The ID of the VPC where the EKS cluster will be created"
-  type        = string
-}
-
-variable "cluster_version" {
-  description = "The desired Kubernetes version for the EKS cluster"
+variable "environment" {
+  description = "current aws environment"
   type        = string
 }
 
@@ -48,27 +49,17 @@ variable "region" {
   default     = "us-east-2"
 }
 
-variable "environment" {
-  description = "current aws environment"
+variable "role_arn" {
+  description = "AWS IAM role ARN"
   type        = string
 }
 
-variable "ou_role_arn" {
-  description = "current environment role arn"
+variable "vpc_id" {
+  description = "VPC ID"
   type        = string
 }
 
 variable "tags" {
-  description = "A map of tags to apply to all resources"
+  description = "A map of tags to apply to eks resources"
   type        = map(string)
-}
-
-variable "public_subnet_ids" {
-  description = "List of subnets for EKS cluster"
-  type        = list(string)
-}
-
-variable "private_subnet_ids" {
-  description = "List of subnets for EKS cluster"
-  type        = list(string)
 }

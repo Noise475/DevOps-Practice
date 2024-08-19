@@ -3,6 +3,11 @@ variable "environment" {
   type        = string
 }
 
+variable "role_arn" {
+  description = "AWS role_arn"
+  type = string
+}
+
 variable "environments" {
   description = "List of all environments"
   type        = list(string)
