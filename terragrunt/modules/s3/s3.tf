@@ -1,4 +1,12 @@
 # module/s3/main.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
 
 # Create remote state buckets
 resource "aws_s3_bucket" "bucket_env_example" {

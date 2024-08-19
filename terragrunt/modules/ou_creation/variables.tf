@@ -1,5 +1,4 @@
 # modules/ou_creation/variables.tf
-
 variable "ou_names" {
   description = "List of OU names to create"
   type        = list(object({ name = string }))

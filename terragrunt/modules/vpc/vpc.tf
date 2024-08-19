@@ -1,4 +1,12 @@
 # modules/vpc/main.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
 
 # VPC
 resource "aws_vpc" "eks_vpc" {

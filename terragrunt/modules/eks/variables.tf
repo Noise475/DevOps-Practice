@@ -1,5 +1,4 @@
 # modules/eks/variables.tf
-
 # Cluster config map
 variable "eks_clusters" {
   description = "Map of EKS clusters"

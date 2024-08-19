@@ -34,11 +34,11 @@ remote_state {
 }
 
 inputs = {
-  environment  = "staging"
-  environments = ["staging"]
-  region       = "us-east-2"
-  role_arn     = "${get_env("ROLE_ARN")}"
-  account_id   = "${get_env("ACCOUNT_ID")}"
+  environment          = "staging"
+  environments         = ["staging"]
+  region               = "us-east-2"
+  role_arn             = "${get_env("ROLE_ARN")}"
+  account_id           = "${get_env("ACCOUNT_ID")}"
 
   tags = {
     Org_ID      = "staging"

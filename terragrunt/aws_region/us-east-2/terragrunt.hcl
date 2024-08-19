@@ -4,13 +4,17 @@ terraform {
   source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
 }
 
+locals {
+  region = "us-east-2"
+}
+
 # Generate provider configuration dynamically
 generate "provider" {
   path      = "provider_override.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${local.region}"
   }
 EOF
 }
@@ -24,7 +28,7 @@ remote_state {
   }
   config = {
     bucket         = "root-remote-state-tf-bucket"
-    region         = "us-east-2"
+    region         = "${local.region}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "root-terraform-lock-table"
@@ -33,11 +37,16 @@ remote_state {
 
 # Include the input values to use for the variables of the module.
 inputs = {
-  region     = "us-east-2"
-  role_arn   = "${get_env("ROLE_ARN")}"
-  account_id = "${get_env("ACCOUNT_ID")}"
+  account_id           = "590183659157"
+  environment          = "${get_env("ENVIRONMENT")}"
+  environments         = ["dev", "staging", "prod"]
+  region               = "${local.region}"
+  role_arn             = "${get_env("ROLE_ARN")}"
+  table_name           = "root-terraform-lock-table"
+
 
   tags = {
     Terraform = "true"
+    Region    = local.region
   }
 }

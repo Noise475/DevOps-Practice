@@ -1,7 +1,7 @@
 # us-east-2/iam/terragrunt.hcl
 
 terraform {
-  source = "../../../modules/iam"#"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.4"
+  source = "../../../modules/iam" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/iam?ref=0.0.4"
 }
 
 dependency "ou_creation" {
@@ -17,16 +17,9 @@ include "root" {
 }
 
 inputs = {
-  environment  = "${get_env("ENVIRONMENT")}"
-  environments = ["dev", "staging", "prod"]
-  region       = "us-east-2"
-  account_id   = "590183659157"
-  Org_ID       = dependency.ou_creation.outputs.current_ou_id
-  github_org   = "Noise475"
-  table_name   = "root-terraform-lock-table"
+  region     = "us-east-2"
+  Org_ID     = dependency.ou_creation.outputs.current_ou_id
+  github_org = "Noise475"
 
-  tags = {
-    Terraform = true
-    Region    = "us-east-2"
-  }
+  tags = include.root.inputs.tags
 }

@@ -5,7 +5,7 @@ variable "environment" {
 
 variable "environments" {
   description = "List of all environments"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "s3_key_arn" {
@@ -18,3 +18,5 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+

@@ -1,5 +1,12 @@
 # modules/ou_creation/main.tf
-data "aws_organizations_organization" "current" {}
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
 
 # Create Organizational Units
 resource "aws_organizations_organizational_unit" "ou" {
@@ -9,3 +16,5 @@ resource "aws_organizations_organizational_unit" "ou" {
 
   tags = var.tags
 }
+
+data "aws_organizations_organization" "current" {}

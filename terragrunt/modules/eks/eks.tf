@@ -1,4 +1,12 @@
 # modules/eks/main.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
 
 # EKS Clusters
 resource "aws_eks_cluster" "terragrunt_cluster" {

@@ -1,4 +1,12 @@
 # modules/kms/main.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
 
 # VPC Keys
 resource "aws_kms_key" "private_subnet_key" {

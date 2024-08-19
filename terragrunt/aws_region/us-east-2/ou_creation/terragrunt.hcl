@@ -15,8 +15,6 @@ inputs = {
       name = name
     }
   ]
-  environment = "${get_env("ENVIRONMENT")}"
-  region      = "us-east-2"
 
-  tags = merge(include.root.inputs.tags, { Region = "us-east-2", Org_ID = "${get_env("ENVIRONMENT")}", Environment = "${get_env("ENVIRONMENT")}" })
+  tags = include.root.inputs.tags
 }
