@@ -63,8 +63,6 @@ resource "aws_ssm_parameter" "role_arn" {
   type        = "SecureString"
   value       = var.role_arn
 
-
-
   tags = var.tags
 }
 
@@ -75,8 +73,6 @@ resource "aws_ssm_parameter" "sso_instance_arn" {
   description = "SSO Instance ARN for AWS Account ID:${var.account_id} access"
   type        = "SecureString"
   value       = var.sso_instance_arn
-
-
 
   tags = var.tags
 }
@@ -89,8 +85,6 @@ resource "aws_ssm_parameter" "permission_set_arn" {
   type        = "SecureString"
   value       = var.permission_set_arn
 
-
-
   tags = var.tags
 }
 
@@ -101,8 +95,6 @@ resource "aws_ssm_parameter" "sso_group_id" {
   description = "SSO Instance group ID"
   type        = "SecureString"
   value       = var.sso_group_id
-
-
 
   tags = var.tags
 }

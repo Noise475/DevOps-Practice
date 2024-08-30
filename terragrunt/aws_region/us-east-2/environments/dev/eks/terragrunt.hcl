@@ -1,7 +1,7 @@
 # us-east-2/environments/dev/eks/terragrunt.hcl
 
 terraform {
-  source = "../../../../../modules/eks" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.4"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.0"
 }
 
 
@@ -13,7 +13,7 @@ include "root" {
 dependency "iam" {
   config_path = "../../../iam"
   mock_outputs = {
-    ou_role_arn = "dev_role_arn"
+    ou_role_arns = { dev = "placeholder" }
   }
 }
 
@@ -26,18 +26,18 @@ dependency "vpc" {
     eks_public_key     = "placeholder"
     public_subnet_ids  = ["100.1.1.0/16"]
     private_subnet_ids = ["100.10.1.0/16"]
+    ou_role_arns       = { dev = "placeholder" }
   }
 
   mock_outputs_merge_strategy_with_state = "shallow"
 }
-
 
 # dev-specific variables
 inputs = {
   cluster_name = "dev-eks-cluster"
   vpc_id       = dependency.vpc.outputs.vpc_id
   vpc_cidr     = dependency.vpc.outputs.vpc_cidr
-  ou_role_arn  = dependency.iam.outputs.ou_role_arn
+  role_arn     = dependency.iam.outputs.ou_role_arns["dev"]
 
   eks_clusters = {
     "dev" = {

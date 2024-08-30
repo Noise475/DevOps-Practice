@@ -1,11 +1,12 @@
 # us-east-2/terragrunt.hcl
 
 terraform {
-  source = "../../modules" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
 }
 
 locals {
-  region = "us-east-2"
+  region     = "us-east-2"
+  table_name = "root-terraform-lock-table"
 }
 
 # Generate provider configuration dynamically
@@ -31,23 +32,18 @@ remote_state {
     region         = "${local.region}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
-    dynamodb_table = "root-terraform-lock-table"
+    dynamodb_table = "${local.table_name}"
   }
 }
 
 # Include the input values to use for the variables of the module.
 inputs = {
-  account_id   = "${get_env("ACCOUNT_ID")}"
-  environment  = "${get_env("ENVIRONMENT")}"
-  environments = ["dev", "staging", "prod"]
-  region       = "${local.region}"
-  role_arn     = "${get_env("ROLE_ARN")}"
-  table_name   = "root-terraform-lock-table"
-  org_id       = "${get_env("ORG_ID")}"
-
+  account_id = "${get_env("ACCOUNT_ID")}"
+  region     = "${local.region}"
+  table_name = "${local.table_name}"
 
   tags = {
-    Terraform   = "true"
-    Region      = "${local.region}"
+    Terraform = "true"
+    Region    = "${local.region}"
   }
 }

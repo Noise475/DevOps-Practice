@@ -1,7 +1,12 @@
 # us-east-2/environmentsprod/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
+}
+
+locals {
+  region   = "us-east-2"
+  role_arn = "arn:aws:iam::590183659157:role/prod"
 }
 
 # Generate provider configuration dynamically
@@ -10,9 +15,9 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-2"
+  region = "${local.region}"
   assume_role {
-    role_arn = "${get_env("ROLE_ARN")}"
+    role_arn = "${local.role_arn}"
   }
 }
 EOF
@@ -27,7 +32,7 @@ remote_state {
   }
   config = {
     bucket         = "root-remote-state-tf-bucket"
-    region         = "us-east-2"
+    region         = "${local.region}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "prod-terraform-lock-table"
@@ -35,17 +40,17 @@ remote_state {
 }
 
 inputs = {
-  environment          = "prod"
-  environments         = ["prod"]
-  region               = "us-east-2"
-  role_arn             = "arn:aws:iam::590183659157:role/prod"
-  account_id           = "${get_env("ACCOUNT_ID")}"
+  environment  = "prod"
+  environments = ["prod"]
+  region       = "${local.region}"
+  role_arn     = "${local.role_arn}"
+  account_id   = "${get_env("ACCOUNT_ID")}"
+  org_id       = "ou-5cu4-dyppwwvz" # Get from ou_creation outputs
 
   tags = {
-    Org_ID      = "${get_env("ORG_ID")}"
+    Org_ID      = "ou-5cu4-dyppwwvz" # Get from ou_creation outputs
     Environment = "prod"
     Terraform   = "true"
-    Region      = "us-east-2"
+    Region      = "${local.region}"
   }
 }
-

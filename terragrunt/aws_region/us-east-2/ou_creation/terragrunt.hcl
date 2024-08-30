@@ -1,7 +1,7 @@
 # us-east-2/ou_creation/terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ou_creation?ref=0.0.4"
+  source = "../../../modules/ou_creation" # "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/ou_creation?ref=0.0.0"
 }
 
 include "root" {
@@ -9,12 +9,18 @@ include "root" {
   expose = true
 }
 
-inputs = {
-  ou_names = [
-    for name in ["dev", "staging", "prod"] : {
-      name = name
-    }
-  ]
+locals {
+  ou_names = {
+    dev     = "dev"
+    staging = "staging"
+    prod    = "prod"
+  }
+}
 
-  tags = merge(include.root.inputs.tags, {Org_ID = "${get_env("ORG_ID")}", Environment = "${get_env("ENVIRONMENT")}" })
+inputs = {
+  ou_names = local.ou_names
+
+  tags = include.root.inputs.tags
+
+
 }

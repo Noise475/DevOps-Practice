@@ -1,7 +1,7 @@
 # us-east-2/environments/dev/terragrunt.hcl
 
 terraform {
-  source = "../../../../modules" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.4"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
 }
 
 locals {
@@ -45,10 +45,10 @@ inputs = {
   region       = "${local.region}"
   role_arn     = "${local.role_arn}"
   account_id   = "${get_env("ACCOUNT_ID")}"
-  org_id       = "${get_env("ORG_ID")}"
+  org_id       = "ou-5cu4-ohpzyw9j" # Get from ou_creation outputs
 
   tags = {
-    Org_ID      = "${get_env("ORG_ID")}"
+    Org_ID      = "ou-5cu4-ohpzyw9j" # Get from ou_creation outputs
     Environment = "dev"
     Terraform   = "true"
     Region      = "${local.region}"

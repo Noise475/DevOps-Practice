@@ -1,7 +1,7 @@
 # us-east-2/environmentsdev/vpc/terragrunt.hcl
 
 terraform {
-  source = "../../../../../modules/vpc" #"git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.4"
+  source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.0"
 }
 
 include "root" {
@@ -13,7 +13,7 @@ dependency "iam" {
   config_path = "../../../iam"
 
   mock_outputs = {
-    ou_role_arn = ["placeholder"]
+    ou_role_arns = ["placeholder"]
   }
 
   mock_outputs_merge_strategy_with_state = "shallow"
@@ -41,8 +41,6 @@ inputs = {
 
   private_subnet_cidrs = {
     a = "10.20.4.0/24"
-    b = "10.20.5.0/24"
-    c = "10.20.6.0/24"
   }
 
   availability_zones = {
@@ -55,7 +53,7 @@ inputs = {
   s3_key_arn             = dependency.kms.outputs.s3_key_arn
   eks_public_key         = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+8GOSiLmugMq86ptAW9hDToexMingO2tiatTaJAwY8"
   ou_role_name           = "dev"
-  role_arn               = dependency.iam.outputs.ou_role_arn
+  role_arn               = dependency.iam.outputs.ou_role_arns["dev"]
 
   tags = include.root.inputs.tags
 }

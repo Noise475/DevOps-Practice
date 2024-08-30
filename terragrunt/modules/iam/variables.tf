@@ -19,6 +19,11 @@ variable "account_id" {
   type        = string
 }
 
+variable "org_ids" {
+  description = "Map of AWS Organization IDs"
+  type        = map(string)
+}
+
 variable "org_id" {
   description = "AWS Organization ID"
   type        = string

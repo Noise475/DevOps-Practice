@@ -55,7 +55,7 @@ resource "aws_iam_policy" "tf_policy" {
 
 # Define policies for each environment
 resource "aws_iam_policy" "ou_tf_policy" {
-  for_each    = toset(var.environments)
+  for_each    = var.org_ids
   name        = "${each.key}-terraform-policy"
   description = "administrative terraform policy for ${each.key}"
 
@@ -64,7 +64,7 @@ resource "aws_iam_policy" "ou_tf_policy" {
     region      = var.region
     account_id  = var.account_id
     table_name  = var.table_name
-    org_id      = var.org_id
+    org_id      = each.value
   })
   tags = var.tags
 }
