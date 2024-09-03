@@ -25,7 +25,6 @@ dependency "vpc" {
     eks_public_key     = "placeholder"
     public_subnet_ids  = ["100.1.1.0/16"]
     private_subnet_ids = ["100.10.1.0/16"]
-    ou_role_arns       = { staging = "placeholder" }
   }
 
   mock_outputs_merge_strategy_with_state = "shallow"

@@ -6,7 +6,7 @@ terraform {
 
 locals {
   region   = "us-east-2"
-  role_arn = "arn:aws:iam::590183659157:role/dev"
+  role_arn = "arn:aws:iam::590183659157:role/staging"
 }
 
 # Generate provider configuration dynamically
@@ -32,7 +32,7 @@ remote_state {
   config = {
     bucket         = "root-remote-state-tf-bucket"
     region         = "${local.region}"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
+    key            = "${path_relative_to_include()}/environments/staging/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "staging-terraform-lock-table"
   }
@@ -44,10 +44,10 @@ inputs = {
   region       = "${local.region}"
   role_arn     = "${local.role_arn}"
   account_id   = "${get_env("ACCOUNT_ID")}"
-  org_id       = "ou-5cu4-tpshxaeg" # Get from ou_creation outputs
+  org_id       = "ou-5cu4-bgeczwr6" # Get from ou_creation outputs
 
   tags = {
-    Org_ID      = "ou-5cu4-tpshxaeg" # Get from ou_creation outputs
+    Org_ID      = "ou-5cu4-bgeczwr6" # Get from ou_creation outputs
     environment = "staging"
     Terraform   = "true"
     Region      = "${local.region}"

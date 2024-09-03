@@ -12,13 +12,13 @@ terraform {
 resource "aws_s3_bucket" "bucket_env_example" {
   for_each = toset(var.environments)
 
-  bucket = "${each.key}-remote-state-tf-bucket"
-  
+  bucket = "${each.key}-example-bucket"
+
   # Typically don't want this but allows easier create/destroy cycles
   force_destroy = true
 
   tags = {
-    Name        = "${each.key}-remote-state-tf-bucket"
+    Name        = "${each.key}-example-bucket"
     Environment = each.key
   }
 }
@@ -53,5 +53,5 @@ resource "aws_s3_bucket_policy" "s3_policy" {
   for_each = aws_s3_bucket.bucket_env_example
 
   bucket = each.value.bucket
-  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = each.key, role_arn = var.role_arn })
+  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = var.environment, role_arn = var.role_arn })
 }

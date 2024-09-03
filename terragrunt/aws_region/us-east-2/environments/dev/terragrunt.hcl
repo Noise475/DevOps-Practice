@@ -33,7 +33,7 @@ remote_state {
   config = {
     bucket         = "root-remote-state-tf-bucket"
     region         = "${local.region}"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
+    key            = "${path_relative_to_include()}/environments/dev/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
   }
@@ -45,10 +45,10 @@ inputs = {
   region       = "${local.region}"
   role_arn     = "${local.role_arn}"
   account_id   = "${get_env("ACCOUNT_ID")}"
-  org_id       = "ou-5cu4-ohpzyw9j" # Get from ou_creation outputs
+  org_id       = "ou-5cu4-u75xvt41" # Get from ou_creation outputs
 
   tags = {
-    Org_ID      = "ou-5cu4-ohpzyw9j" # Get from ou_creation outputs
+    Org_ID      = "ou-5cu4-u75xvt41" # Get from ou_creation outputs
     Environment = "dev"
     Terraform   = "true"
     Region      = "${local.region}"

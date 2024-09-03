@@ -13,8 +13,8 @@
         "s3:*"
       ],
       "Resource": [
-        "arn:aws:s3:::dev-remote-state-tf-bucket",
-        "arn:aws:s3:::dev-remote-state-tf-bucket/*"
+        "arn:aws:s3:::${environment}-example-bucket",
+        "arn:aws:s3:::${environment}-example-bucket/*"
       ]
     }
   ]

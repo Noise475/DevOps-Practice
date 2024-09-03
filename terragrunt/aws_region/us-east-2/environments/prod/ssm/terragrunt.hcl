@@ -26,7 +26,7 @@ dependency "kms" {
   mock_outputs = {
     ssm_key_arn = "placeholder"
   }
-  
+
   mock_outputs_merge_strategy_with_state = "shallow"
 }
 

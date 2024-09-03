@@ -1,4 +1,4 @@
-# us-east-2/environmentsdev/vpc/terragrunt.hcl
+# us-east-2/environments/dev/vpc/terragrunt.hcl
 
 terraform {
   source = "git::https://github.com/Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.0"

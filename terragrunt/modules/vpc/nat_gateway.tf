@@ -11,7 +11,7 @@ resource "aws_key_pair" "eks" {
 
 # Instances for NAT Gateway
 resource "aws_instance" "eks_nat_instance" {
-  for_each = aws_subnet.public_subnets
+  for_each = aws_subnet.private_subnets
 
   ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI
   instance_type = "t2.micro"
@@ -24,7 +24,7 @@ resource "aws_instance" "eks_nat_instance" {
 
 # Elastic IPs for NAT Gateways
 resource "aws_eip" "eks_nat_eip" {
-  for_each = aws_subnet.public_subnets
+  for_each = aws_subnet.private_subnets
 
   tags = merge(var.tags,
   { Name = "nat-eip-${each.key}-${var.environment}" })
@@ -32,7 +32,7 @@ resource "aws_eip" "eks_nat_eip" {
 
 # NAT Gateways
 resource "aws_nat_gateway" "eks_nat_gateway" {
-  for_each = aws_subnet.public_subnets
+  for_each = aws_subnet.private_subnets
 
   allocation_id = aws_eip.eks_nat_eip[each.key].id
   subnet_id     = each.value.id
