@@ -48,15 +48,35 @@ inputs = {
   }
 
   eks_node_groups = {
-    "prod" = {
-      node_group_name    = "prod-node-group"
+    "public" = {
+      cluster_key        = "prod"
+      node_group_name    = "prod-public-node-group"
       eks_public_key     = dependency.vpc.outputs.eks_public_key
-      instance_types     = ["t2.micro"]
+      instance_types     = ["t3.small"]
       public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
-      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      private_subnet_ids = []
       scaling_config = {
         desired_size = 2
         max_size     = 3
+        min_size     = 1
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+
+      tags = include.root.inputs.tags
+    }
+
+    "private" = {
+      cluster_key        = "prod"
+      node_group_name    = "prod-private-node-group"
+      eks_public_key     = dependency.vpc.outputs.eks_public_key
+      instance_types     = ["t3.medium"]
+      public_subnet_ids  = []
+      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      scaling_config = {
+        desired_size = 2
+        max_size     = 4
         min_size     = 1
       }
       update_config = {

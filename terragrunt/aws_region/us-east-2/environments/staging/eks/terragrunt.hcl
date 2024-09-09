@@ -48,15 +48,35 @@ inputs = {
   }
 
   eks_node_groups = {
-    "staging" = {
-      node_group_name    = "staging-node-group"
+    "public" = {
+      cluster_key        = "staging"
+      node_group_name    = "staging-public-node-group"
       eks_public_key     = dependency.vpc.outputs.eks_public_key
-      instance_types     = ["t2.micro"]
+      instance_types     = ["t3.small"]
       public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
-      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      private_subnet_ids = []
       scaling_config = {
         desired_size = 2
         max_size     = 3
+        min_size     = 1
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+
+      tags = include.root.inputs.tags
+    }
+
+    "private" = {
+      cluster_key        = "staging"
+      node_group_name    = "staging-private-node-group"
+      eks_public_key     = dependency.vpc.outputs.eks_public_key
+      instance_types     = ["t3.medium"]
+      private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+      public_subnet_ids  = []
+      scaling_config = {
+        desired_size = 2
+        max_size     = 4
         min_size     = 1
       }
       update_config = {

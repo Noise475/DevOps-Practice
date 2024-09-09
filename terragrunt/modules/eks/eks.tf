@@ -29,11 +29,12 @@ resource "aws_eks_cluster" "terragrunt_cluster" {
 resource "aws_eks_node_group" "public_group" {
   for_each = var.eks_node_groups
 
-  cluster_name    = aws_eks_cluster.terragrunt_cluster[each.key].name
+  cluster_name    = aws_eks_cluster.terragrunt_cluster[each.value.cluster_key].name
   node_group_name = each.value.node_group_name
   node_role_arn   = aws_iam_role.eks_node_instance_role.arn
-  subnet_ids      = each.value.public_subnet_ids
-  instance_types  = each.value.instance_types
+  subnet_ids      = length(lookup(each.value, "public_subnet_ids", [])) > 0 ? each.value.public_subnet_ids : lookup(each.value, "private_subnet_ids", [])
+
+  instance_types = each.value.instance_types
 
   remote_access {
     ec2_ssh_key               = each.value.eks_public_key
@@ -61,11 +62,12 @@ resource "aws_eks_node_group" "public_group" {
 resource "aws_eks_node_group" "private_group" {
   for_each = var.eks_node_groups
 
-  cluster_name    = aws_eks_cluster.terragrunt_cluster[each.key].name
+  cluster_name    = aws_eks_cluster.terragrunt_cluster[tostring(each.value.cluster_key)].name
   node_group_name = each.value.node_group_name
   node_role_arn   = aws_iam_role.eks_node_instance_role.arn
-  subnet_ids      = each.value.private_subnet_ids
-  instance_types  = each.value.instance_types
+  subnet_ids      = length(lookup(each.value, "public_subnet_ids", [])) > 0 ? each.value.public_subnet_ids : lookup(each.value, "private_subnet_ids", [])
+
+  instance_types = each.value.instance_types
 
   remote_access {
     ec2_ssh_key               = each.value.eks_public_key
@@ -89,4 +91,3 @@ resource "aws_eks_node_group" "private_group" {
 
   tags = var.tags
 }
-
