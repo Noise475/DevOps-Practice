@@ -1,7 +1,7 @@
 # us-east-2/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.1"
 }
 
 locals {
