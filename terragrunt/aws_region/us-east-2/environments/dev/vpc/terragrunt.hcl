@@ -1,7 +1,7 @@
 # us-east-2/environments/dev/vpc/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.1"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/vpc?ref=0.0.0"
 }
 
 include "root" {
@@ -41,12 +41,13 @@ inputs = {
 
   private_subnet_cidrs = {
     a = "10.20.4.0/24"
+    b = "10.20.5.0/24"
+    c = "10.20.6.0/24"
   }
 
   availability_zones = {
     a = "us-east-2a"
     b = "us-east-2b"
-    c = "us-east-2c"
   }
 
   private_subnet_key_arn = dependency.kms.outputs.private_subnet_key_arn

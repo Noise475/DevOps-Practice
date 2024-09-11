@@ -1,7 +1,7 @@
 # us-east-2/environments/staging/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.1"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
 }
 
 locals {
@@ -16,13 +16,14 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${local.region}"
-  assume_role {
+  assume_role = {
     role_arn = "${local.role_arn}"
   }
 }
 EOF
 }
 
+# Generate backend.tf
 remote_state {
   backend = "s3"
   generate = {
@@ -32,7 +33,7 @@ remote_state {
   config = {
     bucket         = "root-remote-state-tf-bucket"
     region         = "${local.region}"
-    key            = "${path_relative_to_include()}/environments/staging/terraform.tfstate"
+    key            = "${path_relative_to_include()}/staging/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "staging-terraform-lock-table"
   }
@@ -48,7 +49,7 @@ inputs = {
 
   tags = {
     Org_ID      = "ou-5cu4-bgeczwr6" # Get from ou_creation outputs
-    environment = "staging"
+    Environment = "staging"
     Terraform   = "true"
     Region      = "${local.region}"
   }

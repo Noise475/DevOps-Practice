@@ -20,8 +20,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_eks_cluster.terragrunt_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster) | resource |
-| [aws_eks_node_group.private_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group) | resource |
-| [aws_eks_node_group.public_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group) | resource |
+| [aws_eks_node_group.node_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group) | resource |
 | [aws_iam_policy.cluster_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.eks_node_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy_attachment.eks_node_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
@@ -45,7 +44,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | AWS Account ID | `string` | n/a | yes |
 | <a name="input_eks_clusters"></a> [eks\_clusters](#input\_eks\_clusters) | Map of EKS clusters | <pre>map(object({<br>    name               = string<br>    public_subnet_ids  = list(string)<br>    private_subnet_ids = list(string)<br>    version            = string<br>    tags               = map(string)<br>  }))</pre> | n/a | yes |
-| <a name="input_eks_node_groups"></a> [eks\_node\_groups](#input\_eks\_node\_groups) | Map of EKS node groups | <pre>map(object({<br>    node_group_name    = string<br>    eks_public_key     = string<br>    instance_types     = list(string)<br>    public_subnet_ids  = list(string)<br>    private_subnet_ids = list(string)<br>    scaling_config = object({<br>      desired_size = number<br>      max_size     = number<br>      min_size     = number<br>    })<br>    update_config = object({<br>      max_unavailable = number<br>    })<br>    tags = map(string)<br>  }))</pre> | n/a | yes |
+| <a name="input_eks_node_groups"></a> [eks\_node\_groups](#input\_eks\_node\_groups) | Node group config map | <pre>map(object({<br>    cluster_key        = string<br>    node_group_name    = string<br>    eks_public_key     = string<br>    instance_types     = list(string)<br>    public_subnet_ids  = list(string)<br>    private_subnet_ids = list(string)<br>    scaling_config = object({<br>      desired_size = number<br>      max_size     = number<br>      min_size     = number<br>    })<br>    update_config = object({<br>      max_unavailable = number<br>    })<br>    tags = map(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | current aws environment | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | current AWS region | `string` | `"us-east-2"` | no |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | AWS IAM role ARN | `string` | n/a | yes |

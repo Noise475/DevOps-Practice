@@ -1,7 +1,7 @@
 # environments/staging/ssm/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.1"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/ssm?ref=0.0.0"
 }
 
 include "root" {

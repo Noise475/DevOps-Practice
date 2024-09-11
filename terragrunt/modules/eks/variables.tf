@@ -19,14 +19,13 @@ variable "eks_clusters" {
 
 # Node group config map
 variable "eks_node_groups" {
-  description = "Map of EKS node groups"
   type = map(object({
     cluster_key        = string
+    node_group_name    = string
     eks_public_key     = string
     instance_types     = list(string)
-    node_group_name    = string
-    public_subnet_ids  = optional(list(string), [])
-    private_subnet_ids = optional(list(string), [])
+    public_subnet_ids  = list(string)
+    private_subnet_ids = list(string)
     scaling_config = object({
       desired_size = number
       max_size     = number

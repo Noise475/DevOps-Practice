@@ -8,11 +8,16 @@ terraform {
   }
 }
 
+# Generate a random ID for uniqueness
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
 # Create remote state buckets
 resource "aws_s3_bucket" "bucket_env_example" {
   for_each = toset(var.environments)
 
-  bucket = "${each.key}-example-bucket"
+  bucket = "${each.key}-example-bucket-${random_id.bucket_suffix.hex}"
 
   # Typically don't want this but allows easier create/destroy cycles
   force_destroy = true
@@ -51,7 +56,27 @@ resource "aws_s3_bucket_versioning" "versioning_example" {
 # Create S3 terrafrom access policy
 resource "aws_s3_bucket_policy" "s3_policy" {
   for_each = aws_s3_bucket.bucket_env_example
+  bucket   = each.value.bucket
 
-  bucket = each.value.bucket
-  policy = templatefile("${path.module}/policies/s3-policy.json", { environment = var.environment, role_arn = var.role_arn })
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          AWS = [
+            "${var.role_arn}",
+            "arn:aws:iam::590183659157:role/terraform_role"
+          ]
+        },
+        Action = [
+          "s3:*"
+        ],
+        Resource = [
+          "arn:aws:s3:::${each.value.bucket}",
+          "arn:aws:s3:::${each.value.bucket}/*"
+        ]
+      }
+    ]
+  })
 }

@@ -49,6 +49,7 @@ No modules.
 | <a name="input_github_repo"></a> [github\_repo](#input\_github\_repo) | Github repo name | `string` | `"DevOps-Practice"` | no |
 | <a name="input_oidc_audience"></a> [oidc\_audience](#input\_oidc\_audience) | OIDC audience | `string` | `""` | no |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | AWS Organization ID | `string` | n/a | yes |
+| <a name="input_org_ids"></a> [org\_ids](#input\_org\_ids) | Map of AWS Organization IDs | `map(string)` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | current AWS region | `string` | n/a | yes |
 | <a name="input_table_name"></a> [table\_name](#input\_table\_name) | Dynamodb table name | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
@@ -60,7 +61,7 @@ No modules.
 | <a name="output_account_id"></a> [account\_id](#output\_account\_id) | n/a |
 | <a name="output_environments"></a> [environments](#output\_environments) | n/a |
 | <a name="output_gh_role_arn"></a> [gh\_role\_arn](#output\_gh\_role\_arn) | n/a |
-| <a name="output_ou_role_arn"></a> [ou\_role\_arn](#output\_ou\_role\_arn) | n/a |
+| <a name="output_org_ids"></a> [org\_ids](#output\_org\_ids) | n/a |
 | <a name="output_ou_role_arns"></a> [ou\_role\_arns](#output\_ou\_role\_arns) | n/a |
 | <a name="output_permission_set_arn"></a> [permission\_set\_arn](#output\_permission\_set\_arn) | n/a |
 | <a name="output_sso_group_id"></a> [sso\_group\_id](#output\_sso\_group\_id) | n/a |

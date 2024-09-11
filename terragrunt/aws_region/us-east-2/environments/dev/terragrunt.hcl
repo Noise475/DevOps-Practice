@@ -1,7 +1,7 @@
 # us-east-2/environments/dev/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.1"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules?ref=0.0.0"
 }
 
 locals {
@@ -16,9 +16,9 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${local.region}"
-  assume_role {
+  assume_role = {
     role_arn = "${local.role_arn}"
-  }
+  }  
 }
 EOF
 }
@@ -33,7 +33,7 @@ remote_state {
   config = {
     bucket         = "root-remote-state-tf-bucket"
     region         = "${local.region}"
-    key            = "${path_relative_to_include()}/environments/dev/terraform.tfstate"
+    key            = "${path_relative_to_include()}/dev/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
   }

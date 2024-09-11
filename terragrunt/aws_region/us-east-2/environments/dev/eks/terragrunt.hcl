@@ -1,7 +1,7 @@
 # us-east-2/environments/dev/eks/terragrunt.hcl
 
 terraform {
-  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.1"
+  source = "git::git@github.com:Noise475/DevOps-Practice.git//terragrunt/modules/eks?ref=0.0.0"
 }
 
 
@@ -50,11 +50,12 @@ inputs = {
 
   eks_node_groups = {
     "public" = {
-      cluster_key       = "dev"
-      node_group_name   = "dev-public-node-group"
-      eks_public_key    = dependency.vpc.outputs.eks_public_key
-      instance_types    = ["t3.small"]
-      public_subnet_ids = dependency.vpc.outputs.public_subnet_ids
+      cluster_key        = "dev"
+      node_group_name    = "dev-public-node-group"
+      eks_public_key     = dependency.vpc.outputs.eks_public_key
+      instance_types     = ["t3.small"]
+      public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
+      private_subnet_ids = []
       scaling_config = {
         desired_size = 2
         max_size     = 3
@@ -72,6 +73,7 @@ inputs = {
       node_group_name    = "dev-private-node-group"
       eks_public_key     = dependency.vpc.outputs.eks_public_key
       instance_types     = ["t3.medium"]
+      public_subnet_ids  = []
       private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
       scaling_config = {
         desired_size = 2
