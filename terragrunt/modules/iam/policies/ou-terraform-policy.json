@@ -4,57 +4,96 @@
         {
             "Effect": "Allow",
             "Action": [
+                "autoscaling:*",
                 "ec2:*",
-                "iam:AttachRolePolicy",
-                "iam:AttachUserPolicy",
-                "iam:CreateGroup",
-                "iam:CreatePolicy",
-                "iam:CreatePolicyVersion",
-                "iam:CreateRole",
-                "iam:DeletePolicy",
-                "iam:DeletePolicyVersion",
-                "iam:DeleteRole",
-                "iam:DetachRolePolicy",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
-                "iam:GetRole",
-                "iam:ListAttachedRolePolicies",
-                "iam:ListEntitiesForPolicy",
-                "iam:ListInstanceProfilesForRole",
-                "iam:ListPolicyVersions",
-                "iam:ListRolePolicies",
-                "iam:PassRole",
-                "iam:PutRolePolicy",
-                "iam:PutUserPolicy",
-                "iam:UpdateAssumeRolePolicy",
-                "iam:UntagRole",
-                "iam:TagRole",
-                "kms:Create*",
-                "kms:Describe*",
-                "kms:Enable*",
-                "kms:List*",
-                "kms:Put*",
-                "kms:Update*",
-                "kms:Revoke*",
-                "kms:Disable*",
-                "kms:Get*",
-                "kms:Delete*",
-                "kms:ScheduleKeyDeletion",
-                "kms:CancelKeyDeletion",
-                "organizations:Describe*",
-                "organizations:List*",
+                "eks:*",
+                "iam:*",
+                "kms:*",
                 "s3:*",
                 "ssm:*",
-                "sso:ListInstances",
-                "sso:ListAccountAssignments",
+                "sso:*",
                 "dynamodb:*"
             ],
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:RequestTag/OrgID": "${environment}"
+                    "aws:RequestTag/Org_ID": "${org_id}"
                 }
             }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:*",
+                "ec2:*",
+                "eks:*",
+                "iam:*",
+                "kms:*",
+                "s3:*",
+                "ssm:*",
+                "sso:*",
+                "dynamodb:*"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Org_ID": "${org_id}"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "kms:ListAliases",
+                "ssm:DescribeParameters"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:*"
+            ],
+            "Resource": [
+                "arn:aws:iam::${account_id}:role/${environment}-eksNodeInstanceRole",
+                "arn:aws:iam::${account_id}:role/${environment}-cluster-role",
+                "arn:aws:iam::${account_id}:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": [
+                "arn:aws:eks:us-east-2:${account_id}:cluster/${environment}-cluster",
+                "arn:aws:eks:us-east-2:${account_id}:nodegroup/${environment}-cluster/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::{environment}-remote-state-tf-bucket",
+                "arn:aws:s3:::{enviornment}-remote-state-tf-bucket/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::root-remote-state-tf-bucket"
         }
     ]
 }

@@ -1,13 +1,15 @@
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
 
 ## Modules
 
@@ -18,13 +20,9 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_iam_openid_connect_provider.github](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
-| [aws_iam_policy.eks_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.github_oidc_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.ou_tf_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.ou_tf_state_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.tf_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy_attachment.eks_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
-| [aws_iam_policy_attachment.ou_state_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
 | [aws_iam_policy_attachment.ou_tf_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
 | [aws_iam_policy_attachment.tf_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
 | [aws_iam_role.github_oidc_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -51,7 +49,9 @@ No modules.
 | <a name="input_github_repo"></a> [github\_repo](#input\_github\_repo) | Github repo name | `string` | `"DevOps-Practice"` | no |
 | <a name="input_oidc_audience"></a> [oidc\_audience](#input\_oidc\_audience) | OIDC audience | `string` | `""` | no |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | AWS Organization ID | `string` | n/a | yes |
+| <a name="input_org_ids"></a> [org\_ids](#input\_org\_ids) | Map of AWS Organization IDs | `map(string)` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | current AWS region | `string` | n/a | yes |
+| <a name="input_table_name"></a> [table\_name](#input\_table\_name) | Dynamodb table name | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
@@ -59,8 +59,9 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_account_id"></a> [account\_id](#output\_account\_id) | n/a |
+| <a name="output_environments"></a> [environments](#output\_environments) | n/a |
 | <a name="output_gh_role_arn"></a> [gh\_role\_arn](#output\_gh\_role\_arn) | n/a |
-| <a name="output_ou_role_arn"></a> [ou\_role\_arn](#output\_ou\_role\_arn) | n/a |
+| <a name="output_org_ids"></a> [org\_ids](#output\_org\_ids) | n/a |
 | <a name="output_ou_role_arns"></a> [ou\_role\_arns](#output\_ou\_role\_arns) | n/a |
 | <a name="output_permission_set_arn"></a> [permission\_set\_arn](#output\_permission\_set\_arn) | n/a |
 | <a name="output_sso_group_id"></a> [sso\_group\_id](#output\_sso\_group\_id) | n/a |

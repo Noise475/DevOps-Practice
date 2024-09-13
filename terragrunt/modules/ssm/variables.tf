@@ -3,6 +3,11 @@ variable "environment" {
   type        = string
 }
 
+variable "environments" {
+  description = "Map of environments"
+  type        = list(string)
+}
+
 variable "region" {
   description = "Current aws region"
   type        = string
@@ -37,4 +42,9 @@ variable "sso_group_id" {
 variable "tags" {
   description = "A map of tags to apply to all resources"
   type        = map(string)
+}
+
+variable "org_id" {
+  description = "AWS Organization ID"
+  type        = string
 }

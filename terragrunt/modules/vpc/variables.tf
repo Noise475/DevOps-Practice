@@ -9,17 +9,42 @@ variable "environment" {
 }
 
 variable "environments" {
-  description = "List of all environments"
-  type        = map(string)
-  default = {
-    dev     = "Development Environment"
-    staging = "Staging Environment"
-    prod    = "Production Environment"
-  }
+  description = "Map of all environments"
+  type        = list(string)
 }
 
 variable "tags" {
   description = "A map of tags to apply to all resources"
   type        = map(string)
   default     = {}
+}
+
+variable "public_subnet_cidrs" {
+  description = "Map of public subnet cidrs"
+  type        = map(string)
+}
+
+variable "private_subnet_cidrs" {
+  description = "Map of private subnet cidrs"
+  type        = map(string)
+}
+
+variable "ou_role_name" {
+  description = "Current env iam role name"
+  type        = string
+}
+
+variable "availability_zones" {
+  description = "Map of availability zones"
+  type        = map(string)
+}
+
+variable "cidr_block" {
+  description = "VPC cidr block range"
+  type        = string
+}
+
+variable "role_arn" {
+  description = "EKS role ARN"
+  type        = string
 }
