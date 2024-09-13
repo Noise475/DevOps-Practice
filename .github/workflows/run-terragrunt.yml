@@ -3,10 +3,10 @@ name: Plan and Apply IAC
 on:
   push:
     branches:
-      - '*'
+      - 'terragrunt'
   pull_request:
     branches:
-      - 'master'
+      - 'terragrunt'
 
 jobs:
   dev_plan:
