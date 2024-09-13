@@ -17,6 +17,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   dev_apply:
     needs: [dev_plan]
@@ -27,6 +28,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   stage_plan:
     uses: ./.github/workflows/tf-plan.yml
@@ -36,6 +38,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   stage_apply:
     uses: ./.github/workflows/tf-apply.yml
@@ -45,6 +48,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   prod_plan:
     uses: ./.github/workflows/tf-plan.yml
@@ -54,6 +58,7 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   prod_apply:
     uses: ./.github/workflows/tf-apply.yml
@@ -63,3 +68,4 @@ jobs:
     secrets:
       GH_ROLE_ARN: ${{ secrets.GH_ROLE_ARN }}
       TF_ROLE_ARN: ${{ secrets.TF_ROLE_ARN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
