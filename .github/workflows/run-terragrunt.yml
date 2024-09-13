@@ -1,9 +1,6 @@
 name: Plan and Apply IAC
 
 on:
-  push:
-    branches:
-      - 'terragrunt'
   pull_request:
     branches:
       - 'terragrunt'
