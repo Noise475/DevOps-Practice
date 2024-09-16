@@ -33,7 +33,7 @@ remote_state {
   config = {
     bucket         = "root-remote-state-tf-bucket"
     region         = "${local.region}"
-    key            = "${path_relative_to_include()}/environments/dev/terraform.tfstate"
+    key            = "${path_relative_to_include()}/dev/terraform.tfstate"
     encrypt        = true
     dynamodb_table = "dev-terraform-lock-table"
   }
