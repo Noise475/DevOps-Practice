@@ -4,3 +4,4 @@
 docker-compose.yml
 validate.sh
 README.md
+*__pycache__*
