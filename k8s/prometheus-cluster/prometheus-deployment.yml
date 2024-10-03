@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: prometheus-container
-          image: prom/prometheus
+          image: prom/prometheus:v2.46.0
           volumeMounts:
             - name: config-volume
               mountPath: /etc/prometheus/prometheus.yml
@@ -26,6 +26,19 @@ spec:
           configMap:
             name: prometheus-config
       serviceAccountName: prometheus
+      persistentVolumeClaim:
+            claimName: prometheus-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
@@ -71,4 +84,3 @@ data:
         action: replace
         target_label: kubernetes_name
 ---
-

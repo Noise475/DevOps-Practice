@@ -14,10 +14,9 @@ cd to the `/php-apache-sql` folder and run
 
 ``` shell
 docker-compose up
-
 ```
 
-Which will build 3 images to the specifications in the `/apache` and `/php` Dockerfiles and the docker-compose.yml file
+Which will build 2 images to the specifications in the `/apache` and `/php` Dockerfiles and the docker-compose.yml file
 
 ``` shell
 --- Some output ommitted ---
@@ -83,8 +82,6 @@ docker swarm init
 Create a docker-compose.yml file
 
 ``` shell
-version: '3'
-
 services:
   web:
 
@@ -128,21 +125,18 @@ should return
 
 ``` shell
 Hello from Swarm <os.hostname>
-
 ```
 
 Now scale this service
 
 ``` shell
 docker service scale nodejs_web=4
-
 ```
 
 Confirm by running
 
 ``` shell
 curl localhost
-
 ```
 
 multiple times and see that the value for `<os.hostname>` changes for each service endpoint.
@@ -151,7 +145,6 @@ Running:
 
 ``` shell
 docker service ls
-
 ```
 
 Should return 4 replicas
@@ -165,24 +158,19 @@ ysoyp3sai6i7        node_web            replicated          4/4                 
 Remove stack and leave swarm
 
 ``` shell
-
 docker stack rm nodejs
 docker swarm leave --force
-
 ```
 
-## Machine
+# Docker-Machine
 
-### mulit-host cluster
+#### Install docker-machine
 
-Install docker-machine
-
-```shell script
 https://docs.docker.com/machine/install-machine/
 
-```
 
-Install virtualbox
+
+#### Install virtualbox
 
 ``` shell
 https://www.virtualbox.org/wiki/Downloads
@@ -190,16 +178,11 @@ https://www.virtualbox.org/wiki/Downloads
 ```
 
 Create a few machines
-
 ```shell
-
 docker-machine create --driver virtualbox vm1
 docker-machine create --driver virtualbox vm2
-
 ```
-
 ssh into the newly created vm and start a swarm
-
 ``` shell
 
 docker-machine ssh vm1

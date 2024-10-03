@@ -22,7 +22,7 @@ docker run -ti --rm --network="host" drwetter/testssl.sh \
 ## Hot Reload
 
 hot reloads are enabled through the `volumes` directive on
-`containerize_app_1` in the compose file. simply open the file `/app/src/server.py` and make changes to the index() method such as
+`app_1` in the compose file. simply open the file `/app/src/server.py` and make changes to the index() method such as
 
  ``` python
  content = "It's easier to ask forgiveness than it is to get permission."

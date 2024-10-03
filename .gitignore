@@ -13,3 +13,5 @@ plan-all-output.sh
 *.plan
 tg-import.sh
 assume-role.sh
+.DS_store
+*__pycache__*

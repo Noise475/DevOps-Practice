@@ -1,27 +1,24 @@
-version: "3"
 services:
   app:
-    container_name: containerize_app_1
+    container_name: app_1
     restart: always
     build:
       context: ./app
     networks:
       - app-net
-    ports:
-      - 8000:8000
     volumes:
-      - .:/home
+      - ./app:/home/app
 
   nginx:
     restart: always
-    container_name: containerize_nginx_1
+    container_name: nginx_1
     build:
       context: ./nginx
     networks:
       - app-net
     ports:
-      - 80:80
-      - 443:443
+      - 8000:80
+      - 8001:443
     volumes:
       - ./nginx:/etc/nginx
     depends_on:
