@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: rpc-app-cont
-          image: supergiantkir/prometheus-test-app
+          image: supergiantkir/prometheus-test-app:v1.3.2
           ports:
             - name: web
               containerPort: 8081
