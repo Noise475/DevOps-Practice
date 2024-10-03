@@ -28,7 +28,6 @@ spec:
       serviceAccountName: prometheus
       persistentVolumeClaim:
             claimName: prometheus-pvc
-    serviceAccountName: prometheus
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
