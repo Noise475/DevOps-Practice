@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/istio/istio.git'
-    targetRevision: release-1.23 # Replace with the desired Istio release
-    path: install/kubernetes/helm/istio
+    repoURL: 'https://github.com/Noise475/DevOps-Practice.git'
+    targetRevision: release-1.23
+    path: k8s/istio
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: istio-system

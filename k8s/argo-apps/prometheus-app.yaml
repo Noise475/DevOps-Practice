@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/Noise475/DevOps-Practice.git'
     targetRevision: minikube
-    path: k8s/helm/prometheus # Adjust path based on your repo structure
+    path: k8s/charts/prometheus
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
