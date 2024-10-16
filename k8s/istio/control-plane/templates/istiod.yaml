@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istiod
+  namespace: istio-system
+  labels:
+    app: istiod
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: istiod
+  template:
+    metadata:
+      labels:
+        app: istiod
+    spec:
+      serviceAccountName: istiod-service-account
+      containers:
+        - name: discovery
+          image: docker.io/istio/pilot:latest
+          args:
+            - discovery
+            - --serviceCluster
+            - istiod
+            - --zipkinAddress
+            - zipkin.istio-system:9411  # Address of Zipkin for tracing
+          ports:
+            - containerPort: 15010  # HTTP port for metrics
+            - containerPort: 15014  # gRPC port for discovery service
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: 15014
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz/live
+              port: 15014
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      # Resource limits and requests can be added as necessary
+      resources:
+        limits:
+          cpu: "1000m"
+          memory: "512Mi"
+        requests:
+          cpu: "500m"  
+          memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: istiod
+  namespace: istio-system
+spec:
+  ports:
+    - port: 15010
+      targetPort: 15010
+      protocol: TCP
+      name: http-discovery
+    - port: 15014
+      targetPort: 15014
+      protocol: TCP
+      name: grpc-discovery
+  selector:
+    app: istiod
