@@ -1,14 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio
-  namespace: argocd
+  name: istio-control-plane
 spec:
   project: default
   source:
     repoURL: 'https://github.com/Noise475/DevOps-Practice.git'
     targetRevision: minikube
-    path: k8s/istio
+    path: 'k8s/istio/control-plane'
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: istio-system
