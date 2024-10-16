@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/Noise475/DevOps-Practice.git'
-    targetRevision: release-1.23
+    targetRevision: minikube
     path: k8s/istio
   destination:
     server: 'https://kubernetes.default.svc'
