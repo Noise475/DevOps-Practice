@@ -2,16 +2,16 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: rpc-app
-  namespace: {{ .Values.namespace }}
+  namespace: app
 spec:
   hosts:
-    - "*"
+    - "rpc.local" # if local, update /etc/hosts with a localhost entry matching the value here
   gateways:
     - rpc-app-gateway
   http:
     - match:
         - uri:
-            prefix: /rpc
+            prefix: /
       route:
         - destination:
             host: rpc-app-service
@@ -23,16 +23,16 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: prometheus
-  namespace: {{ .Values.namespace }}
+  namespace: monitoring
 spec:
   hosts:
-    - "*"
+    - "prometheus.local" # if local, update /etc/hosts with a localhost entry matching the value here
   gateways:
     - rpc-app-gateway
   http:
     - match:
         - uri:
-            prefix: /prometheus
+            prefix: /
       route:
         - destination:
             host: prometheus-server
